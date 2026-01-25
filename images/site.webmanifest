@@ -1,0 +1,21 @@
+{
+  "name": "Kindady's Retail",
+  "short_name": "Kindady's",
+  "description": "Retail with Heart - Curated luxury lifestyle products",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ed64a6",
+  "icons": [
+    {
+      "src": "/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

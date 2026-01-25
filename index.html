@@ -1,0 +1,2184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kindady's Retail | Retail with Heart</title>
+    <meta name="description" content="Curated luxury lifestyle products - clothes, perfumes, shoes & accessories. Kindly selected, beautifully presented.">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css">
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+
+    <!-- FAVICON CONFIGURATION -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#ed64a6">
+    <meta name="msapplication-TileColor" content="#1a365d">
+    <meta name="theme-color" content="#ffffff">
+    
+        <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDfpoqyjtO7VueYtcGEYTfkWHOl4YNG7sk",
+            authDomain: "kindadys-9924e.firebaseapp.com",
+            projectId: "kindadys-9924e",
+            storageBucket: "kindadys-9924e.firebasestorage.app",
+            messagingSenderId: "772017587580",
+            appId: "1:772017587580:web:82cd5c27edf6bfc44c50f9",
+            measurementId: "G-D74KTPX92D"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        
+        // Export to global scope
+        window.firestoreDB = db;
+        window.firebaseCollection = collection;
+        window.firebaseGetDocs = getDocs;
+        window.firebaseQuery = query;
+        window.firebaseOrderBy = orderBy;
+        
+        console.log("Firebase loaded on main page!");
+    </script>
+
+    <style>
+        /* Additional styles for improved product grid */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .product-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .product-image-container {
+            width: 100%;
+            height: 280px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .product-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .product-card:hover .product-image {
+            transform: scale(1.05);
+        }
+        
+        .product-details {
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .product-category {
+            display: inline-block;
+            background: #e2e8f0;
+            color: #4a5568;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            margin-bottom: 10px;
+            align-self: flex-start;
+        }
+        
+        .product-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #2d3748;
+            line-height: 1.4;
+        }
+        
+        .product-price {
+            color: #ed64a6;
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+        
+        /* Product Tags in Product Card */
+        .product-tags-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-bottom: 15px;
+            min-height: 24px;
+        }
+        
+        .product-tag {
+            background: rgba(101, 126, 234, 0.1);
+            color: #667eea;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 500;
+            display: inline-block;
+            border: 1px solid rgba(101, 126, 234, 0.2);
+        }
+        
+        .add-to-cart {
+            background: #1a365d;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background 0.3s ease;
+            margin-top: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .add-to-cart:hover {
+            background: #2d3748;
+        }
+        
+        /* Filters */
+        .filters {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            padding: 10px 20px;
+            border: 2px solid #e2e8f0;
+            background: white;
+            color: #4a5568;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-btn.active {
+            background: #ed64a6;
+            color: white;
+            border-color: #ed64a6;
+        }
+        
+        .filter-btn:hover:not(.active) {
+            border-color: #cbd5e0;
+            background: #f7fafc;
+        }
+        
+        /* Loading State */
+        .product-loading {
+            text-align: center;
+            padding: 60px 20px;
+            grid-column: 1 / -1;
+        }
+        
+        .loading-spinner {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #ed64a6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #10b981;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            z-index: 1000;
+            animation: slideIn 0.3s ease;
+            display: none;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        .notification.show {
+            display: block;
+        }
+        
+        /* Admin Upload Link */
+        .admin-upload-link {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #667eea;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 50px;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 100;
+            font-size: 14px;
+        }
+        
+        .admin-upload-link:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+        }
+        
+        /* Cart Count */
+        .cart-count {
+            background: #ed64a6;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+            position: absolute;
+            top: -8px;
+            right: -8px;
+        }
+
+         /* Firebase Status Indicator */
+        .firebase-indicator {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .firebase-indicator.connected {
+            background: #10b981;
+            color: white;
+        }
+        
+        .firebase-indicator.disconnected {
+            background: #ef4444;
+            color: white;
+        }
+        
+        .sync-button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-left: 10px;
+        }
+        
+        .sync-button:hover {
+            background: #5a67d8;
+        }
+        
+        .products-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .products-stats {
+            font-size: 14px;
+            color: #666;
+            background: #f8f9fa;
+            padding: 8px 15px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .products-stats i {
+            color: #ed64a6;
+        }
+
+          /* Hero Image Grid Overlay */
+    .hero-image .grid-item {
+        position: relative;
+        cursor: pointer;
+        overflow: hidden;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+    }
+    
+    .hero-image .grid-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    }
+    
+    .hero-image .image-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(237, 100, 166, 0.8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        border-radius: 10px;
+    }
+    
+    .hero-image .grid-item:hover .image-overlay {
+        opacity: 1;
+    }
+    
+    .hero-image .image-overlay span {
+        color: white;
+        font-weight: 600;
+        font-size: 16px;
+        text-align: center;
+        padding: 10px 20px;
+        background: rgba(26, 54, 93, 0.8);
+        border-radius: 20px;
+    }
+    
+    /* Hero Tags as Clickable Buttons */
+    .hero-tags .tag {
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+    }
+    
+    .hero-tags .tag:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(237, 100, 166, 0.3);
+        background: #ed64a6 !important;
+        color: white !important;
+    }
+    
+    .hero-tags .tag:active {
+        transform: translateY(0);
+    }
+    
+    /* Add a pulsing animation for tags */
+    @keyframes pulse {
+        0% { box-shadow: 0 0 0 0 rgba(237, 100, 166, 0.4); }
+        70% { box-shadow: 0 0 0 10px rgba(237, 100, 166, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(237, 100, 166, 0); }
+    }
+    
+    .hero-tags .tag:hover {
+        animation: pulse 1.5s infinite;
+    }
+
+     /* Universal Search Styles */
+/* Universal Search Styles - REDUCED WIDTH */
+    .search-container {
+        flex: 0 1 300px; /* Changed from 400px to 300px */
+        max-width: 300px; /* Reduced from 400px */
+        margin: 0 20px;
+        position: relative;
+        min-width: 200px; /* Added minimum width */
+    }
+    
+    .search-box {
+        display: flex;
+        align-items: center;
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 30px;
+        padding: 8px 15px;
+        border: 2px solid transparent;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        width: 100%; /* Ensures it takes full container width */
+    }
+    
+    .search-box:focus-within {
+        border-color: #ed64a6;
+        box-shadow: 0 4px 20px rgba(237, 100, 166, 0.15);
+        transform: translateY(-1px);
+    }
+    
+    .search-icon {
+        color: #9ca3af;
+        margin-right: 10px;
+        font-size: 16px;
+        flex-shrink: 0;
+    }
+    
+    .search-input {
+        flex: 1;
+        border: none;
+        background: transparent;
+        outline: none;
+        font-size: 14px;
+        color: #374151;
+        font-family: 'Poppins', sans-serif;
+        min-width: 0; /* Allows input to shrink properly */
+        width: 100%; /* Takes available space */
+    }
+    
+    .search-input::placeholder {
+        color: #9ca3af;
+        font-size: 13px; /* Slightly smaller placeholder */
+    }
+    
+    .search-clear {
+        background: none;
+        border: none;
+        color: #9ca3af;
+        cursor: pointer;
+        padding: 0;
+        margin-left: 5px;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 20px;
+        height: 20px;
+        flex-shrink: 0;
+    }
+    
+    .search-clear.show {
+        opacity: 1;
+    }
+    
+    .search-clear:hover {
+        color: #ef4444;
+    }
+    
+    .search-results {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        margin-top: 10px;
+        max-height: 400px;
+        overflow-y: auto;
+        z-index: 1000;
+        display: none;
+        border: 1px solid #e5e7eb;
+        min-width: 300px; /* Minimum width for dropdown */
+    }
+    
+    .search-results.show {
+        display: block;
+        animation: slideDown 0.3s ease;
+    }
+    
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .search-result-item {
+        padding: 12px 15px; /* Slightly reduced padding */
+        border-bottom: 1px solid #f3f4f6;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 12px; /* Reduced gap */
+        transition: background 0.2s ease;
+    }
+    
+    .search-result-item:hover {
+        background: #f9fafb;
+    }
+    
+    .search-result-item:last-child {
+        border-bottom: none;
+    }
+    
+    .search-result-image {
+        width: 45px; /* Slightly smaller */
+        height: 45px;
+        border-radius: 8px;
+        object-fit: cover;
+        border: 1px solid #e5e7eb;
+        flex-shrink: 0;
+    }
+    
+    .search-result-info {
+        flex: 1;
+        min-width: 0;
+        overflow: hidden;
+    }
+    
+    .search-result-title {
+        font-weight: 500;
+        color: #1f2937;
+        font-size: 13px; /* Slightly smaller font */
+        margin-bottom: 3px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    
+    .search-result-category {
+        font-size: 11px; /* Smaller font */
+        color: #6b7280;
+        background: #f3f4f6;
+        padding: 2px 8px;
+        border-radius: 12px;
+        display: inline-block;
+        white-space: nowrap;
+    }
+    
+    .search-result-price {
+        color: #ed64a6;
+        font-weight: 600;
+        font-size: 13px;
+        margin-left: 8px;
+        flex-shrink: 0;
+    }
+    
+    .search-no-results {
+        padding: 15px; /* Reduced padding */
+        text-align: center;
+        color: #6b7280;
+        font-size: 13px;
+    }
+    
+    .search-no-results i {
+        font-size: 20px; /* Smaller icon */
+        margin-bottom: 8px;
+        display: block;
+        color: #d1d5db;
+    }
+    
+    .search-result-highlight {
+        background-color: #fff3cd;
+        padding: 1px 3px;
+        border-radius: 3px;
+        color: #856404;
+    }
+    
+    /* Tag-specific search result styles */
+    .search-result-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+        margin-top: 4px;
+    }
+    
+    .search-result-tag {
+        background: rgba(101, 126, 234, 0.1);
+        color: #667eea;
+        padding: 1px 6px;
+        border-radius: 10px;
+        font-size: 10px;
+        border: 1px solid rgba(101, 126, 234, 0.2);
+    }
+    
+    .search-result-match-type {
+        font-size: 10px;
+        color: #10b981;
+        background: #f0fdf4;
+        padding: 2px 6px;
+        border-radius: 10px;
+        border: 1px solid #bbf7d0;
+        margin-left: 5px;
+        font-weight: 500;
+    }
+    
+    /* Tag search section in results */
+    .search-tag-section {
+        padding: 10px 15px;
+        border-bottom: 1px solid #f3f4f6;
+        background: #f9fafb;
+    }
+    
+    .search-tag-title {
+        font-size: 12px;
+        font-weight: 600;
+        color: #4b5563;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+    
+    .search-tag-title i {
+        color: #667eea;
+    }
+    
+    .search-tag-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+    
+    .search-tag-item {
+        background: white;
+        border: 1px solid #e5e7eb;
+        padding: 4px 10px;
+        border-radius: 15px;
+        font-size: 11px;
+        color: #374151;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    
+    .search-tag-item:hover {
+        background: #667eea;
+        color: white;
+        border-color: #667eea;
+        transform: translateY(-1px);
+    }
+    
+    /* Mobile responsive for search - UPDATED */
+    @media (max-width: 768px) {
+        .search-container {
+            order: 3;
+            max-width: 100%;
+            margin: 15px 0 0 0;
+            width: 100%;
+            flex: 1 1 100%;
+        }
+        
+        .nav-container {
+            flex-wrap: wrap;
+        }
+        
+        .logo {
+            flex: 1;
+        }
+        
+        .search-box {
+            width: 100%;
+        }
+        
+        .search-results {
+            position: fixed;
+            top: 70px;
+            left: 10px;
+            right: 10px;
+            max-height: 60vh;
+            min-width: calc(100vw - 20px); /* Full width minus padding */
+        }
+    }
+    
+    /* For tablets */
+    @media (max-width: 1024px) {
+        .search-container {
+            max-width: 250px; /* Reduced for tablets */
+            flex: 0 1 250px;
+        }
+    }
+    
+    /* For very small screens */
+    @media (max-width: 640px) {
+        .search-container {
+            max-width: 100%;
+            flex: 1 1 100%;
+        }
+        
+        .search-input::placeholder {
+            font-size: 12px; /* Even smaller on mobile */
+        }
+    }
+    
+    /* Make the nav container flexible */
+    .nav-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px; /* Reduced gap */
+    }
+    
+    /* Adjust logo and navigation spacing */
+    .logo {
+        flex: 0 1 auto;
+    }
+    
+   
+    </style>
+</head>
+<body>
+   <!-- Update the Navigation section -->
+<header class="header">
+    <nav class="nav-container">
+        <div class="logo">
+            <a href="#home" class="logo-link">
+                <div class="logo-combined">
+                    <div class="logo-image">
+                        <img src="images/favicon-32x32.png" alt="Kindady's Retail">
+                    </div>
+                    <div class="logo-words">
+                        <span class="logo-main">KINDADY'S</span>
+                        <span class="logo-tagline">E-tail with Heart</span>
+                    </div>
+                </div>
+            </a>
+        </div>
+        
+        <!-- Search Bar - New Addition -->
+        <div class="search-container">
+            <div class="search-box">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" 
+                       id="universalSearch" 
+                       class="search-input" 
+                       placeholder="Search products, collections, tags..."
+                       onkeyup="handleSearch(event)">
+                <button class="search-clear" id="searchClear" onclick="clearSearch()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="search-results" id="searchResultsDropdown"></div>
+        </div>
+        
+        <div class="nav-toggle" id="navToggle">
+            <i class="fas fa-bars"></i>
+        </div>
+        
+        <ul class="nav-menu" id="navMenu">
+            <li><a href="#home" class="nav-link active">Home</a></li>
+            <li><a href="#collections" class="nav-link">Collections</a></li>
+            <li><a href="#products" class="nav-link">Products</a></li>
+            <li><a href="#about" class="nav-link">Our Story</a></li>
+            <li><a href="#contact" class="nav-link">Contact</a></li>
+            <li class="cart-icon">
+                <a href="#cart" id="cartBtn">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span class="cart-count" id="cartCount">0</span>
+                </a>
+            </li>
+            <li class="admin-nav-item">
+                <a href="admin.html" class="nav-link" style="color: #ed64a6;">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <span style="font-size: 12px;">Upload</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+  <!-- Hero Section -->
+<section class="hero" id="home">
+    <div class="hero-content">
+        <h1 class="hero-title">Retail with <span class="heart-text">Heart</span></h1>
+        <p class="hero-subtitle">Curated luxury lifestyle products, kindly selected for you</p>
+        <div class="hero-tags">
+            <span class="tag" onclick="filterProductsByCategory('clothing')">Clothing</span>
+            <span class="tag" onclick="filterProductsByCategory('fragrance')">Perfumes</span>
+            <span class="tag" onclick="filterProductsByCategory('footwear')">Shoes</span>
+            <span class="tag" onclick="filterProductsByCategory('accessories')">Accessories</span>
+        </div>
+        <a href="#collections" class="btn btn-primary">Explore Collections</a>
+    </div>
+    <div class="hero-image">
+        <div class="image-grid">
+            <div class="grid-item" onclick="filterProductsByCategory('clothing')">
+                <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400" alt="Luxury Clothing">
+                <div class="image-overlay">
+                    <span>Shop Clothing</span>
+                </div>
+            </div>
+            <div class="grid-item" onclick="filterProductsByCategory('fragrance')">
+                <img src="https://images.unsplash.com/photo-1541643600914-78b084683601?ixlib=rb-4.0.3&auto=format&fit=crop&w=400" alt="Designer Perfumes">
+                <div class="image-overlay">
+                    <span>Shop Fragrances</span>
+                </div>
+            </div>
+            <div class="grid-item" onclick="filterProductsByCategory('footwear')">
+                <img src="https://res.cloudinary.com/dkajyfuab/image/upload/v1769360254/collection/h3x3tdywxy7boskkks3q.jpg" alt="Premium Shoes">
+                <div class="image-overlay">
+                    <span>Shop Footwear</span>
+                </div>
+            </div>
+            <div class="grid-item" onclick="filterProductsByCategory('accessories')">
+                <img src="https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?ixlib=rb-4.0.3&auto=format&fit=crop&w=400" alt="Lifestyle Accessories">
+                <div class="image-overlay">
+                    <span>Shop Accessories</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+    <!-- Value Proposition -->
+    <section class="values-section">
+        <div class="container">
+            <div class="values-grid">
+                <div class="value-card">
+                    <div class="value-icon">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h3>Kindly Curated</h3>
+                    <p>Every product is hand-selected with care and consideration</p>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h3>Premium Quality</h3>
+                    <p>Only the finest materials and craftsmanship</p>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon">
+                        <i class="fas fa-handshake"></i>
+                    </div>
+                    <h3>Personal Service</h3>
+                    <p>Warm, personalized attention to every customer</p>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon">
+                        <i class="fas fa-shipping-fast"></i>
+                    </div>
+                    <h3>Free Shipping</h3>
+                    <p>Free delivery on orders over $100</p>
+                </div>
+            </div>
+        </div>
+    </section>
+<!-- Update your Collections section - add onclick handlers -->
+<section class="collections-section" id="collections">
+    <div class="container">
+        <h2 class="section-title">Our <span class="highlight">Collections</span></h2>
+        <p class="section-subtitle">Beautifully organized by lifestyle categories</p>
+        
+        <div class="collections-grid">
+            <div class="collection-card" onclick="filterProductsByCategory('clothing')">
+                <div class="collection-image">
+                    <img src="https://images.unsplash.com/photo-1445205170230-053b83016050?ixlib=rb-4.0.3&auto=format&fit=crop&w=600" alt="Clothing Collection">
+                    <div class="collection-overlay">
+                        <h3>Clothing</h3>
+                        <p>Elevated everyday wear</p>
+                        <span class="btn-collection">View Collection</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="collection-card" onclick="filterProductsByCategory('fragrance')">
+                <div class="collection-image">
+                    <img src="https://images.unsplash.com/photo-1541643600914-78b084683601?ixlib=rb-4.0.3&auto=format&fit=crop&w=600" alt="Fragrance Collection">
+                    <div class="collection-overlay">
+                        <h3>Fragrances</h3>
+                        <p>Scents that tell stories</p>
+                        <span class="btn-collection">View Collection</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="collection-card" onclick="filterProductsByCategory('footwear')">
+                <div class="collection-image">
+                    <img src="https://res.cloudinary.com/dkajyfuab/image/upload/v1769360254/collection/h3x3tdywxy7boskkks3q.jpg" alt="Footwear Collection">
+                    <div class="collection-overlay">
+                        <h3>Footwear</h3>
+                        <p>Steps in comfort & style</p>
+                        <span class="btn-collection">View Collection</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="collection-card" onclick="filterProductsByCategory('accessories')">
+                <div class="collection-image">
+                    <img src="https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?ixlib=rb-4.0.3&auto=format&fit=crop&w=600" alt="Accessories Collection">
+                    <div class="collection-overlay">
+                        <h3>Accessories</h3>
+                        <p>Finishing touches</p>
+                        <span class="btn-collection">View Collection</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Update Products section - add IDs for dynamic updates -->
+<section class="products-section" id="products">
+    <div class="container">
+        <h2 class="section-title" id="productsTitle">Featured <span class="highlight">Products</span></h2>
+        <p class="section-subtitle" id="productsSubtitle">Kindady's hand-picked favorites</p>
+        
+        <div class="products-controls">
+       <!-- Update the filter button - remove "shoes" and use "footwear" consistently -->
+<div class="filters">
+    <button class="filter-btn active" data-filter="all" onclick="filterProducts('all')">All Products</button>
+    <button class="filter-btn" data-filter="clothing" onclick="filterProducts('clothing')">Clothing</button>
+    <button class="filter-btn" data-filter="fragrance" onclick="filterProducts('fragrance')">Fragrances</button>
+    <button class="filter-btn" data-filter="footwear" onclick="filterProducts('footwear')">Footwear</button>
+    <button class="filter-btn" data-filter="accessories" onclick="filterProducts('accessories')">Accessories</button>
+</div>
+            
+            <div class="products-stats" id="productsStats">
+                <i class="fas fa-database"></i>
+                <span id="productCount">Loading...</span>
+            </div>
+            
+            <button class="sync-button" onclick="loadProductsFromFirebase()">
+                <i class="fas fa-sync-alt"></i>
+                Refresh Products
+            </button>
+        </div>
+        
+        <div class="products-grid" id="productsGrid">
+            <div class="product-loading">
+                <div class="loading-spinner"></div>
+                <p>Loading products from your collection...</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+    <!-- About Section -->
+    <section class="about-section" id="about">
+        <div class="container">
+            <div class="about-grid">
+                <div class="about-image">
+                    <div class="image-frame">
+                        <img src="https://res.cloudinary.com/dzoq4pgjn/image/upload/v1769299772/n9mghgleavmzhnuurcbh.jpg" alt="Kindady's Founder">
+                        <div class="image-badge">
+                            <i class="fas fa-heart"></i>
+                            <span>Founded with Love</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-content">
+                    <h2 class="section-title">Our <span class="highlight">Story</span></h2>
+                    <h3>Hello, I'm Dora Yaa Asor</h3>
+                    <p>Kindady's Retail was born from a simple belief: retail should be kind, personal, and filled with heart. After years in the fashion industry, I noticed something missing - the human connection, the personal touch, the kindness that makes shopping truly special.</p>
+                    <p>Every product in our collection is hand-selected not just for its beauty, but for the story it tells and the joy it brings. From luxurious fabrics to captivating scents, each item is chosen with care, consideration, and of course, lots of heart.</p>
+                    <div class="about-stats">
+                        <div class="stat">
+                            <h4>500+</h4>
+                            <p>Happy Customers</p>
+                        </div>
+                        <div class="stat">
+                            <h4>50+</h4>
+                            <p>Curated Brands</p>
+                        </div>
+                        <div class="stat">
+                            <h4>100%</h4>
+                            <p>Heart & Soul</p>
+                        </div>
+                    </div>
+                    <a href="#contact" class="btn btn-secondary">Get in Touch</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact-section" id="contact">
+        <div class="container">
+            <h2 class="section-title">Get in <span class="highlight">Touch</span></h2>
+            <p class="section-subtitle">We'd love to hear from you</p>
+            
+            <div class="contact-grid">
+                <div class="contact-info">
+                    <div class="contact-card">
+                        <div class="contact-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <h4>Visit Us</h4>
+                        <p>123 Luxury Lane<br>Retail District<br>NY 10001</p>
+                    </div>
+                    
+                    <div class="contact-card">
+                        <div class="contact-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <h4>Call Us</h4>
+                        <p>(555) 123-4567</p>
+                        <p>Mon-Fri: 9am-6pm EST</p>
+                    </div>
+                    
+                    <div class="contact-card">
+                        <div class="contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <h4>Email Us</h4>
+                        <p>hello@kindadysretail.com</p>
+                        <p>Response within 24 hours</p>
+                    </div>
+                    
+                    <div class="social-links">
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-pinterest"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-tiktok"></i></a>
+                    </div>
+                </div>
+                
+                <div class="contact-form">
+                    <form id="contactForm">
+                        <div class="form-group">
+                            <input type="text" id="name" placeholder="Your Name" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" id="email" placeholder="Your Email" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" id="subject" placeholder="Subject">
+                        </div>
+                        <div class="form-group">
+                            <textarea id="message" rows="5" placeholder="Your Message" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-paper-plane"></i> Send Message
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="newsletter-section">
+        <div class="container">
+            <div class="newsletter-box">
+                <div class="newsletter-content">
+                    <h3>Join Our Kind Community</h3>
+                    <p>Subscribe for exclusive offers, new arrivals, and heartfelt stories</p>
+                </div>
+                <div class="newsletter-form">
+                    <input type="email" placeholder="Your email address">
+                    <button class="btn btn-primary">Subscribe</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="footer-logo">
+                        <span class="logo-text">KINDADY'S</span>
+                        <span class="logo-sub">RETAIL</span>
+                    </div>
+                    <p class="footer-tagline">Retail with Heart</p>
+                    <p>Curated luxury lifestyle products, kindly selected and beautifully presented for those who value quality, style, and genuine connection.</p>
+                </div>
+                
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#collections">Collections</a></li>
+                        <li><a href="#products">Shop All</a></li>
+                        <li><a href="#about">Our Story</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h4>Customer Care</h4>
+                    <ul>
+                        <li><a href="#">Shipping Policy</a></li>
+                        <li><a href="#">Returns & Exchanges</a></li>
+                        <li><a href="#">Size Guide</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h4>Stay Connected</h4>
+                    <p>Follow us for daily inspiration, styling tips, and behind-the-scenes moments.</p>
+                    <div class="footer-social">
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-pinterest"></i></a>
+                        <a href="#"><i class="fab fa-tiktok"></i></a>
+                    </div>
+                    <div class="payment-methods">
+                        <i class="fab fa-cc-visa"></i>
+                        <i class="fab fa-cc-mastercard"></i>
+                        <i class="fab fa-cc-amex"></i>
+                        <i class="fab fa-cc-paypal"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 Kindady's Retail. All rights reserved. | Designed with <i class="fas fa-heart"></i> by Kindady's Team</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Admin Upload Link -->
+    <a href="admin.html" class="admin-upload-link">
+        <i class="fas fa-cloud-upload-alt"></i>
+        Upload Products
+    </a>
+
+    <!-- Notification -->
+    <div class="notification" id="notification"></div>
+
+    <!-- Cart Modal -->
+    <div class="cart-modal" id="cartModal">
+        <div class="cart-content">
+            <div class="cart-header">
+                <h3><i class="fas fa-shopping-bag"></i> Your Shopping Bag</h3>
+                <button class="close-cart" id="closeCart">&times;</button>
+            </div>
+            <div class="cart-items" id="cartItems">
+                <p class="empty-cart">Your bag is empty</p>
+            </div>
+            <div class="cart-total">
+                <div class="total-line">
+                    <span>Subtotal:</span>
+                    <span>$<span id="cartSubtotal">0.00</span></span>
+                </div>
+                <div class="total-line">
+                    <span>Shipping:</span>
+                    <span id="shippingCost">Calculated at checkout</span>
+                </div>
+                <div class="total-line grand-total">
+                    <span>Total:</span>
+                    <span>$<span id="cartTotal">0.00</span></span>
+                </div>
+                <button class="btn btn-checkout">Proceed to Checkout</button>
+                <p class="continue-shopping">or <a href="#products">continue shopping</a></p>
+            </div>
+        </div>
+    </div>
+
+   <script>
+    // CLOUDINARY INTEGRATION SCRIPT
+    const PRODUCT_CATEGORIES = {
+        clothing: ['shirt', 'dress', 'jacket', 'pants', 'sweater', 'blouse', 'skirt', 'top', 'jeans', 'coat', 't-shirt', 'hoodie', 'cardigan', 'jumper'],
+        fragrance: ['perfume', 'cologne', 'scent', 'fragrance', 'essence', 'spray', 'bottle', 'aroma', 'oud', 'amber', 'musk', 'rose', 'jasmine'],
+        footwear: ['shoe', 'shoes', 'sneaker', 'boot', 'heel', 'sandal', 'loafer', 'footwear', 'feet', 'trainer', 'pump', 'flat', 'slipper', 'slippers', 'mule'],
+        accessories: ['bag', 'watch', 'jewelry', 'belt', 'scarf', 'hat', 'sunglasses', 'wallet', 'purse', 'bracelet', 'necklace', 'ring', 'earring', 'tie']
+    };
+
+    let cart = JSON.parse(localStorage.getItem('kindadys_cart')) || [];
+    let firebaseConnected = false;
+    let productsFromFirebase = [];
+    let allProducts = [];
+    let currentFilter = 'all';
+    
+    // Tag tracking for search
+    let allTags = new Set();
+    let tagFrequency = {};
+    let productTagMap = {};
+
+    // Search functionality variables
+    let searchTimeout;
+    let lastSearchQuery = '';
+
+    // Check Firebase connection
+    function checkFirebaseConnection() {
+        const indicator = document.createElement('div');
+        indicator.className = 'firebase-indicator';
+        indicator.id = 'firebaseIndicator';
+        document.body.appendChild(indicator);
+        
+        if (window.firestoreDB) {
+            firebaseConnected = true;
+            indicator.innerHTML = '<i class="fas fa-check-circle"></i> Firebase Connected';
+            indicator.classList.add('connected');
+            console.log('Firebase is connected');
+            
+            // Load products from Firebase
+            setTimeout(() => {
+                loadProductsFromFirebase();
+            }, 1000);
+            
+        } else {
+            indicator.innerHTML = '<i class="fas fa-exclamation-circle"></i> Firebase Not Connected';
+            indicator.classList.add('disconnected');
+            console.log('Firebase is not connected, loading from localStorage');
+            
+            // Load from localStorage as fallback
+            loadProductsFromLocalStorage();
+        }
+    }
+
+    // Enhanced category detection that maps all shoe/slipper/footwear to "footwear"
+    function detectCategory(filename) {
+        if (!filename) return 'clothing';
+        
+        const lowerFilename = filename.toLowerCase();
+        
+        // Check for footwear-related terms FIRST (priority)
+        const footwearTerms = ['shoe', 'shoes', 'sneaker', 'boot', 'boots', 'heel', 'heels', 'sandal', 'sandals', 
+                              'loafer', 'loafers', 'footwear', 'slipper', 'slippers', 'trainer', 'trainers', 
+                              'pump', 'pumps', 'flat', 'flats', 'mule', 'mules', 'foot', 'feet'];
+        
+        for (const term of footwearTerms) {
+            if (lowerFilename.includes(term)) {
+                return 'footwear';
+            }
+        }
+        
+        // Check for fragrance/perfume terms
+        const fragranceTerms = ['perfume', 'perfumes', 'cologne', 'colognes', 'fragrance', 'fragrances', 
+                               'scent', 'scents', 'essence', 'spray', 'bottle', 'aroma'];
+        for (const term of fragranceTerms) {
+            if (lowerFilename.includes(term)) {
+                return 'fragrance';
+            }
+        }
+        
+        // Check for clothing terms
+        const clothingTerms = ['shirt', 'dress', 'jacket', 'pants', 'sweater', 'blouse', 'skirt', 'top', 
+                              'jeans', 'coat', 't-shirt', 'hoodie', 'cardigan', 'jumper', 'clothing', 'clothes'];
+        for (const term of clothingTerms) {
+            if (lowerFilename.includes(term)) {
+                return 'clothing';
+            }
+        }
+        
+        // Check for accessories terms
+        const accessoriesTerms = ['bag', 'watch', 'jewelry', 'belt', 'scarf', 'hat', 'sunglasses', 'wallet', 
+                                 'purse', 'bracelet', 'necklace', 'ring', 'earring', 'tie', 'accessory'];
+        for (const term of accessoriesTerms) {
+            if (lowerFilename.includes(term)) {
+                return 'accessories';
+            }
+        }
+        
+        // Default to clothing if nothing matches
+        return 'clothing';
+    }
+
+    // When products come from Firebase, ensure consistent categories
+    function normalizeProductCategories(products) {
+        return products.map(product => {
+            // If product already has a category, normalize it
+            if (product.category) {
+                const lowerCategory = product.category.toLowerCase();
+                
+                // Map variations to standard categories
+                if (lowerCategory.includes('shoe') || 
+                    lowerCategory.includes('slipper') || 
+                    lowerCategory.includes('foot') ||
+                    lowerCategory === 'shoes' ||
+                    lowerCategory === 'footwear') {
+                    product.category = 'footwear';
+                }
+                else if (lowerCategory.includes('perfume') || 
+                         lowerCategory.includes('fragrance') || 
+                         lowerCategory.includes('scent') ||
+                         lowerCategory === 'fragrances') {
+                    product.category = 'fragrance';
+                }
+                else if (lowerCategory === 'accessory' || 
+                         lowerCategory === 'accessories') {
+                    product.category = 'accessories';
+                }
+                else if (lowerCategory === 'cloth' || 
+                         lowerCategory === 'clothes' ||
+                         lowerCategory === 'clothing') {
+                    product.category = 'clothing';
+                }
+            } else {
+                // If no category, detect it from the name
+                product.category = detectCategory(product.name || '');
+            }
+            
+            return product;
+        });
+    }
+
+    // Extract and index tags from products
+    function indexProductTags(products) {
+        allTags.clear();
+        tagFrequency = {};
+        productTagMap = {};
+        
+        products.forEach(product => {
+            const productId = product.firebaseId || product.id;
+            const productTags = product.tags || [];
+            
+            productTagMap[productId] = productTags;
+            
+            productTags.forEach(tag => {
+                allTags.add(tag);
+                tagFrequency[tag] = (tagFrequency[tag] || 0) + 1;
+            });
+        });
+        
+        console.log(`Indexed ${allTags.size} unique tags from ${products.length} products`);
+    }
+
+    // Load products from Firebase
+    async function loadProductsFromFirebase() {
+        if (!firebaseConnected || !window.firestoreDB) {
+            console.log('Firebase not available, using localStorage');
+            loadProductsFromLocalStorage();
+            return;
+        }
+        
+        const container = document.getElementById('productsGrid');
+        const statsEl = document.getElementById('productCount');
+        
+        try {
+            container.innerHTML = `
+                <div class="product-loading">
+                    <div class="loading-spinner"></div>
+                    <p>Loading products from Firebase...</p>
+                </div>
+            `;
+            
+            const db = window.firestoreDB;
+            const productsCollection = window.firebaseCollection(db, 'products');
+            const q = window.firebaseQuery(productsCollection, window.firebaseOrderBy('createdAt', 'desc'));
+            const querySnapshot = await window.firebaseGetDocs(q);
+            
+            productsFromFirebase = [];
+            allProducts = [];
+            
+            querySnapshot.forEach((doc) => {
+                const productData = doc.data();
+                const product = {
+                    id: doc.id,
+                    ...productData,
+                    firebaseId: doc.id
+                };
+                productsFromFirebase.push(product);
+            });
+            
+            console.log(`Loaded ${productsFromFirebase.length} products from Firebase`);
+            
+            if (productsFromFirebase.length > 0) {
+                // Normalize categories for all products
+                allProducts = normalizeProductCategories(productsFromFirebase);
+                
+                // Index tags for search
+                indexProductTags(allProducts);
+                
+                displayProducts(allProducts);
+                updateProductStats(allProducts.length, 'Firebase');
+                statsEl.innerHTML = `${allProducts.length} products loaded from Firebase`;
+            } else {
+                // No products in Firebase, check localStorage
+                loadProductsFromLocalStorage();
+                statsEl.innerHTML = 'No products in Firebase, using local storage';
+            }
+            
+        } catch (error) {
+            console.error('Error loading from Firebase:', error);
+            showNotification('Error loading products from Firebase. Using local storage.');
+            loadProductsFromLocalStorage();
+            statsEl.innerHTML = 'Error loading from Firebase';
+        }
+    }
+
+    // Display products function (generic)
+    function displayProducts(products) {
+        const container = document.getElementById('productsGrid');
+        
+        if (products.length === 0) {
+            container.innerHTML = `
+                <div class="product-loading" style="grid-column: 1 / -1;">
+                    <i class="fas fa-box-open" style="font-size: 48px; color: #ccc; margin-bottom: 15px;"></i>
+                    <p>No products found in your collection</p>
+                    <p style="font-size: 14px; color: #666; margin-top: 10px;">
+                        Use the <a href="admin.html" style="color: #ed64a6;">Upload Products</a> page to add products
+                    </p>
+                </div>
+            `;
+            return;
+        }
+        
+        const productsHTML = products.map((product, index) => {
+            const productId = product.firebaseId || product.id;
+            const category = product.category || detectCategory(product.name || '');
+            const price = product.price || generatePrice(index);
+            const title = product.name || generateTitle('', category);
+            const imageUrl = product.mainImage || product.images?.[0]?.url || product.url || '';
+            const tags = productTagMap[productId] || product.tags || [];
+            
+            // Apply Cloudinary transformations if it's a Cloudinary URL
+            let displayImageUrl = imageUrl;
+            if (imageUrl.includes('res.cloudinary.com')) {
+                displayImageUrl = imageUrl.replace('/upload/', '/upload/w_600,h_600,c_fill/');
+            }
+            
+            // Escape single quotes in title for JavaScript
+            const safeTitle = title.replace(/'/g, "\\'");
+            const safeDescription = (product.description || '').replace(/'/g, "\\'");
+            
+            return `
+                <div class="product-card" data-category="${category}" data-firebase-id="${product.firebaseId || ''}" data-tags="${tags.join(',')}">
+                    <div class="product-image-container">
+                        <img src="${displayImageUrl || 'https://via.placeholder.com/600x600/cccccc/ffffff?text=Product+Image'}" 
+                             alt="${title}" 
+                             class="product-image" 
+                             loading="lazy"
+                             onerror="this.src='https://via.placeholder.com/600x600/cccccc/ffffff?text=Image+Not+Available'">
+                    </div>
+                    <div class="product-details">
+                        <span class="product-category">${category.charAt(0).toUpperCase() + category.slice(1)}</span>
+                        <h3 class="product-title">${title}</h3>
+                        <p class="product-price">${product.currencySymbol || '$'}${price.toFixed(2)}</p>
+                        ${tags.length > 0 ? `
+                            <div class="product-tags-container">
+                                ${tags.slice(0, 3).map(tag => `<span class="product-tag">#${tag}</span>`).join('')}
+                                ${tags.length > 3 ? `<span class="product-tag">+${tags.length - 3} more</span>` : ''}
+                            </div>
+                        ` : ''}
+                        ${product.brand ? `<p style="font-size: 13px; color: #666; margin-bottom: 10px;">${product.brand}</p>` : ''}
+                        ${product.description ? `<p style="font-size: 13px; color: #777; margin-bottom: 15px; line-height: 1.4;">${truncateText(product.description, 80)}</p>` : ''}
+                        <button class="add-to-cart" onclick="addToCart('${safeTitle}', ${price}, '${imageUrl}', '${safeDescription}')">
+                            <i class="fas fa-shopping-bag"></i> Add to Cart
+                        </button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        container.innerHTML = productsHTML;
+        applyCurrentFilter();
+    }
+
+    // Filter products by category
+    function filterProducts(category) {
+        currentFilter = category;
+        updateFilterButtons(category);
+        
+        if (category === 'all') {
+            displayProducts(allProducts);
+            document.getElementById('productsTitle').innerHTML = 'Featured <span class="highlight">Products</span>';
+            document.getElementById('productsSubtitle').textContent = 'Kindady\'s hand-picked favorites';
+        } else {
+            const filteredProducts = allProducts.filter(product => {
+                // Ensure we're comparing with normalized category
+                return product.category === category;
+            });
+            
+            displayProducts(filteredProducts);
+            
+            // Update title based on category
+            const categoryTitles = {
+                'clothing': 'Clothing',
+                'fragrance': 'Fragrances', 
+                'footwear': 'Footwear',
+                'accessories': 'Accessories'
+            };
+            
+            document.getElementById('productsTitle').innerHTML = `${categoryTitles[category]} <span class="highlight">Collection</span>`;
+            document.getElementById('productsSubtitle').textContent = `Explore our curated ${categoryTitles[category].toLowerCase()} selection`;
+            
+            // Scroll to products section
+            document.getElementById('products').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        updateProductStats(allProducts.length, 'Firebase', category);
+    }
+
+    // Filter products by category from collection cards
+    function filterProductsByCategory(category) {
+        // Map any shoe/slipper click to "footwear"
+        if (category === 'shoes' || category === 'slippers') {
+            category = 'footwear';
+        }
+        
+        currentFilter = category;
+        updateFilterButtons(category);
+        
+        const filteredProducts = allProducts.filter(product => {
+            return product.category === category;
+        });
+        
+        displayProducts(filteredProducts);
+        
+        // Update title based on category
+        const categoryTitles = {
+            'clothing': 'Clothing',
+            'fragrance': 'Fragrances',
+            'footwear': 'Footwear',
+            'accessories': 'Accessories'
+        };
+        
+        document.getElementById('productsTitle').innerHTML = `${categoryTitles[category]} <span class="highlight">Collection</span>`;
+        document.getElementById('productsSubtitle').textContent = `Explore our curated ${categoryTitles[category].toLowerCase()} selection`;
+        
+        // Scroll to products section
+        document.getElementById('products').scrollIntoView({ behavior: 'smooth' });
+        
+        updateProductStats(allProducts.length, 'Firebase', category);
+        
+        // Show notification
+        showNotification(`Viewing ${categoryTitles[category]} collection`);
+    }
+    
+    // Filter products by tag
+    function filterProductsByTag(tag) {
+        const filteredProducts = allProducts.filter(product => {
+            const productId = product.firebaseId || product.id;
+            const productTags = productTagMap[productId] || product.tags || [];
+            return productTags.includes(tag);
+        });
+        
+        displayProducts(filteredProducts);
+        
+        // Update title
+        document.getElementById('productsTitle').innerHTML = `Tag: <span class="highlight">#${tag}</span>`;
+        document.getElementById('productsSubtitle').textContent = `Products tagged with #${tag}`;
+        
+        // Reset filter buttons
+        updateFilterButtons('all');
+        currentFilter = 'all';
+        
+        // Scroll to products section
+        document.getElementById('products').scrollIntoView({ behavior: 'smooth' });
+        
+        updateProductStats(allProducts.length, 'Firebase', `tag: ${tag}`);
+        
+        // Show notification
+        showNotification(`Showing products tagged #${tag}`);
+    }
+
+    // Update filter buttons
+    function updateFilterButtons(selectedCategory) {
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        filterButtons.forEach(button => {
+            const filter = button.getAttribute('data-filter');
+            if (filter === selectedCategory) {
+                button.classList.add('active');
+            } else {
+                button.classList.remove('active');
+            }
+        });
+    }
+
+    // Apply current filter to displayed products
+    function applyCurrentFilter() {
+        const productCards = document.querySelectorAll('.product-card');
+        
+        productCards.forEach(card => {
+            if (currentFilter === 'all' || card.getAttribute('data-category') === currentFilter) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }
+
+    // Update product statistics
+    function updateProductStats(totalCount, source = 'Local', filter = 'all') {
+        const statsEl = document.getElementById('productCount');
+        const visibleProducts = document.querySelectorAll('.product-card[style*="block"], .product-card:not([style])').length;
+        
+        if (filter === 'all') {
+            statsEl.innerHTML = `${totalCount} products from ${source}`;
+        } else {
+            statsEl.innerHTML = `${visibleProducts} ${filter} products from ${source}`;
+        }
+    }
+
+    // Load products from localStorage (fallback)
+    function loadProductsFromLocalStorage() {
+        const container = document.getElementById('productsGrid');
+        const statsEl = document.getElementById('productCount');
+        
+        const uploads = JSON.parse(localStorage.getItem('kindadys_uploads')) || [];
+        const firebaseProducts = JSON.parse(localStorage.getItem('kindadys_products')) || [];
+        
+        // Combine both sources
+        const allLocalProducts = [...uploads, ...firebaseProducts];
+        
+        console.log(`Found ${allLocalProducts.length} products in localStorage`);
+        
+        if (allLocalProducts.length === 0) {
+            showFallbackProducts();
+            statsEl.innerHTML = 'No products found. Showing demo products.';
+            allProducts = [];
+            return;
+        }
+        
+        const imageUploads = allLocalProducts.filter(upload => {
+            if (upload.url && (upload.url.includes('.jpg') || upload.url.includes('.jpeg') || upload.url.includes('.png') || upload.url.includes('.webp') || upload.url.includes('.gif'))) {
+                return true;
+            }
+            if (upload.mainImage || upload.images) {
+                return true;
+            }
+            return false;
+        });
+        
+        if (imageUploads.length === 0) {
+            showFallbackProducts();
+            statsEl.innerHTML = 'No valid products found. Showing demo products.';
+            allProducts = [];
+            return;
+        }
+        
+        allProducts = normalizeProductCategories(imageUploads);
+        
+        // Index tags for search
+        indexProductTags(allProducts);
+        
+        displayProducts(allProducts);
+        updateProductStats(allProducts.length, 'local storage');
+        statsEl.innerHTML = `${allProducts.length} products from local storage`;
+    }
+
+    // Show fallback products
+    function showFallbackProducts() {
+        const container = document.getElementById('productsGrid');
+        
+        const fallbackProducts = [
+            { 
+                id: 'fallback-1',
+                name: "Classic White Shirt", 
+                price: 89.99, 
+                category: "clothing", 
+                mainImage: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                description: "Premium cotton shirt for everyday elegance",
+                tags: ["casual", "summer", "essential"]
+            },
+            { 
+                id: 'fallback-2',
+                name: "Luxury Perfume", 
+                price: 129.99, 
+                category: "fragrance", 
+                mainImage: "https://images.unsplash.com/photo-1541643600914-78b084683601?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                description: "Signature scent for lasting impression",
+                tags: ["elegant", "evening", "luxury"]
+            },
+            { 
+                id: 'fallback-3',
+                name: "Leather Boots", 
+                price: 159.99, 
+                category: "footwear", 
+                mainImage: "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                description: "Handcrafted leather boots for comfort and style",
+                tags: ["comfort", "winter", "durable"]
+            },
+            { 
+                id: 'fallback-4',
+                name: "Designer Handbag", 
+                price: 299.99, 
+                category: "accessories", 
+                mainImage: "https://images.unsplash.com/photo-1584917865442-de89df76afd3?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                description: "Chic handbag for modern sophistication",
+                tags: ["trendy", "versatile", "luxury"]
+            }
+        ];
+
+        allProducts = fallbackProducts;
+        
+        // Index tags for search
+        indexProductTags(allProducts);
+        
+        const productsHTML = fallbackProducts.map(product => {
+            const safeTitle = product.name.replace(/'/g, "\\'");
+            const safeDescription = (product.description || '').replace(/'/g, "\\'");
+            const tags = product.tags || [];
+            
+            return `
+                <div class="product-card" data-category="${product.category}" data-tags="${tags.join(',')}">
+                    <div class="product-image-container">
+                        <img src="${product.mainImage}" alt="${product.name}" class="product-image">
+                    </div>
+                    <div class="product-details">
+                        <span class="product-category">${product.category.charAt(0).toUpperCase() + product.category.slice(1)}</span>
+                        <h3 class="product-title">${product.name}</h3>
+                        <p class="product-price">$${product.price.toFixed(2)}</p>
+                        ${tags.length > 0 ? `
+                            <div class="product-tags-container">
+                                ${tags.map(tag => `<span class="product-tag">#${tag}</span>`).join('')}
+                            </div>
+                        ` : ''}
+                        ${product.description ? `<p style="font-size: 13px; color: #777; margin-bottom: 15px; line-height: 1.4;">${product.description}</p>` : ''}
+                        <button class="add-to-cart" onclick="addToCart('${safeTitle}', ${product.price}, '${product.mainImage}', '${safeDescription}')">
+                            <i class="fas fa-shopping-bag"></i> Add to Cart
+                        </button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        container.innerHTML = productsHTML;
+        applyCurrentFilter();
+    }
+
+    // Utility functions
+    function generateTitle(filename, category) {
+        if (!filename) {
+            const titles = {
+                clothing: ['Elegant Blouse', 'Premium Jacket', 'Classic Denim'],
+                fragrance: ['Signature Scent', 'Premium Fragrance', 'Luxury Perfume'],
+                footwear: ['Designer Shoes', 'Comfort Sneakers', 'Elegant Heels'],
+                accessories: ['Chic Handbag', 'Elegant Watch', 'Statement Jewelry']
+            };
+            const categoryTitles = titles[category] || titles.clothing;
+            return categoryTitles[Math.floor(Math.random() * categoryTitles.length)];
+        }
+        
+        const cleanName = filename
+            .replace(/\.[^/.]+$/, '')
+            .replace(/[_-]/g, ' ')
+            .replace(/\d+/g, '')
+            .trim();
+        
+        if (cleanName.length > 3) {
+            return cleanName.split(' ')
+                .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                .join(' ');
+        }
+        
+        return generateTitle('', category);
+    }
+
+    function generatePrice(index) {
+        const basePrices = [49.99, 79.99, 89.99, 99.99, 129.99, 149.99];
+        return basePrices[index % basePrices.length];
+    }
+
+    function truncateText(text, maxLength) {
+        if (!text) return '';
+        return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
+    }
+
+    // Shopping cart functionality
+    function addToCart(title, price, image, description = '') {
+        cart.push({
+            id: Date.now(),
+            title,
+            price,
+            image,
+            description,
+            quantity: 1
+        });
+        
+        localStorage.setItem('kindadys_cart', JSON.stringify(cart));
+        updateCartCount();
+        showNotification(`"${title}" added to cart!`);
+    }
+    
+    function updateCartCount() {
+        const cartCount = document.getElementById('cartCount');
+        if (cartCount) {
+            cartCount.textContent = cart.length;
+        }
+    }
+    
+    function showNotification(message) {
+        const notification = document.getElementById('notification');
+        notification.textContent = message;
+        notification.classList.add('show');
+        
+        setTimeout(() => {
+            notification.classList.remove('show');
+        }, 3000);
+    }
+
+    // =============== ENHANCED UNIVERSAL SEARCH WITH TAGS ===============
+    
+    function handleSearch(event) {
+        const searchInput = document.getElementById('universalSearch');
+        const searchQuery = searchInput.value.trim();
+        const clearBtn = document.getElementById('searchClear');
+        
+        // Show/hide clear button
+        if (searchQuery.length > 0) {
+            clearBtn.classList.add('show');
+        } else {
+            clearBtn.classList.remove('show');
+            hideSearchResults();
+            return;
+        }
+        
+        // If Enter key is pressed
+        if (event.key === 'Enter') {
+            performSearch(searchQuery);
+            return;
+        }
+        
+        // Debounce search to avoid too many requests
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => {
+            performSearch(searchQuery);
+        }, 300);
+    }
+
+    function performSearch(query) {
+        if (query === lastSearchQuery) return;
+        lastSearchQuery = query;
+        
+        const resultsDropdown = document.getElementById('searchResultsDropdown');
+        
+        if (query.length < 2) {
+            hideSearchResults();
+            return;
+        }
+        
+        const searchResults = searchProductsAndTags(query);
+        displaySearchResults(searchResults, query);
+    }
+
+    function searchProductsAndTags(query) {
+        if (!allProducts.length) return [];
+        
+        const lowerQuery = query.toLowerCase();
+        const results = [];
+        const tagResults = [];
+        
+        // First, search for exact tag matches
+        const matchingTags = Array.from(allTags).filter(tag => 
+            tag.toLowerCase().includes(lowerQuery)
+        );
+        
+        // Sort tags by frequency (most common first) and relevance
+        matchingTags.sort((a, b) => {
+            const aScore = tagFrequency[a] || 0;
+            const bScore = tagFrequency[b] || 0;
+            
+            // Exact match gets higher priority
+            if (a === lowerQuery && b !== lowerQuery) return -1;
+            if (b === lowerQuery && a !== lowerQuery) return 1;
+            
+            // Starts with query gets higher priority
+            if (a.startsWith(lowerQuery) && !b.startsWith(lowerQuery)) return -1;
+            if (b.startsWith(lowerQuery) && !a.startsWith(lowerQuery)) return 1;
+            
+            // Then sort by frequency
+            return bScore - aScore;
+        });
+        
+        // Take top 5 tags
+        const topTags = matchingTags.slice(0, 5);
+        
+        // Search products
+        allProducts.forEach(product => {
+            let score = 0;
+            const productId = product.firebaseId || product.id;
+            const productTags = productTagMap[productId] || product.tags || [];
+            const searchFields = [
+                { field: product.name || '', weight: 10 },
+                { field: product.description || '', weight: 5 },
+                { field: product.brand || '', weight: 7 },
+                { field: product.category || '', weight: 3 }
+            ];
+            
+            let matchType = '';
+            
+            // Check each field for matches
+            searchFields.forEach(({ field, weight }) => {
+                const lowerField = field.toLowerCase();
+                if (lowerField.includes(lowerQuery)) {
+                    // Higher score for exact matches at the beginning
+                    if (lowerField.startsWith(lowerQuery)) {
+                        score += weight * 2;
+                        matchType = 'name';
+                    } else if (lowerField.includes(lowerQuery)) {
+                        score += weight;
+                        matchType = 'description';
+                    }
+                }
+            });
+            
+            // Check tags for matches (higher weight for tag matches)
+            const tagMatches = productTags.filter(tag => 
+                tag.toLowerCase().includes(lowerQuery)
+            );
+            
+            if (tagMatches.length > 0) {
+                score += 15 * tagMatches.length; // Higher weight for tag matches
+                matchType = 'tag';
+            }
+            
+            if (score > 0) {
+                results.push({
+                    ...product,
+                    score,
+                    matchType,
+                    tagMatches
+                });
+            }
+        });
+        
+        // Sort by score (highest first)
+        results.sort((a, b) => b.score - a.score);
+        
+        // Return both results and tags
+        return {
+            products: results.slice(0, 6), // Limit to 6 products
+            tags: topTags
+        };
+    }
+
+    function displaySearchResults(searchData, query) {
+        const resultsDropdown = document.getElementById('searchResultsDropdown');
+        const { products, tags } = searchData;
+        
+        if (products.length === 0 && tags.length === 0) {
+            resultsDropdown.innerHTML = `
+                <div class="search-no-results">
+                    <i class="fas fa-search"></i>
+                    <p>No products or tags found for "<strong>${query}</strong>"</p>
+                    <p style="font-size: 12px; margin-top: 5px;">Try different keywords</p>
+                </div>
+            `;
+            resultsDropdown.classList.add('show');
+            return;
+        }
+        
+        let resultsHTML = '';
+        
+        // Add tag section if there are matching tags
+        if (tags.length > 0) {
+            resultsHTML += `
+                <div class="search-tag-section">
+                    <div class="search-tag-title">
+                        <i class="fas fa-tags"></i>
+                        <span>Matching Tags</span>
+                    </div>
+                    <div class="search-tag-list">
+                        ${tags.map(tag => `
+                            <div class="search-tag-item" onclick="filterProductsByTag('${tag}'); clearSearch();">
+                                #${tag}
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Add product results
+        if (products.length > 0) {
+            products.forEach(product => {
+                const category = product.category || detectCategory(product.name || '');
+                const price = product.price || generatePrice(0);
+                const title = product.name || generateTitle('', category);
+                const imageUrl = product.mainImage || product.images?.[0]?.url || product.url || '';
+                const productId = product.firebaseId || product.id;
+                const productTags = productTagMap[productId] || product.tags || [];
+                const matchingTags = product.tagMatches || [];
+                
+                // Highlight search terms in title
+                const highlightedTitle = highlightText(title, query);
+                
+                // Apply Cloudinary transformations for thumbnail
+                let displayImageUrl = imageUrl;
+                if (imageUrl.includes('res.cloudinary.com')) {
+                    displayImageUrl = imageUrl.replace('/upload/', '/upload/w_100,h_100,c_fill/');
+                }
+                
+                // Get match type indicator
+                let matchTypeIndicator = '';
+                if (product.matchType === 'tag') {
+                    matchTypeIndicator = '<span class="search-result-match-type">Tag Match</span>';
+                } else if (product.matchType === 'name') {
+                    matchTypeIndicator = '<span class="search-result-match-type">Name Match</span>';
+                }
+                
+                resultsHTML += `
+                    <div class="search-result-item" onclick="goToProduct('${productId}'); clearSearch();">
+                        <img src="${displayImageUrl || 'https://via.placeholder.com/50x50/cccccc/ffffff?text=Product'}" 
+                             alt="${title}" 
+                             class="search-result-image">
+                        <div class="search-result-info">
+                            <div class="search-result-title">
+                                ${highlightedTitle}
+                                ${matchTypeIndicator}
+                            </div>
+                            <span class="search-result-category">${category.charAt(0).toUpperCase() + category.slice(1)}</span>
+                            ${productTags.length > 0 ? `
+                                <div class="search-result-tags">
+                                    ${productTags.slice(0, 3).map(tag => {
+                                        const isMatch = matchingTags.includes(tag);
+                                        return `<span class="search-result-tag" ${isMatch ? 'style="background: #667eea; color: white; border-color: #667eea;"' : ''}>#${tag}</span>`;
+                                    }).join('')}
+                                    ${productTags.length > 3 ? `<span class="search-result-tag">+${productTags.length - 3}</span>` : ''}
+                                </div>
+                            ` : ''}
+                        </div>
+                        <div class="search-result-price">${product.currencySymbol || '$'}${price.toFixed(2)}</div>
+                    </div>
+                `;
+            });
+        }
+        
+        resultsDropdown.innerHTML = resultsHTML;
+        resultsDropdown.classList.add('show');
+    }
+
+    function highlightText(text, query) {
+        if (!text || !query) return text;
+        
+        const lowerText = text.toLowerCase();
+        const lowerQuery = query.toLowerCase();
+        const index = lowerText.indexOf(lowerQuery);
+        
+        if (index === -1) return text;
+        
+        const before = text.substring(0, index);
+        const match = text.substring(index, index + query.length);
+        const after = text.substring(index + query.length);
+        
+        return `${before}<span class="search-result-highlight">${match}</span>${after}`;
+    }
+
+    function goToProduct(productId) {
+        // Find the product
+        const product = allProducts.find(p => 
+            (p.firebaseId && p.firebaseId === productId) || 
+            (p.id && p.id === productId)
+        );
+        
+        if (product) {
+            // Filter to this product's category
+            const category = product.category || detectCategory(product.name || '');
+            filterProductsByCategory(category);
+            
+            // Show notification
+            setTimeout(() => {
+                showNotification(`Showing ${category} collection`);
+                // Scroll to products section
+                document.getElementById('products').scrollIntoView({ behavior: 'smooth' });
+            }, 500);
+        }
+    }
+
+    function clearSearch() {
+        const searchInput = document.getElementById('universalSearch');
+        const clearBtn = document.getElementById('searchClear');
+        const resultsDropdown = document.getElementById('searchResultsDropdown');
+        
+        searchInput.value = '';
+        clearBtn.classList.remove('show');
+        resultsDropdown.classList.remove('show');
+        lastSearchQuery = '';
+        
+        // Focus back on search input
+        searchInput.focus();
+    }
+
+    function hideSearchResults() {
+        const resultsDropdown = document.getElementById('searchResultsDropdown');
+        resultsDropdown.classList.remove('show');
+    }
+
+    // =============== INITIALIZATION ===============
+    
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+        checkFirebaseConnection();
+        updateCartCount();
+        
+        // Refresh products when coming from admin page
+        if (localStorage.getItem('refresh_products')) {
+            loadProductsFromFirebase();
+            localStorage.removeItem('refresh_products');
+            
+            setTimeout(() => {
+                showNotification('Products refreshed!');
+            }, 1000);
+        }
+        
+        const adminLinks = document.querySelectorAll('a[href="admin.html"]');
+        adminLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                localStorage.setItem('refresh_products', 'true');
+            });
+        });
+        
+        // Mobile menu
+        const navToggle = document.getElementById('navToggle');
+        const navMenu = document.getElementById('navMenu');
+        
+        if (navToggle && navMenu) {
+            navToggle.addEventListener('click', () => {
+                navMenu.classList.toggle('show');
+            });
+        }
+        
+        // Add search input focus effect
+        const searchInput = document.getElementById('universalSearch');
+        if (searchInput) {
+            searchInput.addEventListener('focus', () => {
+                if (searchInput.value.trim().length >= 2) {
+                    performSearch(searchInput.value.trim());
+                }
+            });
+        }
+        
+        // Close search results when clicking outside
+        document.addEventListener('click', (event) => {
+            const searchContainer = document.querySelector('.search-container');
+            const searchResults = document.getElementById('searchResultsDropdown');
+            
+            if (searchResults && searchResults.classList.contains('show') && 
+                !searchContainer.contains(event.target)) {
+                hideSearchResults();
+            }
+        });
+    });
+
+    // Make functions available globally
+    window.addToCart = addToCart;
+    window.loadProductsFromFirebase = loadProductsFromFirebase;
+    window.filterProducts = filterProducts;
+    window.filterProductsByCategory = filterProductsByCategory;
+    window.filterProductsByTag = filterProductsByTag;
+    window.clearSearch = clearSearch;
+    window.handleSearch = handleSearch;
+</script>
+
+<script type="module" src="script.js"></script>
+</body>
+</html>

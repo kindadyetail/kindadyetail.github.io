@@ -1,0 +1,2126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Upload | Kindady's E-tail</title>
+    
+    <!-- Cloudinary Upload Widget -->
+    <script src="https://upload-widget.cloudinary.com/global/all.js" type="text/javascript"></script>
+    
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-analytics.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDfpoqyjtO7VueYtcGEYTfkWHOl4YNG7sk",
+            authDomain: "kindadys-9924e.firebaseapp.com",
+            projectId: "kindadys-9924e",
+            storageBucket: "kindadys-9924e.firebasestorage.app",
+            messagingSenderId: "772017587580",
+            appId: "1:772017587580:web:82cd5c27edf6bfc44c50f9",
+            measurementId: "G-D74KTPX92D"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const firestoreDB = getFirestore(app);
+        const analytics = getAnalytics(app);
+        
+        // Export to global scope
+        window.firestoreDB = firestoreDB;
+        window.firebaseCollection = collection;
+        window.firebaseAddDoc = addDoc;
+        window.firebaseGetDocs = getDocs;
+        window.firebaseQuery = query;
+        window.firebaseWhere = where;
+        
+        console.log("Firebase loaded!");
+    </script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: white;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .logo {
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+        
+        .logo i {
+            color: #ed64a6;
+        }
+        
+        .subtitle {
+            opacity: 0.9;
+            font-size: 16px;
+        }
+        
+        .firebase-status {
+            background: rgba(255, 193, 7, 0.2);
+            border-radius: 8px;
+            padding: 8px 15px;
+            margin-top: 10px;
+            display: inline-block;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .firebase-status:hover {
+            background: rgba(255, 193, 7, 0.3);
+        }
+        
+        .firebase-status.connected {
+            background: rgba(40, 167, 69, 0.2);
+        }
+        
+        .firebase-status.connected:hover {
+            background: rgba(40, 167, 69, 0.3);
+        }
+        
+        /* Upload Mode Selector */
+        .mode-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .mode-btn {
+            padding: 12px 24px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .mode-btn.active {
+            background: white;
+            color: #764ba2;
+            border-color: white;
+        }
+        
+        /* Product Form - Single Mode */
+        .product-form {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            display: block;
+        }
+        
+        .product-form.hidden {
+            display: none;
+        }
+        
+        .form-title {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 25px;
+        }
+        
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .required::after {
+            content: " *";
+            color: #ff6b6b;
+        }
+        
+        .form-input, .form-textarea, .form-select {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: 10px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .form-input::placeholder, .form-textarea::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        .form-input:focus, .form-textarea:focus, .form-select:focus {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        /* Image Preview Section */
+        .image-preview-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+            border: 2px dashed rgba(255, 255, 255, 0.2);
+            margin-top: 20px;
+        }
+        
+        .image-preview-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            font-size: 16px;
+            font-weight: 500;
+        }
+        
+        .image-preview-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .preview-image {
+            width: 100%;
+            height: 250px;
+            border-radius: 10px;
+            object-fit: cover;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            display: none;
+        }
+        
+        .preview-image.show {
+            display: block;
+        }
+        
+        .no-preview {
+            text-align: center;
+            padding: 40px 20px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        .no-preview i {
+            font-size: 48px;
+            margin-bottom: 15px;
+            display: block;
+        }
+        
+        .image-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+            font-size: 13px;
+            opacity: 0.8;
+        }
+        
+        .remove-image {
+            background: rgba(255, 107, 107, 0.2);
+            color: #ff6b6b;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .remove-image:hover {
+            background: rgba(255, 107, 107, 0.3);
+        }
+        
+        /* Image Selection Buttons */
+        .image-select-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .image-select-btn {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .image-select-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        .image-select-btn i {
+            font-size: 18px;
+        }
+        
+        /* Currency Section */
+        .currency-section {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .currency-select {
+            width: auto !important;
+            min-width: 120px;
+        }
+        
+        .currency-symbol {
+            font-size: 18px;
+            font-weight: 600;
+            color: #ed64a6;
+            min-width: 30px;
+        }
+        
+        /* Category Management */
+        .category-management {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .category-tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+            min-height: 40px;
+        }
+        
+        .category-tag {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .category-tag:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .category-tag.selected {
+            background: #ed64a6;
+            color: white;
+        }
+        
+        .load-categories-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 13px;
+        }
+        
+        .load-categories-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        /* TAG SYSTEM STYLES */
+        .tags-section {
+            margin-top: 25px;
+        }
+        
+        .tags-title {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .tags-title i {
+            color: #ed64a6;
+        }
+        
+        .tags-input-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .tags-input {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .tags-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .tags-hint {
+            font-size: 12px;
+            opacity: 0.7;
+            margin-bottom: 15px;
+            font-style: italic;
+        }
+        
+        .tags-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 15px;
+            min-height: 40px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .tag-item {
+            background: rgba(101, 126, 234, 0.3);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        
+        .tag-item:hover {
+            background: rgba(101, 126, 234, 0.4);
+            transform: translateY(-2px);
+        }
+        
+        .tag-item.selected {
+            background: #ed64a6;
+            color: white;
+        }
+        
+        .tag-remove {
+            background: none;
+            border: none;
+            color: inherit;
+            cursor: pointer;
+            font-size: 12px;
+            opacity: 0.7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .tag-remove:hover {
+            opacity: 1;
+        }
+        
+        .suggested-tags-title {
+            font-size: 14px;
+            margin-bottom: 8px;
+            opacity: 0.8;
+        }
+        
+        .suggested-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .suggested-tag {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .suggested-tag:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        /* Upload Section */
+        .upload-section {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            text-align: center;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .upload-section:hover {
+            border-color: rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .upload-icon {
+            font-size: 48px;
+            color: #ed64a6;
+            margin-bottom: 15px;
+        }
+        
+        .upload-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .upload-description {
+            opacity: 0.9;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+        
+        /* Buttons */
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 14px 28px;
+            border-radius: 12px;
+            border: none;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            min-width: 200px;
+            justify-content: center;
+        }
+        
+        .btn-primary {
+            background: white;
+            color: #764ba2;
+            font-weight: 600;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+        
+        .btn-small {
+            padding: 8px 16px;
+            min-width: auto;
+            font-size: 14px;
+        }
+        
+        /* Upload History */
+        .history-section {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+        }
+        
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .history-header h2 {
+            font-size: 20px;
+            font-weight: 600;
+        }
+        
+        .history-list {
+            max-height: 500px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+        
+        .history-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+        }
+        
+        .product-info {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+        
+        .product-image-preview {
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            object-fit: cover;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .product-details {
+            flex: 1;
+        }
+        
+        .product-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+            font-size: 16px;
+        }
+        
+        .product-meta {
+            display: flex;
+            gap: 15px;
+            font-size: 14px;
+            opacity: 0.8;
+            margin-bottom: 5px;
+            flex-wrap: wrap;
+        }
+        
+        .product-price {
+            color: #ed64a6;
+            font-weight: 600;
+        }
+        
+        .product-category {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+        }
+        
+        .product-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-top: 8px;
+            margin-bottom: 5px;
+        }
+        
+        .product-tag {
+            background: rgba(101, 126, 234, 0.3);
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+        }
+        
+        .product-description {
+            font-size: 13px;
+            opacity: 0.7;
+            margin-top: 5px;
+            line-height: 1.4;
+        }
+        
+        .file-actions {
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+        }
+        
+        .action-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+        
+        .action-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .empty-history {
+            text-align: center;
+            padding: 40px 20px;
+            opacity: 0.7;
+        }
+        
+        /* Status Messages */
+        .status-message {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            max-width: 400px;
+            z-index: 1000;
+        }
+        
+        .status {
+            background: white;
+            color: #1e293b;
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            animation: slideIn 0.3s ease;
+            border-left: 4px solid;
+        }
+        
+        .status.success {
+            border-left-color: #10b981;
+        }
+        
+        .status.error {
+            border-left-color: #ef4444;
+        }
+        
+        .status.info {
+            border-left-color: #3b82f6;
+        }
+        
+        .status.warning {
+            border-left-color: #FFA000;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        .status-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+        
+        .status-title {
+            font-weight: 600;
+            font-size: 15px;
+        }
+        
+        .status-content {
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .status-url {
+            display: block;
+            margin-top: 8px;
+            color: #3b82f6;
+            text-decoration: none;
+            font-size: 13px;
+            word-break: break-all;
+        }
+        
+        .status-url:hover {
+            text-decoration: underline;
+        }
+        
+        .close-btn {
+            margin-left: auto;
+            background: none;
+            border: none;
+            color: #94a3b8;
+            cursor: pointer;
+            font-size: 20px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .product-form, .upload-section, .history-section {
+                padding: 20px;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+            
+            .product-info {
+                flex-direction: column;
+            }
+            
+            .product-image-preview {
+                width: 100%;
+                height: 150px;
+            }
+            
+            .currency-section {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .currency-select {
+                width: 100% !important;
+            }
+            
+            .image-select-buttons {
+                flex-direction: column;
+            }
+            
+            .tags-input-container {
+                flex-direction: column;
+            }
+        }
+        
+        /* Form validation */
+        .error {
+            color: #ff6b6b;
+            font-size: 13px;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .error.show {
+            display: block;
+        }
+        
+        /* Hidden elements */
+        .hidden {
+            display: none !important;
+        }
+        
+        /* Loading */
+        .loading {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+        
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Product Summary */
+        .product-summary {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+            border-left: 3px solid #ed64a6;
+        }
+        
+        .summary-title {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 10px;
+            color: #ed64a6;
+        }
+        
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            font-size: 13px;
+        }
+        
+        .summary-label {
+            opacity: 0.7;
+        }
+        
+        .summary-value {
+            font-weight: 500;
+        }
+        
+        .summary-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-top: 8px;
+        }
+        
+        .summary-tag {
+            background: rgba(101, 126, 234, 0.3);
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 11px;
+        }
+        
+        /* Image Thumbnails */
+        .image-thumbnails {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+        
+        .image-thumbnail {
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            object-fit: cover;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .image-thumbnail:hover {
+            transform: scale(1.05);
+            border-color: #ed64a6;
+        }
+        
+        .image-thumbnail.selected {
+            border-color: #ed64a6;
+            border-width: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <span>Product Upload</span>
+            </div>
+            <p class="subtitle">Kindady's E-tail - Cloudinary Widget + Firebase</p>
+            <div class="firebase-status" id="firebaseStatus" onclick="connectToFirebase()">
+                <i class="fas fa-plug"></i> Click to Connect Firebase
+            </div>
+        </div>
+        
+        <!-- Upload Mode Selector -->
+        <div class="mode-selector">
+            <button class="mode-btn active" onclick="setUploadMode('single')" id="singleModeBtn">
+                <i class="fas fa-image"></i> Single Product
+            </button>
+        </div>
+        
+        <!-- Product Form -->
+        <div class="product-form" id="singleProductForm">
+            <h2 class="form-title">Product Information</h2>
+            
+            <div class="form-grid">
+                <!-- Left Column: Form Fields -->
+                <div class="form-column">
+                    <div class="form-group">
+                        <label for="productName" class="required">Product Name</label>
+                        <input type="text" id="productName" class="form-input" 
+                               placeholder="e.g., Classic White Shirt" 
+                               oninput="updateProductSummary()" required>
+                        <div class="error" id="nameError">Product name is required</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="productPrice" class="required">Price</label>
+                        <div class="currency-section">
+                            <span class="currency-symbol" id="currencySymbol">₵</span>
+                            <input type="number" id="productPrice" class="form-input" 
+                                   placeholder="99.99" step="0.01" min="0" 
+                                   oninput="updateProductSummary()" required>
+                            <select id="currency" class="form-select currency-select" onchange="updateCurrencySymbol(); updateProductSummary()">
+                                <option value="GHS">GHS (₵)</option>
+                                <option value="USD">USD ($)</option>
+                                <option value="EUR">EUR (€)</option>
+                                <option value="GBP">GBP (£)</option>
+                            </select>
+                        </div>
+                        <div class="error" id="priceError">Valid price is required</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="productCategory" class="required">Category</label>
+                        <div class="category-management">
+                            <select id="productCategory" class="form-select" 
+                                    onchange="updateProductSummary()" style="flex: 1;">
+                                <option value="">Select or create category</option>
+                            </select>
+                            <button class="load-categories-btn" onclick="loadLocalCategories()">
+                                <i class="fas fa-sync"></i> Refresh
+                            </button>
+                        </div>
+                        
+                        <div class="category-tags" id="categoryTags">
+                            <!-- Categories will be shown here -->
+                        </div>
+                        
+                        <div class="category-management" style="margin-top: 10px;">
+                            <input type="text" id="newCategory" class="form-input" 
+                                   placeholder="Add new category" style="flex: 1;">
+                            <button class="btn-secondary" onclick="addCategory()" 
+                                    style="padding: 10px 15px; min-width: auto;">
+                                <i class="fas fa-plus"></i> Add
+                            </button>
+                        </div>
+                        
+                        <div class="error" id="categoryError">Category is required</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="productBrand">Brand (Optional)</label>
+                        <input type="text" id="productBrand" class="form-input" 
+                               placeholder="e.g., Kindady's Collection" 
+                               oninput="updateProductSummary()">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="productDescription">Description (Optional)</label>
+                        <textarea id="productDescription" class="form-textarea" 
+                                  placeholder="Describe your product in detail..." 
+                                  oninput="updateProductSummary()"></textarea>
+                    </div>
+                </div>
+                
+                <!-- Right Column: Image Preview & Summary -->
+                <div class="form-column">
+                    <div class="image-preview-section">
+                        <div class="image-preview-title">
+                            <i class="fas fa-image"></i>
+                            <span>Product Images</span>
+                        </div>
+                        
+                        <div class="image-preview-container">
+                            <div class="no-preview" id="noPreview">
+                                <i class="fas fa-image"></i>
+                                <p>No images selected</p>
+                                <p style="font-size: 12px; margin-top: 10px;">Click "Select Images" to choose product images</p>
+                            </div>
+                            
+                            <img id="previewImage" class="preview-image" alt="Product Preview">
+                            
+                            <!-- Thumbnails for multiple images -->
+                            <div class="image-thumbnails" id="imageThumbnails" style="display: none;">
+                                <!-- Thumbnails will be added here -->
+                            </div>
+                        </div>
+                        
+                        <div class="image-info" id="imageInfo" style="display: none;">
+                            <span id="fileName"></span>
+                            <span id="fileCount"></span>
+                        </div>
+                        
+                        <div class="image-select-buttons">
+                            <button class="image-select-btn" onclick="openCloudinaryWidget()">
+                                <i class="fas fa-cloud"></i>
+                                <span>Select Images</span>
+                            </button>
+                            <button class="image-select-btn" onclick="clearSelectedImages()">
+                                <i class="fas fa-trash"></i>
+                                <span>Clear All</span>
+                            </button>
+                        </div>
+                        
+                        <div style="margin-top: 10px; text-align: center;">
+                            <button class="remove-image" id="removeImageBtn" style="display: none;" onclick="removeSelectedImage()">
+                                <i class="fas fa-times"></i>
+                                Remove Selected
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- TAG SYSTEM SECTION -->
+                    <div class="tags-section">
+                        <div class="tags-title">
+                            <i class="fas fa-tags"></i>
+                            <span>Product Tags</span>
+                        </div>
+                        
+                        <div class="tags-hint">
+                            Add tags to make your product easier to find (e.g., "summer", "casual", "limited edition")
+                        </div>
+                        
+                        <div class="tags-input-container">
+                            <input type="text" id="tagInput" class="form-input tags-input" 
+                                   placeholder="Enter a tag and press Enter or click Add"
+                                   onkeypress="handleTagInputKeyPress(event)">
+                            <button class="btn-secondary btn-small" onclick="addTagFromInput()">
+                                <i class="fas fa-plus"></i> Add
+                            </button>
+                            <button class="btn-secondary btn-small" onclick="clearAllTags()">
+                                <i class="fas fa-trash"></i> Clear
+                            </button>
+                        </div>
+                        
+                        <div class="tags-list" id="tagsList">
+                            <!-- Tags will be displayed here -->
+                            <div class="no-tags" id="noTags" style="color: rgba(255,255,255,0.5); font-style: italic;">
+                                No tags added yet
+                            </div>
+                        </div>
+                        
+                        <div class="suggested-tags-title">
+                            <i class="fas fa-lightbulb"></i> Suggested Tags
+                        </div>
+                        <div class="suggested-tags" id="suggestedTags">
+                            <!-- Suggested tags will be loaded here -->
+                        </div>
+                    </div>
+                    
+                    <div class="product-summary" id="productSummary" style="display: none;">
+                        <div class="summary-title">
+                            <i class="fas fa-clipboard-check"></i>
+                            Product Summary
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Name:</span>
+                            <span class="summary-value" id="summaryName">-</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Price:</span>
+                            <span class="summary-value" id="summaryPrice">-</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Category:</span>
+                            <span class="summary-value" id="summaryCategory">-</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Brand:</span>
+                            <span class="summary-value" id="summaryBrand">-</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Images:</span>
+                            <span class="summary-value" id="summaryImages">0 selected</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Tags:</span>
+                            <span class="summary-value" id="summaryTagsCount">0 tags</span>
+                        </div>
+                        <div class="summary-tags" id="summaryTags">
+                            <!-- Tags will be displayed here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="button-group">
+                <button class="btn btn-secondary" onclick="clearForm()">
+                    <i class="fas fa-redo"></i>
+                    Clear Form
+                </button>
+                <button class="btn btn-secondary" onclick="previewProduct()">
+                    <i class="fas fa-eye"></i>
+                    Preview
+                </button>
+            </div>
+        </div>
+        
+        <!-- Upload Section -->
+        <div class="upload-section">
+            <div class="upload-icon">
+                <i class="fas fa-cloud-upload-alt"></i>
+            </div>
+            <h2 class="upload-title">Ready to Save Product</h2>
+            <p class="upload-description">
+                Images uploaded via Cloudinary Widget<br>
+                Product data saves to Firebase when connected
+            </p>
+            
+            <div class="button-group">
+                <button class="btn btn-primary" onclick="saveProduct()" id="uploadBtn">
+                    <i class="fas fa-save"></i>
+                    <span>Save Product</span>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Upload History -->
+        <div class="history-section">
+            <div class="history-header">
+                <h2>Recent Products</h2>
+                <div>
+                    <button class="btn-secondary" onclick="loadLocalHistory()" style="padding: 8px 16px; min-width: auto; margin-right: 10px;">
+                        <i class="fas fa-sync"></i> Refresh
+                    </button>
+                    <button class="btn-secondary" onclick="clearLocalHistory()" style="padding: 8px 16px; min-width: auto;">
+                        <i class="fas fa-trash-alt"></i> Clear
+                    </button>
+                </div>
+            </div>
+            
+            <div class="history-list" id="historyList">
+                <!-- History will be loaded here -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- Status Messages -->
+    <div class="status-message" id="statusContainer"></div>
+
+    <script>
+        // CLOUDINARY CONFIGURATION - SAME AS YOUR WORKING VERSION
+        const CLOUDINARY_CONFIG = {
+            cloudName: 'dkajyfuab',
+            uploadPreset: 'collection',
+            folder: 'collection'
+        };
+        
+        // Application State
+        let firebaseConnected = false;
+        let localCategories = JSON.parse(localStorage.getItem('kindadys_categories')) || ['clothing', 'fragrance', 'footwear', 'shoes', 'accessories'];
+        let localHistory = JSON.parse(localStorage.getItem('kindadys_products')) || [];
+        let selectedImages = []; // Array for multiple images
+        let selectedImageIndex = 0; // Currently viewing image index
+        
+        // Tag System State
+        let productTags = []; // Array of tag objects {id, name}
+        let suggestedTags = [ 'casual', 'formal', 'new arrival', 'sale', 
+                           'trending', 'vintage', 'modern', 'classic', 'comfort', 'stylish',  
+                     'wedding', 'beach', 'travel'];
+        let tagCounter = 0;
+        
+        // Currency Symbols
+        const CURRENCY_SYMBOLS = {
+            'GHS': '₵',
+            'USD': '$',
+            'EUR': '€',
+            'GBP': '£'
+        };
+        
+        // Cloudinary Widget - EXACTLY LIKE YOUR WORKING VERSION
+        let cloudinaryWidget = null;
+        
+        function initCloudinaryWidget() {
+            if (cloudinaryWidget) return cloudinaryWidget;
+            
+            cloudinaryWidget = cloudinary.createUploadWidget({
+                cloudName: CLOUDINARY_CONFIG.cloudName,
+                uploadPreset: CLOUDINARY_CONFIG.uploadPreset,
+                folder: CLOUDINARY_CONFIG.folder,
+                resourceType: 'image',
+                multiple: true,
+                maxFiles: 10,
+                maxFileSize: 10000000, // 10MB
+                clientAllowedFormats: ['jpg', 'jpeg', 'png', 'gif', 'webp'],
+                showAdvancedOptions: true,
+                cropping: true,
+                croppingAspectRatio: 1,
+                showPoweredBy: false,
+                styles: {
+                    palette: {
+                        window: "#1a365d",
+                        sourceBg: "#f8fafc",
+                        windowBorder: "#90A0B3",
+                        tabIcon: "#ed64a6",
+                        inactiveTabIcon: "#69778C",
+                        menuIcons: "#69778C",
+                        link: "#ed64a6",
+                        action: "#FF620C",
+                        inProgress: "#0194c7",
+                        complete: "#20B832",
+                        error: "#e43630",
+                        textDark: "#1a365d",
+                        textLight: "#FFFFFF"
+                    },
+                    fonts: {
+                        default: null,
+                        "'Inter', sans-serif": {
+                            url: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap",
+                            active: true
+                        }
+                    }
+                }
+            }, (error, result) => {
+                if (!error && result && result.event === "success") {
+                    handleCloudinaryUpload(result.info);
+                } else if (error) {
+                    showStatus('error', 'Upload failed: ' + error.message);
+                }
+            });
+            
+            return cloudinaryWidget;
+        }
+        
+        function openCloudinaryWidget() {
+            const widget = initCloudinaryWidget();
+            widget.open();
+        }
+        
+        function handleCloudinaryUpload(info) {
+            // Add the uploaded image to our selected images
+            const newImage = {
+                url: info.secure_url,
+                name: info.original_filename || info.public_id.split('/').pop(),
+                size: info.bytes,
+                publicId: info.public_id,
+                width: info.width,
+                height: info.height,
+                format: info.format
+            };
+            
+            // Check if this image is already in our list
+            const exists = selectedImages.some(img => img.publicId === newImage.publicId);
+            if (!exists) {
+                selectedImages.push(newImage);
+                updateImageDisplay();
+                showStatus('success', `Image added: ${newImage.name}`);
+            } else {
+                showStatus('info', `Image already selected: ${newImage.name}`);
+            }
+        }
+        
+        function updateImageDisplay() {
+            const previewImage = document.getElementById('previewImage');
+            const noPreview = document.getElementById('noPreview');
+            const imageInfo = document.getElementById('imageInfo');
+            const fileName = document.getElementById('fileName');
+            const fileCount = document.getElementById('fileCount');
+            const removeBtn = document.getElementById('removeImageBtn');
+            const thumbnailsContainer = document.getElementById('imageThumbnails');
+            
+            if (selectedImages.length === 0) {
+                // No images
+                previewImage.classList.remove('show');
+                previewImage.src = '';
+                noPreview.style.display = 'block';
+                imageInfo.style.display = 'none';
+                removeBtn.style.display = 'none';
+                thumbnailsContainer.style.display = 'none';
+                thumbnailsContainer.innerHTML = '';
+            } else {
+                // Has images
+                previewImage.src = selectedImages[selectedImageIndex].url;
+                previewImage.classList.add('show');
+                noPreview.style.display = 'none';
+                
+                fileName.textContent = selectedImages[selectedImageIndex].name;
+                fileCount.textContent = `${selectedImages.length} image${selectedImages.length > 1 ? 's' : ''}`;
+                imageInfo.style.display = 'flex';
+                removeBtn.style.display = 'inline-block';
+                
+                // Update thumbnails
+                thumbnailsContainer.style.display = 'flex';
+                thumbnailsContainer.innerHTML = selectedImages.map((img, index) => `
+                    <img src="${img.url.replace('/upload/', '/upload/w_80,h_80,c_fill/')}" 
+                         alt="${img.name}" 
+                         class="image-thumbnail ${index === selectedImageIndex ? 'selected' : ''}"
+                         onclick="selectImage(${index})"
+                         title="${img.name}">
+                `).join('');
+            }
+            
+            updateProductSummary();
+        }
+        
+        function selectImage(index) {
+            selectedImageIndex = index;
+            updateImageDisplay();
+        }
+        
+        function clearSelectedImages() {
+            selectedImages = [];
+            selectedImageIndex = 0;
+            updateImageDisplay();
+            showStatus('info', 'All images cleared');
+        }
+        
+        function removeSelectedImage() {
+            if (selectedImages.length > 0) {
+                selectedImages.splice(selectedImageIndex, 1);
+                if (selectedImageIndex >= selectedImages.length && selectedImages.length > 0) {
+                    selectedImageIndex = selectedImages.length - 1;
+                } else if (selectedImages.length === 0) {
+                    selectedImageIndex = 0;
+                }
+                updateImageDisplay();
+                showStatus('info', 'Image removed');
+            }
+        }
+        
+        // =============== TAG SYSTEM FUNCTIONS ===============
+        function initTagSystem() {
+            loadSuggestedTags();
+            updateTagsDisplay();
+        }
+        
+        function loadSuggestedTags() {
+            const suggestedTagsContainer = document.getElementById('suggestedTags');
+            const savedSuggestedTags = localStorage.getItem('kindadys_suggested_tags');
+            
+            if (savedSuggestedTags) {
+                suggestedTags = JSON.parse(savedSuggestedTags);
+            }
+            
+            suggestedTagsContainer.innerHTML = suggestedTags.map(tag => `
+                <div class="suggested-tag" onclick="addTag('${tag}')">
+                    ${tag}
+                </div>
+            `).join('');
+        }
+        
+        function addTagFromInput() {
+            const tagInput = document.getElementById('tagInput');
+            const tagName = tagInput.value.trim().toLowerCase();
+            
+            if (!tagName) {
+                showStatus('error', 'Please enter a tag name');
+                return;
+            }
+            
+            // Check if tag already exists
+            if (productTags.some(tag => tag.name === tagName)) {
+                showStatus('info', `Tag "${tagName}" already exists`);
+                tagInput.value = '';
+                return;
+            }
+            
+            addTag(tagName);
+            tagInput.value = '';
+        }
+        
+        function addTag(tagName) {
+            const newTag = {
+                id: 'tag_' + tagCounter++,
+                name: tagName.toLowerCase().trim()
+            };
+            
+            productTags.push(newTag);
+            updateTagsDisplay();
+            updateProductSummary();
+            
+            // Add to suggested tags if not already there
+            if (!suggestedTags.includes(newTag.name)) {
+                suggestedTags.push(newTag.name);
+                localStorage.setItem('kindadys_suggested_tags', JSON.stringify(suggestedTags));
+                loadSuggestedTags();
+            }
+            
+            showStatus('success', `Tag "${newTag.name}" added`);
+        }
+        
+        function removeTag(tagId) {
+            const tagIndex = productTags.findIndex(tag => tag.id === tagId);
+            if (tagIndex !== -1) {
+                const removedTag = productTags[tagIndex];
+                productTags.splice(tagIndex, 1);
+                updateTagsDisplay();
+                updateProductSummary();
+                showStatus('info', `Tag "${removedTag.name}" removed`);
+            }
+        }
+        
+        function clearAllTags() {
+            if (productTags.length === 0) return;
+            
+            if (confirm(`Clear all ${productTags.length} tags?`)) {
+                productTags = [];
+                updateTagsDisplay();
+                updateProductSummary();
+                showStatus('info', 'All tags cleared');
+            }
+        }
+        
+        function updateTagsDisplay() {
+            const tagsList = document.getElementById('tagsList');
+            const noTags = document.getElementById('noTags');
+            
+            if (productTags.length === 0) {
+                noTags.style.display = 'block';
+                tagsList.innerHTML = '<div class="no-tags" id="noTags" style="color: rgba(255,255,255,0.5); font-style: italic;">No tags added yet</div>';
+                return;
+            }
+            
+            noTags.style.display = 'none';
+            tagsList.innerHTML = productTags.map(tag => `
+                <div class="tag-item">
+                    <span>#${tag.name}</span>
+                    <button class="tag-remove" onclick="removeTag('${tag.id}')" title="Remove tag">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+        
+        function handleTagInputKeyPress(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                addTagFromInput();
+            }
+        }
+        
+        // =============== CATEGORY FUNCTIONS ===============
+        function loadLocalCategories() {
+            updateCategorySelect();
+            updateCategoryTags();
+            showStatus('info', `Loaded ${localCategories.length} categories`);
+        }
+        
+        function addCategory() {
+            const newCategoryInput = document.getElementById('newCategory');
+            const categoryName = newCategoryInput.value.trim().toLowerCase();
+            
+            if (!categoryName) {
+                showStatus('error', 'Please enter a category name');
+                return;
+            }
+            
+            if (localCategories.includes(categoryName)) {
+                showStatus('info', `Category "${categoryName}" already exists`);
+                return;
+            }
+            
+            // Add to local categories
+            localCategories.push(categoryName);
+            localStorage.setItem('kindadys_categories', JSON.stringify(localCategories));
+            
+            // Update UI
+            updateCategorySelect();
+            updateCategoryTags();
+            
+            // Clear input
+            newCategoryInput.value = '';
+            
+            // Show success
+            showStatus('success', `Category "${categoryName}" added`);
+            
+            // If Firebase connected, also save there
+            if (firebaseConnected) {
+                saveCategoryToFirebase(categoryName);
+            }
+        }
+        
+        async function saveCategoryToFirebase(categoryName) {
+            try {
+                const db = window.firestoreDB;
+                const categoryData = {
+                    name: categoryName,
+                    createdAt: new Date().toISOString(),
+                    productCount: 0
+                };
+                
+                await window.firebaseAddDoc(window.firebaseCollection(db, 'categories'), categoryData);
+                console.log(`Category "${categoryName}" saved to Firebase`);
+            } catch (error) {
+                console.error('Error saving category to Firebase:', error);
+            }
+        }
+        
+        function updateCategorySelect() {
+            const select = document.getElementById('productCategory');
+            const currentValue = select.value;
+            
+            select.innerHTML = '<option value="">Select or create category</option>' +
+                localCategories.map(category => 
+                    `<option value="${category}" ${category === currentValue ? 'selected' : ''}>${category}</option>`
+                ).join('');
+        }
+        
+        function updateCategoryTags() {
+            const tagsContainer = document.getElementById('categoryTags');
+            tagsContainer.innerHTML = localCategories.map(category => `
+                <div class="category-tag" onclick="selectCategory('${category}')" title="Click to select">
+                    ${category}
+                </div>
+            `).join('');
+        }
+        
+        function selectCategory(category) {
+            document.getElementById('productCategory').value = category;
+            document.querySelectorAll('.category-tag').forEach(tag => {
+                tag.classList.remove('selected');
+                if (tag.textContent.trim() === category) {
+                    tag.classList.add('selected');
+                }
+            });
+            updateProductSummary();
+        }
+        
+        // =============== PRODUCT SAVE FUNCTION ===============
+        async function saveProduct() {
+            // Validate form
+            if (!validateForm()) {
+                showStatus('error', 'Please fill all required fields');
+                return;
+            }
+            
+            if (selectedImages.length === 0) {
+                showStatus('error', 'Please select at least one image');
+                return;
+            }
+            
+            try {
+                disableUploadButton();
+                
+                // 1. Collect product data
+                const productData = collectProductData();
+                
+                // 2. Add tags to product data
+                productData.tags = productTags.map(tag => tag.name);
+                productData.tagCount = productTags.length;
+                
+                // 3. Add image data to product
+                productData.images = selectedImages.map(img => ({
+                    url: img.url,
+                    publicId: img.publicId,
+                    size: img.size,
+                    width: img.width,
+                    height: img.height,
+                    format: img.format
+                }));
+                
+                productData.mainImage = selectedImages[0].url;
+                productData.imageCount = selectedImages.length;
+                productData.timestamp = new Date().toISOString();
+                productData.id = Date.now().toString();
+                
+                // 4. Save to Firebase if connected
+                if (firebaseConnected) {
+                    try {
+                        const firebaseResult = await saveProductToFirebase(productData);
+                        if (firebaseResult.success) {
+                            productData.firebaseId = firebaseResult.docId;
+                            showStatus('info', 'Product data saved to Firebase');
+                        }
+                    } catch (firebaseError) {
+                        console.error('Firebase save error:', firebaseError);
+                        // Continue even if Firebase fails
+                    }
+                }
+                
+                // 5. Add to local history
+                addToLocalHistory(productData);
+                
+                // 6. Show success message
+                showStatus('success', 
+                    `✅ Product saved successfully!<br>
+                     <strong>${productData.name}</strong><br>
+                     Price: ${productData.currencySymbol}${productData.price.toFixed(2)}<br>
+                     Category: ${productData.category}<br>
+                     Tags: ${productData.tagCount} added<br>
+                     Images: ${productData.imageCount} uploaded<br>
+                     <a href="${productData.mainImage}" target="_blank" class="status-url">View Main Image</a>`
+                );
+                
+                // 7. Clear form
+                clearForm();
+                
+            } catch (error) {
+                console.error('Save error:', error);
+                showStatus('error', 'Save failed: ' + error.message);
+            } finally {
+                enableUploadButton();
+            }
+        }
+        
+        async function saveProductToFirebase(productData) {
+            try {
+                const db = window.firestoreDB;
+                
+                const firebaseProductData = {
+                    name: productData.name,
+                    price: productData.price,
+                    currency: productData.currency,
+                    category: productData.category,
+                    brand: productData.brand || '',
+                    description: productData.description || '',
+                    tags: productData.tags || [],
+                    tagCount: productData.tagCount || 0,
+                    images: productData.images,
+                    mainImage: productData.mainImage,
+                    imageCount: productData.imageCount,
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString(),
+                    status: 'active'
+                };
+                
+                const docRef = await window.firebaseAddDoc(window.firebaseCollection(db, 'products'), firebaseProductData);
+                
+                return {
+                    success: true,
+                    docId: docRef.id
+                };
+                
+            } catch (error) {
+                console.error('Error saving to Firebase:', error);
+                return {
+                    success: false,
+                    error: error.message
+                };
+            }
+        }
+        
+        function collectProductData() {
+            const currency = document.getElementById('currency').value;
+            const symbol = CURRENCY_SYMBOLS[currency] || currency;
+            
+            return {
+                name: document.getElementById('productName').value.trim(),
+                price: parseFloat(document.getElementById('productPrice').value),
+                currency: currency,
+                currencySymbol: symbol,
+                category: document.getElementById('productCategory').value,
+                brand: document.getElementById('productBrand').value.trim(),
+                description: document.getElementById('productDescription').value.trim()
+            };
+        }
+        
+        function addToLocalHistory(product) {
+            localHistory.unshift(product);
+            if (localHistory.length > 50) {
+                localHistory = localHistory.slice(0, 50);
+            }
+            localStorage.setItem('kindadys_products', JSON.stringify(localHistory));
+            renderHistory();
+        }
+        
+        // =============== FIREBASE FUNCTIONS ===============
+        async function connectToFirebase() {
+            try {
+                const statusEl = document.getElementById('firebaseStatus');
+                statusEl.innerHTML = '<span class="spinner"></span> Connecting...';
+                statusEl.style.pointerEvents = 'none';
+                
+                // Check if Firebase is loaded
+                if (!window.firestoreDB) {
+                    throw new Error('Firebase SDK not loaded yet');
+                }
+                
+                firebaseConnected = true;
+                
+                statusEl.innerHTML = '<i class="fas fa-check-circle"></i> Firebase Connected';
+                statusEl.classList.add('connected');
+                
+                showStatus('success', 'Firebase connected successfully!');
+                
+                // Sync local data to Firebase
+                await syncLocalDataToFirebase();
+                
+            } catch (error) {
+                const statusEl = document.getElementById('firebaseStatus');
+                statusEl.innerHTML = '<i class="fas fa-exclamation-circle"></i> Connection Failed';
+                
+                showStatus('error', 'Firebase connection failed: ' + error.message);
+                
+                // Re-enable click after 3 seconds
+                setTimeout(() => {
+                    statusEl.innerHTML = '<i class="fas fa-plug"></i> Click to Connect Firebase';
+                    statusEl.style.pointerEvents = 'auto';
+                }, 3000);
+            }
+        }
+        
+        async function syncLocalDataToFirebase() {
+            try {
+                // Sync categories
+                for (const category of localCategories) {
+                    await saveCategoryToFirebase(category);
+                }
+                
+                // Sync products without Firebase IDs
+                let syncedCount = 0;
+                for (const product of localHistory) {
+                    if (!product.firebaseId) {
+                        const result = await saveProductToFirebase(product);
+                        if (result.success) {
+                            product.firebaseId = result.docId;
+                            syncedCount++;
+                        }
+                    }
+                }
+                
+                // Update localStorage
+                if (syncedCount > 0) {
+                    localStorage.setItem('kindadys_products', JSON.stringify(localHistory));
+                    renderHistory();
+                }
+                
+                if (syncedCount > 0) {
+                    showStatus('success', `Synced ${syncedCount} products to Firebase`);
+                }
+                
+            } catch (error) {
+                console.error('Sync error:', error);
+            }
+        }
+        
+        // =============== UI FUNCTIONS ===============
+        function loadLocalHistory() {
+            localHistory = JSON.parse(localStorage.getItem('kindadys_products')) || [];
+            renderHistory();
+        }
+        
+        function renderHistory() {
+            const container = document.getElementById('historyList');
+            
+            if (localHistory.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-history">
+                        <i class="fas fa-box-open" style="font-size: 48px; margin-bottom: 15px;"></i>
+                        <p>No products saved yet</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = localHistory.map(product => `
+                <div class="history-item">
+                    <div class="product-info">
+                        <img src="${product.mainImage?.replace('/upload/', '/upload/w_100,h_100,c_fill/') || 'https://via.placeholder.com/100'}" 
+                             alt="${product.name}" 
+                             class="product-image-preview">
+                        <div class="product-details">
+                            <div class="product-name" title="${product.name}">
+                                ${truncateText(product.name, 40)}
+                            </div>
+                            <div class="product-meta">
+                                <span class="product-price">${product.currencySymbol || '₵'}${product.price?.toFixed(2) || '0.00'}</span>
+                                <span class="product-category">${product.category || 'Uncategorized'}</span>
+                                <span>${product.imageCount || 1} image${(product.imageCount || 1) > 1 ? 's' : ''}</span>
+                            </div>
+                            ${product.tags && product.tags.length > 0 ? `
+                                <div class="product-tags">
+                                    ${product.tags.slice(0, 5).map(tag => `<span class="product-tag">#${tag}</span>`).join('')}
+                                    ${product.tags.length > 5 ? `<span class="product-tag">+${product.tags.length - 5} more</span>` : ''}
+                                </div>
+                            ` : ''}
+                            ${product.description ? `<div class="product-description" title="${product.description}">${truncateText(product.description, 100)}</div>` : ''}
+                            ${product.firebaseId ? `
+                                <div style="font-size: 11px; opacity: 0.5; margin-top: 5px;">
+                                    <i class="fas fa-database"></i> Synced to Firebase
+                                </div>
+                            ` : `
+                                <div style="font-size: 11px; opacity: 0.5; margin-top: 5px;">
+                                    <i class="fas fa-laptop"></i> Local only
+                                </div>
+                            `}
+                            <div style="font-size: 12px; opacity: 0.7; margin-top: 5px;">
+                                ${new Date(product.timestamp).toLocaleString()}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="file-actions">
+                        ${product.mainImage ? `
+                            <button class="action-btn" onclick="copyToClipboard('${product.mainImage}')" title="Copy Image URL">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                            <button class="action-btn" onclick="window.open('${product.mainImage}', '_blank')" title="View Image">
+                                <i class="fas fa-external-link-alt"></i>
+                            </button>
+                        ` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function updateProductSummary() {
+            const name = document.getElementById('productName').value.trim();
+            const price = document.getElementById('productPrice').value;
+            const category = document.getElementById('productCategory').value;
+            const brand = document.getElementById('productBrand').value.trim();
+            const currency = document.getElementById('currency').value;
+            const symbol = CURRENCY_SYMBOLS[currency] || currency;
+            
+            document.getElementById('summaryName').textContent = name || '-';
+            document.getElementById('summaryPrice').textContent = price ? `${symbol}${parseFloat(price).toFixed(2)}` : '-';
+            document.getElementById('summaryCategory').textContent = category || '-';
+            document.getElementById('summaryBrand').textContent = brand || '-';
+            document.getElementById('summaryImages').textContent = selectedImages.length > 0 ? `${selectedImages.length} selected` : '0 selected';
+            document.getElementById('summaryTagsCount').textContent = productTags.length > 0 ? `${productTags.length} tags` : '0 tags';
+            
+            // Update tags in summary
+            const summaryTagsContainer = document.getElementById('summaryTags');
+            if (productTags.length > 0) {
+                summaryTagsContainer.innerHTML = productTags.map(tag => `
+                    <span class="summary-tag">#${tag.name}</span>
+                `).join('');
+            } else {
+                summaryTagsContainer.innerHTML = '';
+            }
+            
+            const summaryBox = document.getElementById('productSummary');
+            summaryBox.style.display = (name || price || category || selectedImages.length > 0 || productTags.length > 0) ? 'block' : 'none';
+        }
+        
+        function updateCurrencySymbol() {
+            const currency = document.getElementById('currency').value;
+            const symbol = CURRENCY_SYMBOLS[currency] || currency;
+            document.getElementById('currencySymbol').textContent = symbol;
+            updateProductSummary();
+        }
+        
+        function validateForm() {
+            let isValid = true;
+            
+            const name = document.getElementById('productName').value.trim();
+            const price = parseFloat(document.getElementById('productPrice').value);
+            const category = document.getElementById('productCategory').value;
+            
+            if (!name) {
+                document.getElementById('nameError').classList.add('show');
+                isValid = false;
+            } else {
+                document.getElementById('nameError').classList.remove('show');
+            }
+            
+            if (isNaN(price) || price <= 0) {
+                document.getElementById('priceError').classList.add('show');
+                isValid = false;
+            } else {
+                document.getElementById('priceError').classList.remove('show');
+            }
+            
+            if (!category) {
+                document.getElementById('categoryError').classList.add('show');
+                isValid = false;
+            } else {
+                document.getElementById('categoryError').classList.remove('show');
+            }
+            
+            return isValid;
+        }
+        
+        function previewProduct() {
+            if (!validateForm()) {
+                showStatus('error', 'Please fill all required fields');
+                return;
+            }
+            
+            if (selectedImages.length === 0) {
+                showStatus('error', 'Please select at least one image');
+                return;
+            }
+            
+            const name = document.getElementById('productName').value.trim();
+            const price = parseFloat(document.getElementById('productPrice').value);
+            const currency = document.getElementById('currency').value;
+            const symbol = CURRENCY_SYMBOLS[currency] || currency;
+            const category = document.getElementById('productCategory').value;
+            const tags = productTags.map(t => t.name).join(', ');
+            
+            showStatus('info', 
+                `📋 Product Preview<br>
+                 <strong>${name}</strong><br>
+                 Price: ${symbol}${price.toFixed(2)}<br>
+                 Category: ${category}<br>
+                 Tags: ${tags || 'No tags'}<br>
+                 Images: ${selectedImages.length} selected`
+            );
+        }
+        
+        function clearForm() {
+            document.getElementById('productName').value = '';
+            document.getElementById('productPrice').value = '';
+            document.getElementById('productBrand').value = '';
+            document.getElementById('productDescription').value = '';
+            document.getElementById('productCategory').value = '';
+            document.getElementById('tagInput').value = '';
+            productTags = [];
+            clearSelectedImages();
+            
+            document.querySelectorAll('.error').forEach(error => {
+                error.classList.remove('show');
+            });
+            
+            document.querySelectorAll('.category-tag').forEach(tag => {
+                tag.classList.remove('selected');
+            });
+            
+            updateTagsDisplay();
+            document.getElementById('productSummary').style.display = 'none';
+        }
+        
+        function clearLocalHistory() {
+            if (confirm('Clear all local product history?')) {
+                localHistory = [];
+                localStorage.setItem('kindadys_products', JSON.stringify(localHistory));
+                renderHistory();
+                showStatus('info', 'Local history cleared');
+            }
+        }
+        
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                showStatus('success', 'URL copied to clipboard');
+            });
+        }
+        
+        function disableUploadButton() {
+            const btn = document.getElementById('uploadBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+        }
+        
+        function enableUploadButton() {
+            const btn = document.getElementById('uploadBtn');
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-save"></i> <span>Save Product</span>';
+        }
+        
+        function showStatus(type, message) {
+            const container = document.getElementById('statusContainer');
+            const id = 'status-' + Date.now();
+            
+            const icons = {
+                success: 'fas fa-check-circle',
+                error: 'fas fa-exclamation-circle',
+                info: 'fas fa-info-circle',
+                warning: 'fas fa-exclamation-triangle'
+            };
+            
+            const statusDiv = document.createElement('div');
+            statusDiv.className = `status ${type}`;
+            statusDiv.id = id;
+            statusDiv.innerHTML = `
+                <div class="status-header">
+                    <i class="${icons[type]}" style="color: ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : type === 'warning' ? '#FFA000' : '#3b82f6'}"></i>
+                    <span class="status-title">${type.charAt(0).toUpperCase() + type.slice(1)}</span>
+                    <button class="close-btn" onclick="document.getElementById('${id}').remove()">&times;</button>
+                </div>
+                <div class="status-content">
+                    ${message}
+                </div>
+            `;
+            
+            container.appendChild(statusDiv);
+            
+            setTimeout(() => {
+                const elem = document.getElementById(id);
+                if (elem) elem.remove();
+            }, 6000);
+        }
+        
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+        }
+        
+        function truncateText(text, maxLength) {
+            if (!text) return '';
+            return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
+        }
+        
+        // =============== INITIALIZATION ===============
+        document.addEventListener('DOMContentLoaded', () => {
+            updateCurrencySymbol();
+            loadLocalCategories();
+            loadLocalHistory();
+            initTagSystem();
+            
+            document.getElementById('currency').addEventListener('change', updateCurrencySymbol);
+            
+            // Initialize Cloudinary widget
+            initCloudinaryWidget();
+            
+            showStatus('info', 
+                'Welcome!<br>' +
+                '1. Click "Select Images" to open Cloudinary uploader<br>' +
+                '2. Upload multiple images (same as your working version)<br>' +
+                '3. Add tags to make your product searchable<br>' +
+                '4. Fill product details and save'
+            );
+        });
+    </script>
+</body>
+</html>
