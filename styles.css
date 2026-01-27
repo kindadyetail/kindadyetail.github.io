@@ -1422,3 +1422,380 @@ h3 { font-size: 1.8rem; }
 .fade-in {
     animation: fadeIn 0.6s ease forwards;
 }
+
+
+
+
+
+
+
+/* Add these styles to your existing CSS */
+.small-checkbox input[type="checkbox"] {
+    transform: scale(0.8);
+    margin-right: 5px;
+}
+
+.small-checkbox span {
+    font-size: 12px !important;
+    line-height: 1.4;
+}
+
+.payment-instructions {
+    background: #f8fafc;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    margin-top: 15px;
+}
+
+.payment-instructions h5 {
+    margin-top: 0;
+    color: #1a365d;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.instructions-list {
+    margin: 10px 0;
+    padding-left: 20px;
+    font-size: 13px;
+}
+
+.instructions-list li {
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+.seller-contact {
+    background: #fff3cd;
+    padding: 12px;
+    border-radius: 6px;
+    border-left: 4px solid #ffc107;
+    margin-top: 15px;
+    font-size: 13px;
+}
+
+.seller-contact p {
+    margin: 5px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.call-notice {
+    background: #d1ecf1;
+    padding: 8px;
+    border-radius: 4px;
+    color: #0c5460;
+    border-left: 3px solid #17a2b8;
+    margin-top: 10px !important;
+}
+
+/* Delivery fee notice */
+.delivery-fee-notice {
+    background: #f8d7da;
+    padding: 10px;
+    border-radius: 6px;
+    border-left: 4px solid #dc3545;
+    font-size: 13px;
+    color: #721c24;
+    margin-bottom: 15px;
+}
+
+.delivery-fee-notice i {
+    color: #dc3545;
+}
+
+.sync-button {
+    background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 500;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    box-shadow: 0 2px 6px rgba(255, 154, 158, 0.2);
+    position: relative;
+    overflow: hidden;
+    white-space: nowrap;
+    min-width: auto;
+    line-height: 1;
+    height: 36px;
+}
+
+.sync-button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(255, 154, 158, 0.25);
+    background: linear-gradient(135deg, #ff7b81 0%, #f8c5b2 100%);
+}
+
+.sync-button:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 3px rgba(255, 154, 158, 0.2);
+}
+
+.sync-button i {
+    font-size: 13px;
+    transition: transform 0.3s ease;
+}
+
+.sync-button:hover i {
+    transform: rotate(180deg);
+}
+
+.sync-button.loading {
+    background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
+    cursor: wait;
+}
+
+.sync-button.loading i {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* For mobile responsiveness */
+@media (max-width: 768px) {
+    .sync-button {
+        padding: 6px 12px;
+        font-size: 12px;
+        gap: 4px;
+        height: 32px;
+        border-radius: 18px;
+    }
+    
+    .sync-button i {
+        font-size: 12px;
+    }
+}
+
+/* For very small screens */
+@media (max-width: 480px) {
+    .sync-button {
+        padding: 5px 10px;
+        font-size: 11px;
+        gap: 3px;
+        height: 30px;
+    }
+    
+    .sync-button span {
+        display: none; /* Hide text on very small screens, show only icon */
+    }
+    
+    .sync-button i {
+        font-size: 12px;
+        margin: 0;
+    }
+}
+
+/* Contact Form Updates */
+.contact-form select.form-control {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    color: #4b5563;
+    background: white;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    background-size: 16px;
+}
+
+.contact-form select.form-control:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.form-footer {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.whatsapp-direct {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #e5e7eb;
+}
+
+.whatsapp-direct p {
+    margin-bottom: 10px;
+    color: #6b7280;
+    font-size: 14px;
+}
+
+.whatsapp-direct {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #e5e7eb;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* This centers child elements */
+}
+
+.btn-success {
+    background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 70%;
+    /* No need for margin auto when parent has align-items: center */
+}
+
+.btn-success:hover {
+    background: linear-gradient(135deg, #1DA851 0%, #0D7C6E 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(37, 211, 102, 0.3);
+}
+
+/* Seller Dashboard Link */
+.seller-dashboard-link {
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    background: #667eea;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 8px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    z-index: 100;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.seller-dashboard-link:hover {
+    background: #5a67d8;
+    transform: translateY(-2px);
+}
+
+/* Contact link styles */
+.contact-link {
+    color: #ed64a6;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    display: inline-block;
+    padding: 2px 4px;
+    border-radius: 4px;
+}
+
+.contact-link:hover {
+    color: #1a365d;
+    background: rgba(237, 100, 166, 0.1);
+    text-decoration: underline;
+    transform: translateY(-1px);
+}
+
+.contact-link:active {
+    transform: translateY(0);
+}
+
+/* Make sure contact card text areas are clickable */
+.contact-card p {
+    line-height: 1.6;
+}
+
+.contact-card p a {
+    color: inherit;
+}
+
+/* Phone-specific styling for better UX on mobile */
+@media (max-width: 768px) {
+    .contact-link {
+        padding: 4px 8px;
+        font-size: 16px; /* Larger tap target on mobile */
+    }
+    
+    /* Make phone numbers more tappable on mobile */
+    a[href^="tel:"] {
+        display: inline-block;
+        min-height: 44px; /* Minimum touch target size */
+        line-height: 44px;
+        padding: 0 12px;
+    }
+}
+
+/* =============== STOCK INDICATORS - SIMPLIFIED =============== */
+
+/* Stock status in product details - direct text on background */
+.product-stock-status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    margin-bottom: 10px;
+    color: #10b981; /* Default in-stock color */
+    font-weight: 500;
+}
+
+.product-stock-status.out-of-stock {
+    color: #ef4444;
+}
+
+.product-stock-status.low-stock {
+    color: #f59e0b;
+}
+
+.stock-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.stock-dot.in-stock {
+    background: #10b981;
+}
+
+.stock-dot.low-stock {
+    background: #f59e0b;
+}
+
+.stock-dot.out-of-stock {
+    background: #ef4444;
+}
+
+/* Disable add to cart button when out of stock */
+.add-to-cart:disabled {
+    background: #9ca3af !important;
+    cursor: not-allowed !important;
+    opacity: 0.7;
+}
+
+.add-to-cart:disabled:hover {
+    transform: none !important;
+    box-shadow: none !important;
+    background: #9ca3af !important;
+}
+
+/* Remove all stock quantity badges */
+.stock-quantity-badge {
+    display: none !important;
+}

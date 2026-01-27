@@ -1,0 +1,2210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kindady's E-tail - Seller Dashboard</title>
+    <meta name="description" content="Seller dashboard for managing orders - Kindady's E-tail">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+       <!-- FAVICON CONFIGURATION -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#ed64a6">
+    <meta name="msapplication-TileColor" content="#1a365d">
+    <meta name="theme-color" content="#ffffff">
+    
+    <style>
+        /* CSS Variables */
+:root {
+    --primary-pink: #ED64A6;
+    --primary-navy: #1A365D;
+    --accent-gold: #D69E2E;
+    --cream: #F7FAFC;
+    --charcoal: #2D3748;
+    --light-gray: #E2E8F0;
+    --success: #38A169;
+    --transition: all 0.3s ease;
+    --shadow: 0 5px 15px rgba(0,0,0,0.1);
+    --shadow-heavy: 0 10px 25px rgba(0,0,0,0.15);
+}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            position: relative; /* For floating button positioning */
+        }
+
+        /* ========== VIEW MESSAGES FLOATING BUTTON ========== */
+        .view-messages-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%); /* WhatsApp green gradient */
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 12px 20px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 5px 20px rgba(37, 211, 102, 0.3);
+            z-index: 100;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .view-messages-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(37, 211, 102, 0.4);
+        }
+
+        .view-messages-btn i {
+            font-size: 16px;
+        }
+
+        .message-count-badge {
+            background: #ed64a6;
+            color: white;
+            font-size: 11px;
+            font-weight: 600;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            border: 2px solid white;
+        }
+
+        /* ========== MESSAGES DASHBOARD MODAL ========== */
+        .messages-dashboard-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .messages-dashboard-content {
+            width: 100%;
+            max-width: 800px;
+            max-height: 90vh;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            animation: scaleIn 0.3s ease;
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .messages-dashboard-header {
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .messages-dashboard-header h3 {
+            margin: 0;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .close-dashboard {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            transition: background 0.3s;
+        }
+
+        .close-dashboard:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .messages-dashboard-body {
+            padding: 20px;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .messages-stats {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e5e7eb;
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .stat i {
+            color: #667eea;
+        }
+
+        .messages-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .message-card {
+            background: white;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+
+        .message-card.unread {
+            border-left-color: #ed64a6;
+            background: #fef6fb;
+        }
+
+        .message-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .message-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+
+        .message-sender {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .message-sender strong {
+            color: #1a365d;
+            font-size: 16px;
+        }
+
+        .message-phone {
+            color: #ed64a6;
+            font-weight: 500;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .message-meta {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 5px;
+            min-width: 120px;
+        }
+
+        .message-time {
+            font-size: 12px;
+            color: #6b7280;
+            white-space: nowrap;
+        }
+
+        .message-subject {
+            background: #e2e8f0;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            color: #4a5568;
+            white-space: nowrap;
+        }
+
+        .message-content {
+            margin: 15px 0;
+            color: #4b5563;
+            line-height: 1.5;
+            padding: 10px;
+            background: #f9fafb;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .message-actions {
+            display: flex;
+            gap: 10px;
+            padding-top: 15px;
+            border-top: 1px solid #e5e7eb;
+            flex-wrap: wrap;
+        }
+
+        .message-actions button,
+        .message-actions a {
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            border: none;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .btn-mark-read {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-mark-read:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .btn-mark-read:hover:not(:disabled) {
+            background: #059669;
+            transform: translateY(-1px);
+        }
+
+        .btn-reply {
+            background: #25D366;
+            color: white;
+        }
+
+        .btn-reply:hover {
+            background: #128C7E;
+            transform: translateY(-1px);
+        }
+
+        .btn-delete {
+            background: #ef4444;
+            color: white;
+        }
+
+        .btn-delete:hover {
+            background: #dc2626;
+            transform: translateY(-1px);
+        }
+
+        .messages-dashboard-footer {
+            padding: 15px 20px;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            background: #f8fafc;
+        }
+
+        .btn-refresh {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+
+        .btn-refresh:hover {
+            background: #5a67d8;
+        }
+
+        .btn-close {
+            background: #6b7280;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .btn-close:hover {
+            background: #4b5563;
+        }
+
+        .no-messages {
+            text-align: center;
+            padding: 40px 20px;
+            color: #6b7280;
+        }
+
+        .no-messages i {
+            font-size: 48px;
+            margin-bottom: 15px;
+            color: #d1d5db;
+        }
+
+        /* ========== REST OF YOUR EXISTING STYLES ========== */
+        /* (Your existing styles remain unchanged below this point) */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Header Styles */
+        .header {
+            background: white;
+            border-radius: 15px;
+            padding: 25px 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            background: linear-gradient(135deg, #ed64a6 0%, #667eea 100%);
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .header-info h1 {
+            font-size: 24px;
+            color: #1a365d;
+            margin-bottom: 5px;
+        }
+
+        .header-info p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .seller-contact {
+            background: #f8fafc;
+            padding: 15px 20px;
+            border-radius: 10px;
+            border-left: 4px solid #ed64a6;
+        }
+
+        .seller-contact h3 {
+            font-size: 16px;
+            color: #1a365d;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .seller-contact p {
+            font-size: 14px;
+            color: #4a5568;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+        }
+
+        .stat-info h3 {
+            font-size: 12px;
+            color: #718096;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+
+        .stat-info .number {
+            font-size: 32px;
+            font-weight: 700;
+            color: #1a365d;
+        }
+
+        .stat-info .change {
+            font-size: 14px;
+            color: #38a169;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 5px;
+        }
+
+        /* Orders Container */
+        .orders-container {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .orders-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .orders-header h2 {
+            font-size: 22px;
+            color: #1a365d;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .filter-select, .search-box {
+            padding: 10px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            min-width: 200px;
+        }
+
+        .search-box {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%239ca3af' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: 15px center;
+            padding-left: 45px;
+        }
+
+        .refresh-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: transform 0.3s ease;
+        }
+
+        .refresh-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Orders Table */
+        .orders-table-container {
+            overflow-x: auto;
+        }
+
+        .orders-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .orders-table th {
+            background: #f8fafc;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #4a5568;
+            border-bottom: 2px solid #e2e8f0;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .orders-table td {
+            padding: 20px 15px;
+            border-bottom: 1px solid #e2e8f0;
+            vertical-align: top;
+        }
+
+        .orders-table tr:hover {
+            background: #f8fafc;
+        }
+
+        /* Order ID */
+        .order-id {
+            font-weight: 600;
+            color: #1a365d;
+            font-size: 15px;
+        }
+
+        .order-time {
+            font-size: 12px;
+            color: #718096;
+            margin-top: 3px;
+        }
+
+        /* Customer Info */
+        .customer-info strong {
+            display: block;
+            color: #2d3748;
+            margin-bottom: 3px;
+        }
+
+        .customer-info .phone {
+            color: #667eea;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .customer-info .email {
+            color: #718096;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 3px;
+        }
+
+        /* Status Badge */
+        .status-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-align: center;
+            min-width: 100px;
+        }
+
+        .status-pending { background: #fef3c7; color: #92400e; }
+        .status-processing { background: #dbeafe; color: #1e40af; }
+        .status-shipped { background: #d1fae5; color: #065f46; }
+        .status-delivered { background: #dcfce7; color: #166534; }
+        .status-cancelled { background: #fee2e2; color: #991b1b; }
+
+        /* Payment Method */
+        .payment-method {
+            display: inline-block;
+            padding: 4px 10px;
+            background: #f3f4f6;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+            color: #4b5563;
+        }
+
+        /* Total Amount */
+        .total-amount {
+            font-weight: 700;
+            color: #ed64a6;
+            font-size: 16px;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .view-btn { background: #dbeafe; color: #1e40af; }
+        .view-btn:hover { background: #bfdbfe; }
+        
+        .update-btn { background: #d1fae5; color: #065f46; }
+        .update-btn:hover { background: #a7f3d0; }
+        
+        .delete-btn { background: #fee2e2; color: #dc2626; }
+        .delete-btn:hover { background: #fecaca; }
+
+        /* Loading State */
+        .loading {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .empty-state i {
+            font-size: 64px;
+            color: #d1d5db;
+            margin-bottom: 20px;
+        }
+
+        .empty-state h3 {
+            color: #374151;
+            margin-bottom: 10px;
+        }
+
+        .empty-state p {
+            color: #6b7280;
+            max-width: 400px;
+            margin: 0 auto 25px;
+        }
+
+        /* Order Details Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            animation: modalSlideUp 0.3s ease;
+        }
+
+        @keyframes modalSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            padding: 25px 30px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 20px 20px 0 0;
+        }
+
+        .modal-header h2 {
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .close-modal {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            transition: background 0.3s;
+        }
+
+        .close-modal:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .modal-body {
+            padding: 30px;
+        }
+
+        /* Order Details Sections */
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .detail-section {
+            background: #f9fafb;
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid #667eea;
+        }
+
+        .detail-section h3 {
+            font-size: 16px;
+            color: #1a365d;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .detail-item {
+            margin-bottom: 12px;
+        }
+
+        .detail-label {
+            font-size: 13px;
+            color: #6b7280;
+            margin-bottom: 3px;
+        }
+
+        .detail-value {
+            font-size: 15px;
+            color: #374151;
+            font-weight: 500;
+        }
+
+        /* Order Items in Modal */
+        .order-items-list {
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+
+        .order-item-row {
+            display: flex;
+            padding: 15px;
+            border-bottom: 1px solid #e5e7eb;
+            align-items: center;
+        }
+
+        .order-item-row:last-child {
+            border-bottom: none;
+        }
+
+        .item-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+
+        .item-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .item-details {
+            flex: 1;
+        }
+
+        .item-name {
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 5px;
+        }
+
+        .item-quantity {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .item-price {
+            font-weight: 700;
+            color: #ed64a6;
+            font-size: 16px;
+            margin-left: 15px;
+            white-space: nowrap;
+        }
+
+        /* Totals in Modal */
+        .order-totals {
+            background: #f9fafb;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 25px;
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .total-row:last-child {
+            border-bottom: none;
+            font-weight: 700;
+            font-size: 18px;
+            color: #1a365d;
+        }
+
+        /* Action Buttons in Modal */
+        .modal-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            padding-top: 25px;
+            border-top: 1px solid #e5e7eb;
+            flex-wrap: wrap;
+        }
+
+        .status-select {
+            padding: 10px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .save-btn {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: transform 0.3s ease;
+        }
+
+        .save-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .call-btn {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            transition: transform 0.3s ease;
+        }
+
+        .call-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* WhatsApp Button */
+        .whatsapp-btn {
+            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            transition: transform 0.3s ease;
+        }
+
+        .whatsapp-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .orders-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .controls {
+                flex-direction: column;
+            }
+
+            .filter-select, .search-box {
+                min-width: 100%;
+            }
+
+            .orders-table th, .orders-table td {
+                padding: 12px 8px;
+                font-size: 13px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .modal-body {
+                padding: 20px;
+            }
+
+            .details-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-actions {
+                flex-direction: column;
+            }
+
+            .status-select, .save-btn, .call-btn, .whatsapp-btn {
+                width: 100%;
+            }
+
+            .view-messages-btn {
+                bottom: 70px; /* Raise above mobile navigation if any */
+                right: 15px;
+                padding: 10px 16px;
+                font-size: 13px;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .header, .stats-grid, .controls, .action-buttons, .modal-actions, .view-messages-btn {
+                display: none;
+            }
+
+            .orders-container {
+                box-shadow: none;
+                padding: 0;
+            }
+
+            .orders-table {
+                border: 1px solid #000;
+            }
+
+            .orders-table th, .orders-table td {
+                border: 1px solid #000;
+            }
+        }
+
+        /* ========== FLOATING HOME BUTTON ========== */
+.floating-home-btn {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    cursor: pointer;
+    box-shadow: 0 5px 20px rgba(16, 185, 129, 0.3);
+    z-index: 100;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.floating-home-btn:hover {
+    transform: translateY(-3px) scale(1.1);
+    box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+}
+
+/* Adjust for mobile */
+@media (max-width: 768px) {
+    .floating-home-btn {
+        top: 15px;
+        left: 15px;
+        width: 45px;
+        height: 45px;
+        font-size: 18px;
+    }
+}
+
+/* Logo Words Styling */
+.logo-words {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.logo-main {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 1.7rem;
+    color: var(--primary-pink);
+    line-height: 1;
+    letter-spacing: 0.5px;
+    background: linear-gradient(135deg, 
+        var(--primary-pink) 0%, 
+        #d53f8c 50%, 
+        var(--primary-pink) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    position: relative;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.logo-main::after {
+    content: '❤️';
+    position: absolute;
+    top: -8px;
+    right: -22px;
+    font-size: 1rem;
+    animation: floatHeart 3s ease-in-out infinite;
+}
+
+@keyframes floatHeart {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-3px) scale(1.1); }
+}
+
+.logo-tagline {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    font-size: 0.75rem;
+    color: var(--primary-navy);
+    margin-top: 4px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    opacity: 0.9;
+    position: relative;
+    padding-left: 2px;
+}
+
+.logo-tagline::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    width: 20px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--primary-pink), transparent);
+    border-radius: 1px;
+}
+
+/* Responsive adjustments for logo text */
+@media (max-width: 768px) {
+    .logo-main {
+        font-size: 1.3rem;
+    }
+    
+    .logo-main::after {
+        font-size: 0.9rem;
+        right: -18px;
+        top: -6px;
+    }
+    
+    .logo-tagline {
+        font-size: 0.65rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .logo-main {
+        font-size: 1.1rem;
+    }
+    
+    .logo-main::after {
+        display: none; /* Hide heart on very small screens */
+    }
+    
+    .logo-tagline {
+        font-size: 0.6rem;
+        display: none; /* Hide tagline on mobile */
+    }
+}
+
+/* For medium screens */
+@media (max-width: 992px) {
+    .logo-main {
+        font-size: 1.5rem;
+    }
+    
+    .logo-tagline {
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+    }
+}
+
+
+    </style>
+    
+</head>
+<body>
+  <!-- ADD THIS FLOATING HOME BUTTON -->
+   <a href="index.html" class="floating-home-btn">
+        <i class="fas fa-home"></i>
+    </a>
+
+    <div class="container">
+        <!-- Header -->
+      <!-- Header -->
+<div class="header">
+    <div class="logo-section">
+        <div class="logo-combined">
+            <div class="logo-image">
+            </div>
+            <div class="logo-words">
+                <div class="logo-main">KINDADY'S</div>
+                <div class="logo-tagline">E-tail with Heart</div>
+            </div>
+        </div>
+        <div class="header-info">
+            <h1>Kindady's E-tail - Seller Dashboard</h1>
+            <p>Manage orders and track sales in real-time</p>
+        </div>
+    </div>
+    
+    <div class="seller-contact">
+        <h3><i class="fas fa-user-circle"></i> Seller Information</h3>
+        <p><i class="fas fa-phone"></i> <strong>Phone:</strong> 0595736002</p>
+        <p><i class="fas fa-envelope"></i> <strong>Email:</strong> kindadyetail@gmail.com</p>
+        <p><i class="fas fa-wallet"></i> <strong>Payment Number:</strong> 0595736002</p>
+    </div>
+</div>
+
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                    <i class="fas fa-shopping-bag"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>Total Orders</h3>
+                    <div class="number" id="totalOrders">0</div>
+                    <div class="change"><i class="fas fa-arrow-up"></i> Loading...</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                    <i class="fas fa-money-bill-wave"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>Total Revenue</h3>
+                    <div class="number" id="totalRevenue">GHS ₵0.00</div>
+                    <div class="change"><i class="fas fa-arrow-up"></i> Loading...</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>Pending Orders</h3>
+                    <div class="number" id="pendingOrders">0</div>
+                    <div class="change"><i class="fas fa-arrow-up"></i> Requires attention</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+                    <i class="fas fa-truck"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>Orders Today</h3>
+                    <div class="number" id="todayOrders">0</div>
+                    <div class="change"><i class="fas fa-calendar-day"></i> Today's orders</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Orders Container -->
+        <div class="orders-container">
+            <div class="orders-header">
+                <h2><i class="fas fa-list-alt"></i> Recent Orders</h2>
+                <div class="controls">
+                    <select class="filter-select" id="statusFilter">
+                        <option value="all">All Status</option>
+                        <option value="pending">Pending</option>
+                        <option value="processing">Processing</option>
+                        <option value="shipped">Shipped</option>
+                        <option value="delivered">Delivered</option>
+                        <option value="cancelled">Cancelled</option>
+                    </select>
+                    <input type="text" class="search-box" id="searchOrders" placeholder="Search orders...">
+                    <button class="refresh-btn" id="refreshOrders">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                </div>
+            </div>
+
+            <!-- Orders Table -->
+            <div class="orders-table-container">
+                <table class="orders-table">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Customer</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th>Payment</th>
+                            <th>Total</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ordersTableBody">
+                        <!-- Orders will be loaded here -->
+                        <tr>
+                            <td colspan="7" class="loading">
+                                <div class="loading-spinner"></div>
+                                <p>Loading orders...</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== VIEW MESSAGES FLOATING BUTTON ========== -->
+    <button class="view-messages-btn" id="viewMessagesBtn">
+        <i class="fas fa-inbox"></i>
+        View Messages
+        <span class="message-count-badge" id="messageCountBadge">0</span>
+    </button>
+
+    <!-- ========== MESSAGES DASHBOARD MODAL ========== -->
+    <div class="messages-dashboard-modal" id="messagesDashboardModal">
+        <div class="messages-dashboard-content">
+            <div class="messages-dashboard-header">
+                <h3><i class="fas fa-inbox"></i> Customer Messages</h3>
+                <button class="close-dashboard" id="closeDashboard">&times;</button>
+            </div>
+            <div class="messages-dashboard-body" id="messagesDashboardBody">
+                <!-- Messages will be loaded here -->
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                    <p>Loading messages...</p>
+                </div>
+            </div>
+            <div class="messages-dashboard-footer">
+                <button class="btn-refresh" id="refreshMessages">
+                    <i class="fas fa-sync-alt"></i> Refresh
+                </button>
+                <button class="btn-close" id="closeMessagesBtn">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Details Modal -->
+    <div class="modal-overlay" id="orderModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-file-invoice"></i> Order Details</h2>
+                <button class="close-modal" id="closeModal">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Order details will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        import { getFirestore, collection, getDocs, query, orderBy, doc, updateDoc, deleteDoc, where, Timestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDfpoqyjtO7VueYtcGEYTfkWHOl4YNG7sk",
+            authDomain: "kindadys-9924e.firebaseapp.com",
+            projectId: "kindadys-9924e",
+            storageBucket: "kindadys-9924e.firebasestorage.app",
+            messagingSenderId: "772017587580",
+            appId: "1:772017587580:web:82cd5c27edf6bfc44c50f9",
+            measurementId: "G-D74KTPX92D"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        let allOrders = [];
+        let currentOrderId = null;
+        let allMessages = [];
+
+        // DOM Elements
+        const ordersTableBody = document.getElementById('ordersTableBody');
+        const orderModal = document.getElementById('orderModal');
+        const closeModal = document.getElementById('closeModal');
+        const modalBody = document.getElementById('modalBody');
+        const refreshBtn = document.getElementById('refreshOrders');
+        const statusFilter = document.getElementById('statusFilter');
+        const searchBox = document.getElementById('searchOrders');
+        const totalOrdersEl = document.getElementById('totalOrders');
+        const totalRevenueEl = document.getElementById('totalRevenue');
+        const pendingOrdersEl = document.getElementById('pendingOrders');
+        const todayOrdersEl = document.getElementById('todayOrders');
+        
+        // Messages elements
+        const viewMessagesBtn = document.getElementById('viewMessagesBtn');
+        const messagesDashboardModal = document.getElementById('messagesDashboardModal');
+        const closeDashboard = document.getElementById('closeDashboard');
+        const closeMessagesBtn = document.getElementById('closeMessagesBtn');
+        const refreshMessagesBtn = document.getElementById('refreshMessages');
+        const messagesDashboardBody = document.getElementById('messagesDashboardBody');
+        const messageCountBadge = document.getElementById('messageCountBadge');
+
+        // ========== MESSAGES FUNCTIONS ==========
+        // Format message time
+        function formatMessageTime(timestamp) {
+            const date = new Date(timestamp);
+            return date.toLocaleDateString('en-GH') + ' ' + date.toLocaleTimeString('en-GH', { hour: '2-digit', minute: '2-digit' });
+        }
+
+        // Load messages from Firebase
+        async function loadMessages() {
+            try {
+                messagesDashboardBody.innerHTML = `
+                    <div class="loading">
+                        <div class="loading-spinner"></div>
+                        <p>Loading messages...</p>
+                    </div>
+                `;
+
+                const contactsCollection = collection(db, 'contacts');
+                const q = query(contactsCollection, orderBy('createdAt', 'desc'));
+                const querySnapshot = await getDocs(q);
+                
+                allMessages = [];
+                let unreadCount = 0;
+
+                querySnapshot.forEach((doc) => {
+                    const messageData = doc.data();
+                    const message = {
+                        id: doc.id,
+                        ...messageData
+                    };
+                    allMessages.push(message);
+                    
+                    if (!message.read) {
+                        unreadCount++;
+                    }
+                });
+
+                // Update badge count
+                messageCountBadge.textContent = unreadCount;
+                if (unreadCount > 0) {
+                    messageCountBadge.style.display = 'flex';
+                } else {
+                    messageCountBadge.style.display = 'none';
+                }
+
+                // If modal is open, render messages
+                if (messagesDashboardModal.style.display === 'flex') {
+                    renderMessages();
+                }
+
+            } catch (error) {
+                console.error('Error loading messages:', error);
+                messagesDashboardBody.innerHTML = `
+                    <div style="text-align: center; padding: 40px; color: #ef4444;">
+                        <i class="fas fa-exclamation-circle" style="font-size: 48px; margin-bottom: 15px; display: block;"></i>
+                        <h3>Error Loading Messages</h3>
+                        <p>${error.message}</p>
+                        <button onclick="loadMessages()" style="margin-top: 15px; padding: 10px 20px; background: #667eea; color: white; border: none; border-radius: 8px; cursor: pointer;">
+                            <i class="fas fa-redo"></i> Try Again
+                        </button>
+                    </div>
+                `;
+            }
+        }
+
+        // Render messages to dashboard
+        function renderMessages() {
+            if (allMessages.length === 0) {
+                messagesDashboardBody.innerHTML = `
+                    <div class="no-messages">
+                        <i class="fas fa-inbox"></i>
+                        <h3>No Messages Yet</h3>
+                        <p>When customers contact you through the website, messages will appear here.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Update stats
+            const unreadCount = allMessages.filter(m => !m.read).length;
+            const totalCount = allMessages.length;
+
+            const statsHTML = `
+                <div class="messages-stats">
+                    <div class="stat">
+                        <i class="fas fa-envelope"></i>
+                        <span>${totalCount} Total Messages</span>
+                    </div>
+                    <div class="stat">
+                        <i class="fas fa-eye-slash"></i>
+                        <span>${unreadCount} Unread</span>
+                    </div>
+                </div>
+            `;
+
+            // Build messages list
+            const messagesHTML = allMessages.map(msg => {
+                const messageTime = formatMessageTime(msg.createdAt || msg.timestamp);
+                const isUnread = !msg.read;
+                
+                return `
+                    <div class="message-card ${isUnread ? 'unread' : 'read'}" data-id="${msg.id}">
+                        <div class="message-header">
+                            <div class="message-sender">
+                                <strong>${msg.name || 'Unknown Sender'}</strong>
+                                <div class="message-phone">
+                                    <i class="fas fa-phone"></i>
+                                    ${msg.phone || 'No phone provided'}
+                                </div>
+                            </div>
+                            <div class="message-meta">
+                                <span class="message-time">${messageTime}</span>
+                                ${msg.subject ? `<span class="message-subject">${msg.subject}</span>` : ''}
+                            </div>
+                        </div>
+                        <div class="message-content">
+                            <p>${msg.message || 'No message content'}</p>
+                        </div>
+                        <div class="message-actions">
+                            <button class="btn-mark-read" onclick="markMessageAsRead('${msg.id}')" ${!isUnread ? 'disabled' : ''}>
+                                <i class="fas fa-check"></i> ${isUnread ? 'Mark Read' : 'Read'}
+                            </button>
+                            <a href="https://wa.me/233${(msg.phone || '595736002').replace('0', '')}?text=Hello%20${encodeURIComponent(msg.name || '')}%2C%20regarding%20your%20message%20on%20Kindady's%20tail" 
+                               target="_blank" class="btn-reply">
+                                <i class="fab fa-whatsapp"></i> Reply
+                            </a>
+                            <button class="btn-delete" onclick="deleteMessage('${msg.id}')">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            messagesDashboardBody.innerHTML = statsHTML + `<div class="messages-list">${messagesHTML}</div>`;
+        }
+
+        // Mark message as read
+        async function markMessageAsRead(messageId) {
+            try {
+                // Update in Firebase (requires update permission)
+                const messageRef = doc(db, 'contacts', messageId);
+                await updateDoc(messageRef, {
+                    read: true,
+                    readAt: new Date().toISOString()
+                });
+
+                // Update local data
+                const messageIndex = allMessages.findIndex(m => m.id === messageId);
+                if (messageIndex !== -1) {
+                    allMessages[messageIndex].read = true;
+                    allMessages[messageIndex].readAt = new Date().toISOString();
+                }
+
+                // Refresh display
+                renderMessages();
+                loadMessages(); // Reload to update badge count
+                
+                // Show success notification
+                alert('Message marked as read!');
+
+            } catch (error) {
+                console.error('Error marking message as read:', error);
+                alert('Error: ' + error.message);
+            }
+        }
+
+        // Delete message
+        async function deleteMessage(messageId) {
+            if (!confirm('Are you sure you want to delete this message? This action cannot be undone.')) {
+                return;
+            }
+
+            try {
+                // Delete from Firebase (requires delete permission)
+                const messageRef = doc(db, 'contacts', messageId);
+                await deleteDoc(messageRef);
+
+                // Remove from local data
+                allMessages = allMessages.filter(m => m.id !== messageId);
+
+                // Refresh display
+                renderMessages();
+                loadMessages(); // Reload to update badge count
+                
+                // Show success notification
+                alert('Message deleted successfully!');
+
+            } catch (error) {
+                console.error('Error deleting message:', error);
+                alert('Error: ' + error.message);
+            }
+        }
+
+        // Show messages dashboard
+        function showMessagesDashboard() {
+            renderMessages();
+            messagesDashboardModal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Close messages dashboard
+        function closeMessagesDashboard() {
+            messagesDashboardModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // ========== ORDERS FUNCTIONS ==========
+        // Format currency
+        function formatCurrency(amount) {
+            return `GHS ₵${parseFloat(amount).toFixed(2)}`;
+        }
+
+        // Format date
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-GH', {
+                day: 'numeric',
+                month: 'short',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        // Get status badge class
+        function getStatusClass(status) {
+            const classes = {
+                'pending': 'status-pending',
+                'processing': 'status-processing',
+                'shipped': 'status-shipped',
+                'delivered': 'status-delivered',
+                'cancelled': 'status-cancelled'
+            };
+            return classes[status] || 'status-pending';
+        }
+
+        // Load orders from Firebase
+        async function loadOrders() {
+            try {
+                ordersTableBody.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="loading">
+                            <div class="loading-spinner"></div>
+                            <p>Loading orders...</p>
+                        </td>
+                    </tr>
+                `;
+
+                const ordersCollection = collection(db, 'orders');
+                const q = query(ordersCollection, orderBy('createdAt', 'desc'));
+                const querySnapshot = await getDocs(q);
+                
+                allOrders = [];
+                let totalRevenue = 0;
+                let pendingCount = 0;
+                let todayCount = 0;
+                const today = new Date().toDateString();
+
+                querySnapshot.forEach((doc) => {
+                    const orderData = doc.data();
+                    const order = {
+                        id: doc.id,
+                        ...orderData,
+                        firebaseId: doc.id
+                    };
+                    allOrders.push(order);
+
+                    // Calculate stats
+                    totalRevenue += parseFloat(order.orderDetails?.total || 0);
+                    if (order.status === 'pending') pendingCount++;
+                    
+                    const orderDate = new Date(order.createdAt).toDateString();
+                    if (orderDate === today) todayCount++;
+                });
+
+                // Update stats
+                totalOrdersEl.textContent = allOrders.length;
+                totalRevenueEl.textContent = formatCurrency(totalRevenue);
+                pendingOrdersEl.textContent = pendingCount;
+                todayOrdersEl.textContent = todayCount;
+
+                // Render orders
+                renderOrders(allOrders);
+
+            } catch (error) {
+                console.error('Error loading orders:', error);
+                ordersTableBody.innerHTML = `
+                    <tr>
+                        <td colspan="7" style="text-align: center; padding: 40px; color: #ef4444;">
+                            <i class="fas fa-exclamation-circle" style="font-size: 48px; margin-bottom: 15px; display: block;"></i>
+                            <h3>Error Loading Orders</h3>
+                            <p>${error.message}</p>
+                            <button onclick="loadOrders()" style="margin-top: 15px; padding: 10px 20px; background: #667eea; color: white; border: none; border-radius: 8px; cursor: pointer;">
+                                <i class="fas fa-redo"></i> Try Again
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }
+        }
+
+        // Render orders to table
+        function renderOrders(orders) {
+            if (orders.length === 0) {
+                ordersTableBody.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="empty-state">
+                            <i class="fas fa-inbox"></i>
+                            <h3>No Orders Found</h3>
+                            <p>When customers place orders, they will appear here.</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            const ordersHTML = orders.map(order => {
+                const orderDate = formatDate(order.createdAt);
+                const statusClass = getStatusClass(order.status);
+                const total = formatCurrency(order.orderDetails?.total || 0);
+                const paymentMethod = order.payment?.method || 'Unknown';
+
+                return `
+                    <tr>
+                        <td>
+                            <div class="order-id">${order.orderId || order.id.substring(0, 8)}</div>
+                            <div class="order-time">${orderDate}</div>
+                        </td>
+                        <td>
+                            <div class="customer-info">
+                                <strong>${order.customer?.name || 'No Name'}</strong>
+                                <div class="phone">
+                                    <i class="fas fa-phone"></i>
+                                    ${order.customer?.phone || 'No Phone'}
+                                </div>
+                                ${order.customer?.email ? `
+                                    <div class="email">
+                                        <i class="fas fa-envelope"></i>
+                                        ${order.customer.email}
+                                    </div>
+                                ` : ''}
+                            </div>
+                        </td>
+                        <td>${orderDate.split(',')[0]}</td>
+                        <td>
+                            <span class="status-badge ${statusClass}">${order.status}</span>
+                        </td>
+                        <td>
+                            <span class="payment-method">${paymentMethod}</span>
+                        </td>
+                        <td class="total-amount">${total}</td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="action-btn view-btn" onclick="viewOrder('${order.id}')" title="View Order">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="action-btn update-btn" onclick="updateOrder('${order.id}')" title="Update Status">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="action-btn delete-btn" onclick="deleteOrder('${order.id}')" title="Delete Order">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+
+            ordersTableBody.innerHTML = ordersHTML;
+        }
+
+        // View order details
+        async function viewOrder(orderId) {
+            try {
+                const order = allOrders.find(o => o.id === orderId);
+                if (!order) {
+                    alert('Order not found!');
+                    return;
+                }
+
+                currentOrderId = orderId;
+                const orderDate = formatDate(order.createdAt);
+                const statusClass = getStatusClass(order.status);
+                const total = formatCurrency(order.orderDetails?.total || 0);
+                const subtotal = formatCurrency(order.orderDetails?.subtotal || 0);
+                const delivery = formatCurrency(order.orderDetails?.delivery || 50);
+
+                // Build order items HTML
+                const itemsHTML = (order.orderDetails?.items || []).map(item => `
+                    <div class="order-item-row">
+                        <div class="item-image">
+                            <img src="${item.image || 'https://via.placeholder.com/60x60/cccccc/ffffff?text=Product'}" alt="${item.title}">
+                        </div>
+                        <div class="item-details">
+                            <div class="item-name">${item.title}</div>
+                            <div class="item-quantity">Quantity: ${item.quantity}</div>
+                        </div>
+                        <div class="item-price">GHS ₵${(item.price * item.quantity).toFixed(2)}</div>
+                    </div>
+                `).join('') || '<p>No items found</p>';
+
+                // Build modal HTML
+                modalBody.innerHTML = `
+                    <div class="details-grid">
+                        <div class="detail-section">
+                            <h3><i class="fas fa-user"></i> Customer Information</h3>
+                            <div class="detail-item">
+                                <div class="detail-label">Full Name</div>
+                                <div class="detail-value">${order.customer?.name || 'Not provided'}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Phone Number</div>
+                                <div class="detail-value">${order.customer?.phone || 'Not provided'}</div>
+                            </div>
+                            ${order.customer?.email ? `
+                            <div class="detail-item">
+                                <div class="detail-label">Email Address</div>
+                                <div class="detail-value">${order.customer.email}</div>
+                            </div>
+                            ` : ''}
+                            <div class="detail-item">
+                                <div class="detail-label">Delivery Address</div>
+                                <div class="detail-value">${order.customer?.address || 'Not provided'}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">City & Region</div>
+                                <div class="detail-value">${order.customer?.city || ''}${order.customer?.region ? `, ${order.customer.region}` : ''}</div>
+                            </div>
+                        </div>
+
+                        <div class="detail-section">
+                            <h3><i class="fas fa-receipt"></i> Order Information</h3>
+                            <div class="detail-item">
+                                <div class="detail-label">Order ID</div>
+                                <div class="detail-value">${order.orderId || order.id}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Order Date</div>
+                                <div class="detail-value">${orderDate}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Order Status</div>
+                                <div class="detail-value">
+                                    <span class="status-badge ${statusClass}">${order.status}</span>
+                                </div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Payment Method</div>
+                                <div class="detail-value">${order.payment?.method || 'Not specified'}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Payment Status</div>
+                                <div class="detail-value">
+                                    <span class="status-badge ${order.payment?.status === 'paid' ? 'status-delivered' : 'status-pending'}">
+                                        ${order.payment?.status || 'awaiting_payment'}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="detail-section">
+                        <h3><i class="fas fa-box"></i> Order Items</h3>
+                        <div class="order-items-list">
+                            ${itemsHTML}
+                        </div>
+                    </div>
+
+                    <div class="order-totals">
+                        <div class="total-row">
+                            <span>Subtotal:</span>
+                            <span>${subtotal}</span>
+                        </div>
+                        <div class="total-row">
+                            <span>Delivery Fee:</span>
+                            <span>${delivery}</span>
+                        </div>
+                        <div class="total-row">
+                            <span>Total Amount:</span>
+                            <span>${total}</span>
+                        </div>
+                    </div>
+
+                    <div class="modal-actions">
+                        <select class="status-select" id="orderStatus">
+                            <option value="pending" ${order.status === 'pending' ? 'selected' : ''}>Pending</option>
+                            <option value="processing" ${order.status === 'processing' ? 'selected' : ''}>Processing</option>
+                            <option value="shipped" ${order.status === 'shipped' ? 'selected' : ''}>Shipped</option>
+                            <option value="delivered" ${order.status === 'delivered' ? 'selected' : ''}>Delivered</option>
+                            <option value="cancelled" ${order.status === 'cancelled' ? 'selected' : ''}>Cancelled</option>
+                        </select>
+                        
+                        <select class="status-select" id="paymentStatus">
+                            <option value="awaiting_payment" ${order.payment?.status === 'awaiting_payment' ? 'selected' : ''}>Awaiting Payment</option>
+                            <option value="paid" ${order.payment?.status === 'paid' ? 'selected' : ''}>Paid</option>
+                        </select>
+
+                        <button class="save-btn" onclick="saveOrderChanges()">
+                            <i class="fas fa-save"></i> Save Changes
+                        </button>
+
+                        <a href="tel:${order.customer?.phone || '0595736002'}" class="call-btn">
+                            <i class="fas fa-phone"></i> Call Customer
+                        </a>
+
+                        <a href="https://wa.me/233${(order.customer?.phone || '595736002').replace('0', '')}?text=Hello%20${encodeURIComponent(order.customer?.name || '')}%2C%20regarding%20your%20order%20${order.orderId || order.id}%20from%20Kindady's%20tail" 
+                           target="_blank" class="whatsapp-btn">
+                            <i class="fab fa-whatsapp"></i> WhatsApp
+                        </a>
+                    </div>
+                `;
+
+                orderModal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+
+            } catch (error) {
+                console.error('Error viewing order:', error);
+                alert('Error loading order details: ' + error.message);
+            }
+        }
+
+        // Update order status
+        async function updateOrder(orderId) {
+            viewOrder(orderId);
+        }
+
+        // Save order changes
+        async function saveOrderChanges() {
+            if (!currentOrderId) return;
+
+            const orderStatus = document.getElementById('orderStatus').value;
+            const paymentStatus = document.getElementById('paymentStatus').value;
+
+            try {
+                const orderRef = doc(db, 'orders', currentOrderId);
+                await updateDoc(orderRef, {
+                    status: orderStatus,
+                    'payment.status': paymentStatus,
+                    updatedAt: new Date().toISOString()
+                });
+
+                // Update local data
+                const orderIndex = allOrders.findIndex(o => o.id === currentOrderId);
+                if (orderIndex !== -1) {
+                    allOrders[orderIndex].status = orderStatus;
+                    allOrders[orderIndex].payment.status = paymentStatus;
+                    allOrders[orderIndex].updatedAt = new Date().toISOString();
+                }
+
+                // Refresh display
+                renderOrders(allOrders);
+                
+                // Show success message
+                alert('Order updated successfully!');
+                
+                // Close modal
+                closeModal.click();
+
+            } catch (error) {
+                console.error('Error updating order:', error);
+                alert('Error updating order: ' + error.message);
+            }
+        }
+
+        // Delete order
+        async function deleteOrder(orderId) {
+            if (!confirm('Are you sure you want to delete this order? This action cannot be undone.')) {
+                return;
+            }
+
+            try {
+                const orderRef = doc(db, 'orders', orderId);
+                await deleteDoc(orderRef);
+
+                // Remove from local data
+                allOrders = allOrders.filter(o => o.id !== orderId);
+
+                // Refresh display
+                renderOrders(allOrders);
+                
+                // Update stats
+                const totalRevenue = allOrders.reduce((sum, order) => sum + parseFloat(order.orderDetails?.total || 0), 0);
+                const pendingCount = allOrders.filter(o => o.status === 'pending').length;
+                const todayCount = allOrders.filter(o => {
+                    const orderDate = new Date(o.createdAt).toDateString();
+                    return orderDate === new Date().toDateString();
+                }).length;
+
+                totalOrdersEl.textContent = allOrders.length;
+                totalRevenueEl.textContent = formatCurrency(totalRevenue);
+                pendingOrdersEl.textContent = pendingCount;
+                todayOrdersEl.textContent = todayCount;
+
+                alert('Order deleted successfully!');
+
+            } catch (error) {
+                console.error('Error deleting order:', error);
+                alert('Error deleting order: ' + error.message);
+            }
+        }
+
+        // Filter orders
+        function filterOrders() {
+            const status = statusFilter.value;
+            const searchTerm = searchBox.value.toLowerCase();
+
+            let filteredOrders = allOrders;
+
+            // Filter by status
+            if (status !== 'all') {
+                filteredOrders = filteredOrders.filter(order => order.status === status);
+            }
+
+            // Filter by search term
+            if (searchTerm) {
+                filteredOrders = filteredOrders.filter(order => {
+                    const searchableText = [
+                        order.orderId || '',
+                        order.id,
+                        order.customer?.name || '',
+                        order.customer?.phone || '',
+                        order.customer?.email || '',
+                        order.customer?.address || '',
+                        order.customer?.city || '',
+                        order.customer?.region || '',
+                        order.status,
+                        order.payment?.method || ''
+                    ].join(' ').toLowerCase();
+
+                    return searchableText.includes(searchTerm);
+                });
+            }
+
+            renderOrders(filteredOrders);
+        }
+
+        // Initialize event listeners
+        function initEventListeners() {
+            // Orders listeners
+            refreshBtn.addEventListener('click', loadOrders);
+            closeModal.addEventListener('click', () => {
+                orderModal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            });
+            statusFilter.addEventListener('change', filterOrders);
+            searchBox.addEventListener('input', filterOrders);
+
+            // Messages listeners
+            viewMessagesBtn.addEventListener('click', showMessagesDashboard);
+            closeDashboard.addEventListener('click', closeMessagesDashboard);
+            closeMessagesBtn.addEventListener('click', closeMessagesDashboard);
+            refreshMessagesBtn.addEventListener('click', loadMessages);
+
+            // Close modals when clicking outside
+            orderModal.addEventListener('click', (e) => {
+                if (e.target === orderModal) {
+                    orderModal.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                }
+            });
+
+            messagesDashboardModal.addEventListener('click', (e) => {
+                if (e.target === messagesDashboardModal) {
+                    closeMessagesDashboard();
+                }
+            });
+
+            // Keyboard shortcuts
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    if (orderModal.style.display === 'flex') {
+                        closeModal.click();
+                    }
+                    if (messagesDashboardModal.style.display === 'flex') {
+                        closeMessagesDashboard();
+                    }
+                }
+                if (e.key === 'r' && (e.ctrlKey || e.metaKey)) {
+                    e.preventDefault();
+                    loadOrders();
+                    loadMessages();
+                }
+            });
+        }
+
+        // Initialize
+        window.addEventListener('DOMContentLoaded', () => {
+            initEventListeners();
+            loadOrders();
+            loadMessages(); // Also load messages on startup
+            
+            // Auto-refresh every 30 seconds
+          // Auto-refresh every 3 hours (10,800,000 milliseconds)
+setInterval(() => {
+    loadOrders();
+    loadMessages();
+    // Re-apply clickable links after refresh
+    setTimeout(() => {
+        makePhoneNumbersClickable();
+        makeEmailsClickable();
+    }, 100);
+}, 10800000); // 10800000 milliseconds = 3 hours
+        });
+
+        // Make functions available globally
+        window.viewOrder = viewOrder;
+        window.updateOrder = updateOrder;
+        window.deleteOrder = deleteOrder;
+        window.saveOrderChanges = saveOrderChanges;
+        window.loadOrders = loadOrders;
+        window.markMessageAsRead = markMessageAsRead;
+        window.deleteMessage = deleteMessage;
+        window.showMessagesDashboard = showMessagesDashboard;
+        window.closeMessagesDashboard = closeMessagesDashboard;
+        window.loadMessages = loadMessages;
+    </script>
+</body>
+</html>
