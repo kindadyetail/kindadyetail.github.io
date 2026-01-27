@@ -1345,30 +1345,29 @@ function sendWhatsAppNotification(orderData) {
     const customerPhone = cleanPhoneNumber(orderData.customer.phone);
     
     // Create detailed message for seller
-    const sellerMessage = encodeURIComponent(
-        `📦 *NEW ORDER - Kindady's tail* 📦\n\n` +
-        `🆔 *Order ID:* ${orderData.orderId}\n` +
-        `📅 *Date:* ${new Date().toLocaleString('en-GH', { timeZone: 'Africa/Accra' })}\n\n` +
-        `👤 *Customer Information*\n` +
-        `• Name: ${orderData.customer.name}\n` +
-        `• Phone: ${orderData.customer.phone}\n` +
-        `• Address: ${orderData.customer.address}, ${orderData.customer.city}\n` +
-        `• Region: ${orderData.customer.region}\n\n` +
-        `💰 *Order Summary*\n` +
-        `• Subtotal: GHS ₵${parseFloat(orderData.orderDetails.subtotal).toFixed(2)}\n` +
-        `• Delivery: GHS ₵${parseFloat(orderData.orderDetails.delivery).toFixed(2)}\n` +
-        `• *TOTAL: GHS ₵${parseFloat(orderData.orderDetails.total).toFixed(2)}*\n\n` +
-        `💳 *Payment Method:* ${formatPaymentMethod(orderData.payment.method)}\n` +
-        `📊 *Status:* ${formatPaymentStatus(orderData.payment.status)}\n\n` +
-        `🛍️ *Items (${orderData.orderDetails.itemCount}):*\n` +
-        orderData.orderDetails.items.map((item, index) => 
-            `${index + 1}. ${item.title} × ${item.quantity} = GHS ₵${(item.price * item.quantity).toFixed(2)}`
-        ).join('\n') + '\n\n' +
-        `📱 *Customer WhatsApp:* https://wa.me/${customerPhone}\n` +
-        `📞 *Call Customer:* ${orderData.customer.phone}\n\n` +
-        `⏰ *Please process this order ASAP!*`
-    );
-    
+  const sellerMessage = encodeURIComponent(
+    `NEW ORDER - Kindady's E-tail\n\n` +
+    `Order ID: ${orderData.orderId}\n` +
+    `Date: ${new Date().toLocaleString('en-GH', { timeZone: 'Africa/Accra' })}\n\n` +
+    `Customer Information\n` +
+    `Name: ${orderData.customer.name}\n` +
+    `Phone: ${orderData.customer.phone}\n` +
+    `Address: ${orderData.customer.address}, ${orderData.customer.city}\n` +
+    `Region: ${orderData.customer.region}\n\n` +
+    `Order Summary\n` +
+    `Subtotal: GHS ₵${parseFloat(orderData.orderDetails.subtotal).toFixed(2)}\n` +
+    `Delivery: GHS ₵${parseFloat(orderData.orderDetails.delivery).toFixed(2)}\n` +
+    `TOTAL: GHS ₵${parseFloat(orderData.orderDetails.total).toFixed(2)}\n\n` +
+    `Payment Method: ${formatPaymentMethod(orderData.payment.method)}\n` +
+    `Status: ${formatPaymentStatus(orderData.payment.status)}\n\n` +
+    `Items (${orderData.orderDetails.itemCount}):\n` +
+    orderData.orderDetails.items.map((item, index) => 
+        `${index + 1}. ${item.title} × ${item.quantity} = GHS ₵${(item.price * item.quantity).toFixed(2)}`
+    ).join('\n') + '\n\n' +
+    `Customer WhatsApp: https://wa.me/${customerPhone}\n` +
+    `Call Customer: ${orderData.customer.phone}\n\n` +
+    `Please process this order promptly.`
+);
     // Create WhatsApp URL
     const whatsappUrl = `https://wa.me/${sellerNumber}?text=${sellerMessage}`;
     
