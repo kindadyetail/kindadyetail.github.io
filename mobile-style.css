@@ -1,16 +1,73 @@
-/* ===== MOBILE STYLES (768px and below) ===== */
+/* ===== FIX FOR MOBILE SCROLLBAR ISSUE ===== */
+@media (max-width: 768px) {
+    /* Remove vertical overflow and scrollbar */
+    html, body {
+        max-width: 100%;
+        overflow-x: hidden;
+        overflow-y: auto;
+        height: auto;
+        min-height: 100vh;
+    }
+    
+    /* Fix for iOS Safari */
+    @supports (-webkit-touch-callout: none) {
+        html, body {
+            height: -webkit-fill-available;
+        }
+    }
+    
+    /* Ensure content doesn't exceed viewport */
+    .container, .footer .container, section, .hero, .values-section {
+        max-width: 100vw;
+        width: 100%;
+    }
+    
+    /* Hero section specific fixes */
+    .hero {
+        min-height: auto;
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+    }
+    
+    /* Values section specific fixes */
+    .values-section {
+        padding: 2rem 0;
+        min-height: auto;
+    }
+    
+    .values-grid {
+        max-height: 200px;
+    }
+    
+    /* Footer specific fixes - LEFT ALIGNED */
+    .footer {
+        padding: 1rem 0 !important;
+        min-height: auto;
+        text-align: left !important;
+    }
+    
+    .footer-bottom {
+        margin-top: 0.5rem;
+        padding-top: 0.5rem;
+        text-align: left !important;
+    }
+}
+
+/* ===== MOBILE STYLES (768px and below) - UPDATED ===== */
 @media (max-width: 768px) {
     /* Hero text adjustments */
     .hero-title {
         font-size: 1.9rem;
         margin-bottom: 0.75rem;
         line-height: 1.1;
+        text-align: left;
     }
     
     .hero-subtitle {
         font-size: 0.8rem;
         margin-bottom: 1.25rem;
         line-height: 1.5;
+        text-align: left;
     }
     
     /* Reduce heart emoji size */
@@ -29,6 +86,9 @@
         margin-bottom: 1.5rem;
         padding-bottom: 8px;
         -webkit-overflow-scrolling: touch;
+        max-width: 100%;
+        justify-content: flex-start;
+        text-align: left;
     }
     
     /* Hide scrollbar but keep functionality */
@@ -65,7 +125,8 @@
 /* ===== VALUES SECTION HORIZONTAL ON MOBILE ===== */
 @media (max-width: 768px) {
     .values-section {
-        padding: 2.4rem 0; /* Reduced from 5rem */
+        padding: 2rem 0;
+        text-align: left;
     }
     
     .values-grid {
@@ -73,9 +134,12 @@
         flex-wrap: nowrap;
         overflow-x: auto;
         gap: 15px;
-        padding-bottom: 5px; /* Reduced padding */
+        padding-bottom: 5px;
         -webkit-overflow-scrolling: touch;
         scroll-snap-type: x mandatory;
+        max-width: 100%;
+        max-height: 200px;
+        justify-content: flex-start;
     }
     
     /* Hide scrollbar but keep functionality */
@@ -90,273 +154,1212 @@
     
     .value-card {
         flex: 0 0 auto;
-        width: 260px; /* Slightly narrower */
-        min-height: 180px; /* Reduced from 220px */
+        width: 260px;
+        min-height: 180px;
         scroll-snap-align: start;
-        padding: 1.25rem; /* Reduced from 1.5rem */
+        padding: 1.25rem;
+        text-align: left;
     }
     
     .value-icon {
-        width: 50px; /* Reduced from 60px */
-        height: 50px; /* Reduced from 60px */
-        font-size: 1.3rem; /* Reduced from 1.5rem */
-        margin-bottom: 0.75rem; /* Reduced from 1rem */
+        width: 50px;
+        height: 50px;
+        font-size: 1.3rem;
+        margin-bottom: 0.75rem;
     }
     
     .value-card h3 {
-        font-size: 1.2rem; /* Reduced from 1.3rem */
-        margin-bottom: 0.5rem; /* Reduced from 0.75rem */
+        font-size: 1.2rem;
+        margin-bottom: 0.5rem;
+        text-align: left;
     }
     
     .value-card p {
-        font-size: 0.85rem; /* Reduced from 0.9rem */
+        font-size: 0.85rem;
         line-height: 1.4;
         margin-bottom: 0;
+        text-align: left;
     }
 }
 
-/* ===== FOOTER RESPONSIVE - HORIZONTAL LAYOUT ===== */
+/* ===== FOOTER RESPONSIVE - LEFT ALIGNED WITH HORIZONTAL ICONS ===== */
 @media (max-width: 992px) {
     .footer-grid {
-        grid-template-columns: repeat(4, 1fr) !important; /* Keep 4 columns */
-        gap: 1.2rem !important; /* Reduced from 1.5rem */
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 1.5rem !important;
         align-items: start;
+        max-width: 100%;
+        text-align: left !important;
     }
     
-    /* Reduce text size but keep horizontal layout */
+    /* Left align all footer content */
+    .footer-col {
+        text-align: left !important;
+    }
+    
+    /* Reduce text size */
     .footer-col h4 {
-        font-size: 0.9rem !important; /* Reduced */
-        margin-bottom: 0.6rem !important; /* Reduced */
+        font-size: 0.9rem !important;
+        margin-bottom: 0.6rem !important;
+        text-align: left !important;
     }
     
     .footer-col p,
     .footer-col ul li,
     .footer-col ul li a {
-        font-size: 0.75rem !important; /* Reduced */
-        line-height: 1.3 !important; /* Tighter line height */
+        font-size: 0.75rem !important;
+        line-height: 1.3 !important;
+        text-align: left !important;
     }
     
     /* Smaller logo in footer */
     .footer-logo .logo-text {
-        font-size: 1rem !important; /* Reduced */
+        font-size: 1rem !important;
+        text-align: left !important;
     }
     
     .footer-logo .logo-sub {
-        font-size: 0.75rem !important; /* Reduced */
+        font-size: 0.75rem !important;
+        text-align: left !important;
     }
     
     .footer-tagline {
-        font-size: 0.8rem !important; /* Reduced */
-        margin-bottom: 0.8rem !important; /* Reduced */
+        font-size: 0.8rem !important;
+        margin-bottom: 0.8rem !important;
+        text-align: left !important;
     }
     
-    /* Smaller social icons */
+    /* SOCIAL ICONS - HORIZONTAL AND LEFT ALIGNED */
     .footer-social {
-        gap: 0.5rem; /* Reduced */
-        margin: 0.8rem 0; /* Reduced */
+        display: flex !important;
+        flex-direction: row !important;
+        gap: 0.5rem !important;
+        margin: 0.8rem 0 !important;
+        justify-content: flex-start !important;
+        align-items: center !important;
+        flex-wrap: nowrap !important;
+        text-align: left !important;
     }
     
     .footer-social a {
-        width: 30px; /* Reduced */
-        height: 30px; /* Reduced */
-        font-size: 0.8rem; /* Reduced */
+        width: 30px !important;
+        height: 30px !important;
+        font-size: 0.8rem !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        flex-shrink: 0 !important;
     }
     
-    /* Smaller payment icons */
+    /* PAYMENT ICONS - HORIZONTAL AND LEFT ALIGNED */
     .payment-methods {
-        font-size: 1rem; /* Reduced */
-        gap: 0.6rem; /* Reduced */
+        display: flex !important;
+        flex-direction: row !important;
+        font-size: 1rem !important;
+        gap: 0.6rem !important;
+        justify-content: flex-start !important;
+        align-items: center !important;
+        flex-wrap: nowrap !important;
+        text-align: left !important;
+        overflow-x: auto !important;
     }
     
     /* Reduce paragraph spacing */
     .footer-col p {
-        margin-bottom: 0.6rem !important; /* Added to control spacing */
+        margin-bottom: 0.6rem !important;
+        text-align: left !important;
+    }
+    
+    /* Left align lists */
+    .footer-col ul {
+        padding-left: 0 !important;
+        margin: 0 !important;
+        text-align: left !important;
+        list-style-position: inside !important;
+    }
+    
+    .footer-col ul li {
+        text-align: left !important;
+        margin-left: 0 !important;
+        padding-left: 0 !important;
     }
 }
 
 @media (max-width: 768px) {
     .footer-grid {
-        grid-template-columns: repeat(4, 1fr) !important;
-        gap: 0.8rem !important; /* Reduced from 1rem */
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 1rem !important;
+        padding: 0 !important;
+        text-align: left !important;
     }
     
-    /* Even smaller text */
+    /* Keep left alignment */
+    .footer-col {
+        text-align: left !important;
+        align-items: flex-start !important;
+    }
+    
+    /* Even smaller text - LEFT ALIGNED */
     .footer-col h4 {
         font-size: 0.8rem !important;
-        margin-bottom: 0.5rem !important; /* Reduced */
+        margin-bottom: 0.5rem !important;
+        text-align: left !important;
     }
     
     .footer-col p,
     .footer-col ul li,
     .footer-col ul li a {
         font-size: 0.7rem !important;
-        line-height: 1.25 !important; /* Even tighter */
+        line-height: 1.25 !important;
+        text-align: left !important;
     }
     
     .footer-logo .logo-text {
-        font-size: 0.9rem !important; /* Reduced */
+        font-size: 0.9rem !important;
+        text-align: left !important;
     }
     
     .footer-logo .logo-sub {
-        font-size: 0.7rem !important; /* Reduced */
+        font-size: 0.7rem !important;
+        text-align: left !important;
     }
     
     .footer-tagline {
-        font-size: 0.75rem !important; /* Reduced */
-        margin-bottom: 0.6rem !important; /* Reduced */
+        font-size: 0.75rem !important;
+        margin-bottom: 0.6rem !important;
+        text-align: left !important;
     }
     
     .footer-col p:not(.footer-tagline) {
-        display: -webkit-box;
-        -webkit-line-clamp: 2; /* Reduced from 3 lines */
-        line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        margin-bottom: 0.5rem !important; /* Added */
+        display: block !important;
+        -webkit-line-clamp: unset !important;
+        line-clamp: unset !important;
+        overflow: visible !important;
+        margin-bottom: 0.5rem !important;
+        text-align: left !important;
     }
     
-    /* Smaller footer bottom */
+    /* Smaller footer bottom - LEFT ALIGNED */
     .footer-bottom p {
-        font-size: 0.65rem !important; /* Reduced */
-        line-height: 1.2 !important; /* Added */
+        font-size: 0.65rem !important;
+        line-height: 1.2 !important;
+        text-align: left !important;
+        padding: 0 !important;
     }
     
-    /* Tighter list item spacing */
+    /* Tighter list item spacing - LEFT ALIGNED */
     .footer-col ul li {
-        margin-bottom: 0.4rem; /* Reduced */
-        line-height: 1.2; /* Added */
+        margin-bottom: 0.4rem !important;
+        line-height: 1.2 !important;
+        text-align: left !important;
+        list-style: none !important;
+        padding-left: 0 !important;
     }
     
-    /* Smaller social icons */
+    /* SOCIAL ICONS - HORIZONTAL AND LEFT ALIGNED */
     .footer-social {
-        gap: 0.4rem;
-        margin: 0.6rem 0;
+        display: flex !important;
+        flex-direction: row !important;
+        gap: 0.4rem !important;
+        margin: 0.6rem 0 !important;
+        justify-content: flex-start !important;
+        align-items: center !important;
+        flex-wrap: nowrap !important;
     }
     
     .footer-social a {
-        width: 26px;
-        height: 26px;
-        font-size: 0.75rem;
+        width: 26px !important;
+        height: 26px !important;
+        font-size: 0.75rem !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
     }
     
+    /* PAYMENT ICONS - HORIZONTAL AND LEFT ALIGNED */
     .payment-methods {
-        font-size: 0.9rem;
-        gap: 0.5rem;
+        display: flex !important;
+        flex-direction: row !important;
+        font-size: 0.9rem !important;
+        gap: 0.5rem !important;
+        justify-content: flex-start !important;
+        align-items: center !important;
+        flex-wrap: nowrap !important;
+        overflow-x: auto !important;
+        padding-bottom: 2px !important;
     }
 }
 
 @media (max-width: 576px) {
     .footer-grid {
-        grid-template-columns: repeat(4, 1fr) !important;
-        gap: 0.6rem !important; /* Reduced from 0.8rem */
-        padding: 0 8px; /* Reduced */
+        grid-template-columns: 1fr !important;
+        gap: 1rem !important;
+        text-align: left !important;
     }
     
-    /* Minimum font sizes */
+    /* All content in single column, left aligned */
+    .footer-col {
+        width: 100% !important;
+        margin-bottom: 1rem !important;
+        text-align: left !important;
+    }
+    
+    /* Minimum font sizes - LEFT ALIGNED */
     .footer-col h4 {
-        font-size: 0.75rem !important;
-        margin-bottom: 0.4rem !important; /* Reduced */
+        font-size: 0.8rem !important;
+        margin-bottom: 0.4rem !important;
+        text-align: left !important;
     }
     
     .footer-col p,
     .footer-col ul li,
     .footer-col ul li a {
-        font-size: 0.65rem !important;
-        line-height: 1.2 !important; /* Even tighter */
+        font-size: 0.7rem !important;
+        line-height: 1.3 !important;
+        text-align: left !important;
     }
     
     /* Tighter spacing */
     .footer-col ul li {
-        margin-bottom: 0.3rem; /* Reduced */
+        margin-bottom: 0.3rem !important;
+        text-align: left !important;
     }
     
-    /* Even smaller icons */
+    /* SOCIAL ICONS - HORIZONTAL AND LEFT ALIGNED */
+    .footer-social {
+        gap: 0.4rem !important;
+        justify-content: flex-start !important;
+    }
+    
     .footer-social a {
-        width: 24px;
-        height: 24px;
-        font-size: 0.7rem;
+        width: 24px !important;
+        height: 24px !important;
+        font-size: 0.7rem !important;
     }
     
+    /* PAYMENT ICONS - HORIZONTAL AND LEFT ALIGNED */
     .payment-methods {
-        font-size: 0.85rem;
-        gap: 0.4rem;
+        font-size: 0.85rem !important;
+        gap: 0.4rem !important;
+        justify-content: flex-start !important;
     }
     
     /* Reduce all margins */
     .footer-col p {
         margin-bottom: 0.4rem !important;
+        text-align: left !important;
     }
     
     .footer-tagline {
         margin-bottom: 0.4rem !important;
+        text-align: left !important;
     }
 }
 
 /* For very small screens (like iPhone SE) */
 @media (max-width: 400px) {
     .footer-grid {
-        grid-template-columns: repeat(4, 1fr) !important;
-        gap: 0.4rem !important; /* Reduced from 0.5rem */
+        grid-template-columns: 1fr !important;
+        gap: 1rem !important;
+        text-align: left !important;
     }
     
-    /* Ultra-small but still readable */
+    /* All left aligned in single column */
+    .footer-col {
+        text-align: left !important;
+    }
+    
+    /* Ultra-small but still readable - LEFT ALIGNED */
     .footer-col h4 {
-        font-size: 0.7rem !important;
-        margin-bottom: 0.3rem !important;
+        font-size: 0.8rem !important;
+        margin-bottom: 0.5rem !important;
+        text-align: left !important;
     }
     
     .footer-col p,
     .footer-col ul li,
     .footer-col ul li a {
-        font-size: 0.6rem !important;
-        line-height: 1.15 !important; /* Very tight */
+        font-size: 0.75rem !important;
+        line-height: 1.3 !important;
+        text-align: left !important;
     }
     
     /* Compact layout */
     .footer-col {
-        padding: 0 3px;
+        padding: 0 !important;
+    }
+    
+    /* SOCIAL ICONS - HORIZONTAL AND LEFT ALIGNED */
+    .footer-social {
+        justify-content: flex-start !important;
     }
     
     .footer-social a {
-        width: 22px;
-        height: 22px;
-        font-size: 0.65rem;
+        width: 28px !important;
+        height: 28px !important;
+        font-size: 0.75rem !important;
     }
     
     /* Remove all excess padding */
     .footer-col ul li {
-        margin-bottom: 0.2rem;
-        padding: 0;
+        margin-bottom: 0.3rem !important;
+        padding: 0 !important;
+        text-align: left !important;
     }
     
     .footer-col p {
-        margin-bottom: 0.3rem !important;
+        margin-bottom: 0.4rem !important;
+        text-align: left !important;
     }
 }
 
 /* Ensure horizontal scrolling doesn't break layout */
 .footer .container {
     max-width: 100%;
-    overflow-x: hidden;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+    box-sizing: border-box;
+    text-align: left !important;
 }
 
-/* Make links more tappable on mobile - adjusted for compact layout */
+/* Make links more tappable on mobile - LEFT ALIGNED */
 @media (max-width: 768px) {
     .footer-col ul li a {
-        display: block;
-        padding: 2px 0; /* Reduced from 4px */
-        min-height: 20px; /* Reduced from 28px */
+        display: block !important;
+        padding: 3px 0 !important;
+        min-height: 24px !important;
+        text-align: left !important;
+        text-decoration: none !important;
     }
 }
 
 /* Reduce overall footer padding */
 @media (max-width: 768px) {
     .footer {
-        padding: 1rem 0 1rem !important; /* Reduced vertical padding */
+        padding: 0.75rem 0 !important;
+        text-align: left !important;
     }
     
     .footer-bottom {
-        padding-top: 1rem !important; /* Reduced */
+        padding-top: 0.75rem !important;
+        margin-top: 0 !important;
+        text-align: left !important;
     }
 }
+
+/* ===== FIX FOR ALL BROWSERS ===== */
+/* This removes the scrollbar track completely */
+::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
+}
+
+/* For Firefox */
+* {
+    scrollbar-width: none;
+}
+
+/* For IE and Edge */
+* {
+    -ms-overflow-style: none;
+}
+
+/* ===== IMPORTANT: FORCE LEFT ALIGNMENT ===== */
+@media (max-width: 768px) {
+    /* Force left alignment on all text */
+    body, div, p, h1, h2, h3, h4, h5, h6, span, a, li, td, th {
+        text-align: left !important;
+    }
+    
+    /* Force left alignment on flex containers */
+    .footer-logo, .footer-social, .payment-methods, .hero, .values-section {
+        align-items: flex-start !important;
+        text-align: left !important;
+    }
+    
+    /* Ensure all content containers are left aligned */
+    .container {
+        text-align: left !important;
+    }
+}
+
+/* ===== SPECIFIC FIX FOR HORIZONTAL ICONS ===== */
+@media (max-width: 768px) {
+    /* Social icons container - horizontal layout */
+    .footer .footer-social {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        justify-content: flex-start !important;
+        align-items: center !important;
+        width: 100% !important;
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        -webkit-overflow-scrolling: touch !important;
+        padding-bottom: 5px !important;
+        margin-left: 0 !important;
+        padding-left: 0 !important;
+    }
+    
+    /* Hide scrollbar for social icons */
+    .footer .footer-social::-webkit-scrollbar {
+        display: none !important;
+    }
+    
+    .footer .footer-social {
+        -ms-overflow-style: none !important;
+        scrollbar-width: none !important;
+    }
+    
+    /* Payment methods - horizontal layout */
+    .footer .payment-methods {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        justify-content: flex-start !important;
+        align-items: center !important;
+        width: 100% !important;
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        -webkit-overflow-scrolling: touch !important;
+        padding-bottom: 5px !important;
+        margin-left: 0 !important;
+        padding-left: 0 !important;
+    }
+    
+    /* Hide scrollbar for payment methods */
+    .footer .payment-methods::-webkit-scrollbar {
+        display: none !important;
+    }
+    
+    .footer .payment-methods {
+        -ms-overflow-style: none !important;
+        scrollbar-width: none !important;
+    }
+}
+
+/* Mobile First - Small Screen Styles - Ultra Compact with Side Padding */
+@media screen and (max-width: 767px) {
+    .newsletter-section {
+        padding: 0.5rem 0 !important;
+        margin: 0 !important;
+    }
+    
+    .container {
+        max-width: 100% !important;
+        padding: 0 1rem !important;
+        margin: 0 !important;
+    }
+    
+    .newsletter-box {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 0.75rem !important;
+        background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%) !important;
+        border-radius: 8px !important;
+        padding: 1rem !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05) !important;
+        border: 1px solid rgba(0, 0, 0, 0.05) !important;
+        position: relative !important;
+        overflow: hidden !important;
+        margin: 0 !important;
+        width: 100% !important;
+    }
+    
+    /* Add !important to all key properties */
+    .newsletter-content h3 {
+        font-size: 1rem !important;
+        margin-bottom: 0.25rem !important;
+    }
+    
+    .newsletter-content p {
+        font-size: 0.75rem !important;
+        margin-bottom: 0.3rem !important;
+    }
+    
+    /* Continue with other properties... */
+
+    .privacy-note {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.25rem;
+        font-size: 0.625rem;
+        color: #718096;
+        margin-top: 0.5rem;
+        line-height: 1.15;
+        padding: 0.25rem 0.5rem;
+        background: rgba(237, 242, 247, 0.5);
+        border-radius: 4px;
+        border: 1px solid rgba(226, 232, 240, 0.5);
+    }
+    
+    .newsletter-form {
+        order: 2;
+        position: relative;
+        z-index: 1;
+        padding: 0 0.25rem;
+    }
+    
+    #brevoNewsletterForm {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    #brevoNewsletterForm input {
+        order: 1;
+        width: 100%;
+        padding: 0.5rem 0.75rem;
+        border: 1px solid #e2e8f0;
+        border-radius: 6px;
+        font-size: 0.75rem;
+        line-height: 1.2;
+        background: white;
+        transition: all 0.2s ease;
+        box-shadow: none;
+    }
+    
+    #brevoNewsletterForm input:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 1px rgba(102, 126, 234, 0.1);
+        transform: none;
+    }
+    
+    #brevoNewsletterForm input::placeholder {
+        color: #a0aec0;
+        font-size: 0.75rem;
+    }
+    
+    #brevoNewsletterForm button {
+        order: 2;
+        width: 100%;
+        padding: 0.5rem 1rem;
+        background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 0.75rem;
+        font-weight: 500;
+        line-height: 1.2;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.25rem;
+        transition: all 0.2s ease;
+        box-shadow: 0 2px 4px rgba(102, 126, 234, 0.2);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    #brevoNewsletterForm button::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.3s ease;
+    }
+    
+    #brevoNewsletterForm button:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 3px 6px rgba(102, 126, 234, 0.25);
+    }
+    
+    #brevoNewsletterForm button:hover::before {
+        left: 100%;
+    }
+    
+    #brevoNewsletterForm button:active {
+        transform: translateY(0);
+    }
+    
+    #newsletterMessage {
+        margin-top: 0.5rem;
+        padding: 0.5rem;
+        border-radius: 6px;
+        text-align: center;
+        font-size: 0.75rem;
+        font-weight: 500;
+        animation: slideDown 0.2s ease;
+    }
+    
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translateY(-5px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    /* Success message styling */
+    #newsletterMessage.success {
+        background: #c6f6d5;
+        color: #22543d;
+        border: 1px solid #9ae6b4;
+    }
+    
+    /* Error message styling */
+    #newsletterMessage.error {
+        background: #fed7d7;
+        color: #742a2a;
+        border: 1px solid #fc8181;
+    }
+    
+    .privacy-note i {
+        color: #48bb78;
+        font-size: 0.625rem;
+    }
+    
+    /* Reduce spinner size if needed */
+    #subscribeSpinner .fa-spinner {
+        font-size: 0.75rem;
+    }
+    
+    /* Optional: Add subtle pattern background - smaller */
+    .newsletter-box::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 60px;
+        height: 60px;
+        background: radial-gradient(circle at top right, rgba(102, 126, 234, 0.05) 0%, transparent 70%);
+        pointer-events: none;
+    }
+}
+
+
+
+
+@media (max-width: 768px) {
+
+    /* Hide icons */
+    .contact-icon {
+        display: none;
+    }
+
+    /* Remove card look + add gentle spacing */
+    .contact-card {
+        background: transparent;
+        box-shadow: none;
+        padding: 0;
+        margin-bottom: 1.25rem; /* 👈 space between the three */
+        border-radius: 0;
+    }
+
+    /* Disable hover / focus / active effects */
+    .contact-card:hover,
+    .contact-card:focus,
+    .contact-card:active {
+        background: transparent;
+        box-shadow: none;
+        transform: none;
+    }
+
+    /* Prevent highlight feel */
+    .contact-card,
+    .contact-card * {
+        transition: none;
+    }
+
+    /* Headings */
+    .contact-card h4 {
+        font-size: 0.95rem;
+        margin-bottom: 0.25rem;
+        line-height: 1.2;
+    }
+
+    /* Body text */
+    .contact-card p,
+    .contact-card a {
+        font-size: 0.85rem;
+        line-height: 1.35;
+        margin: 0;
+    }
+
+    /* Wrapper cleanup */
+    .contact-info {
+        gap: 0;
+        background: transparent;
+        padding: 0;
+    }
+}
+@media (max-width: 768px) {
+
+    /* Remove link hover/tap effects */
+    .contact-card a,
+    .contact-card a:hover,
+    .contact-card a:focus,
+    .contact-card a:active {
+        background: transparent;
+        box-shadow: none;
+        text-decoration: none;
+        color: inherit;
+        opacity: 1;
+    }
+
+    /* Remove mobile tap highlight */
+    .contact-card a {
+        -webkit-tap-highlight-color: transparent;
+    }
+}
+@media (max-width: 768px) {
+
+    /* Slightly pull the third card up */
+    .contact-card:nth-child(3) {
+        margin-top: -2rem;
+    }
+}
+
+@media (max-width: 768px) {
+
+    /* Reduce section title and center */
+    .section-title {
+        font-size: 1.4rem;
+        margin-bottom: 0.25rem;
+        text-align: center !important;
+    }
+
+    /* Reduce subtitle and center */
+    .section-subtitle {
+        font-size: 0.85rem;
+        line-height: 1.3;
+        margin-bottom: 1rem;
+        text-align: center !important;
+    }
+}
+
+@media (max-width: 768px) {
+
+    /* Reduce social icons size */
+    .social-links a {
+        font-size: 1rem; /* smaller than default */
+        margin-right: 0.5rem; /* optional: reduce spacing between icons */
+    }
+
+    /* Optional: remove extra bottom spacing */
+    .social-links {
+        margin-bottom: 1rem;
+    }
+}
+
+@media (max-width: 768px) {
+
+    /* Make form box more compact */
+    .contact-form {
+        padding: 1.5rem;        /* reduce padding */
+        border-radius: 10px;    /* slightly smaller corners */
+        max-width: 100%;        /* ensure it fits screen */
+        box-shadow: 0 8px 20px rgba(0,0,0,0.08); /* subtle shadow */
+    }
+
+    /* Shrink input, select, and textarea */
+    .contact-form input,
+    .contact-form select,
+    .contact-form textarea {
+        font-size: 0.85rem;
+        padding: 0.6rem 0.8rem;  /* smaller padding inside fields */
+    }
+
+    /* Shrink buttons */
+    .contact-form .btn {
+        font-size: 0.85rem;
+        padding: 0.5rem 0.9rem;  /* smaller buttons */
+    }
+
+    /* Shrink WhatsApp button specifically */
+    .contact-form .btn-success {
+        font-size: 0.85rem;
+        padding: 0.5rem 0.9rem;
+    }
+
+    /* Optional: reduce spacing between form elements */
+    .contact-form .form-group {
+        margin-bottom: 0.8rem;
+    }
+
+    .form-footer {
+        gap: 0.5rem;  /* closer buttons */
+    }
+}
+@media (max-width: 768px) {
+
+    /* Center the form buttons */
+    .contact-form .form-footer {
+        display: flex;
+        flex-direction: column; /* stack buttons vertically */
+        align-items: center;    /* center horizontally */
+        gap: 0.5rem;            /* spacing between buttons */
+    }
+
+    /* Optional: make buttons smaller on mobile */
+    .contact-form .btn {
+        width: auto;           /* shrink to content */
+        text-align: center;
+    }
+}
+
+
+
+@media (max-width: 768px) {
+
+    /* Reduce space between Contact Section and Newsletter Section */
+    .contact-section {
+        padding-bottom: 2rem; /* reduce from default, e.g., 4-5rem */
+    }
+
+    .newsletter-section {
+        padding-top: 2rem; /* reduce from default */
+    }
+}
+
+
+@media (max-width: 768px) {
+
+    /* About Section padding */
+    .about-section {
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+    }
+
+    /* About grid: stack vertically for mobile */
+    .about-grid {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch; /* image fills width */
+        gap: 1.5rem;
+    }
+
+    /* Image: fill container width like desktop */
+    .about-image img {
+        width: 100%;
+        height: auto;
+        border-radius: 8px;
+        display: block;
+    }
+
+    /* Image badge */
+    .image-badge {
+        font-size: 0.8rem;
+        padding: 0.25rem 0.5rem;
+        position: absolute; /* keep badge on top of image */
+        top: 0.5rem;
+        left: 0.5rem;
+    }
+
+    /* Section title */
+    .about-section .section-title {
+        font-size: 1.6rem;
+        margin-bottom: 0.5rem;
+        text-align: center;
+        line-height: 1.2;
+    }
+
+    /* Subtitle / name */
+    .about-section h3 {
+        font-size: 1.2rem;
+        margin-bottom: 0.5rem;
+        text-align: center;
+        line-height: 1.2;
+    }
+
+    /* Paragraphs */
+    .about-section p {
+        font-size: 0.95rem;
+        line-height: 1.4;
+        margin-bottom: 0.75rem;
+        text-align: center; /* keeps text readable */
+        max-width: 95%; /* prevents touching screen edges */
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    /* Button */
+    .about-section .btn {
+        font-size: 0.95rem;
+        padding: 0.5rem 1rem;
+        display: block;
+        margin: 0.75rem auto 0 auto; /* centered */
+    }
+}
+
+@media (max-width: 768px) {
+
+    /* Hide "Our Story" title */
+    .about-section .section-title {
+        display: none;
+    }
+
+    /* Hide "Chat with Me" button */
+    .about-section .btn.btn-secondary {
+        display: none;
+    }
+}
+
+
+
+@media (max-width: 768px) {
+
+    /* Filters container: horizontal scroll if needed */
+    .filters {
+        display: flex !important;
+        flex-wrap: nowrap !important;      
+        overflow-x: auto !important;       
+        gap: 0.5rem !important;            
+        padding-bottom: 0.5rem !important; 
+        -webkit-overflow-scrolling: touch !important; 
+    }
+
+    /* Filter buttons: smaller and compact */
+    .filter-btn {
+        font-size: 0.8rem !important;       
+        padding: 0.35rem 0.75rem !important; 
+        white-space: nowrap !important;      
+        flex-shrink: 0 !important;           
+    }
+
+    /* Reduce products-controls spacing */
+    .products-controls {
+        gap: 0.75rem !important;             
+        flex-wrap: wrap !important;           
+    }
+
+    /* Products grid: 2 columns */
+    .products-grid {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 0.75rem !important;
+    }
+
+    /* Each product card */
+    .product-card {
+        display: flex !important;
+        flex-direction: column !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    /* Image fills the card */
+    .product-card img {
+        width: 100% !important;
+        height: auto !important;
+        display: block !important;
+        object-fit: cover !important;
+        border-radius: 8px !important;
+    }
+
+    /* Product info spacing */
+    .product-info {
+        padding: 0.25rem 0 !important;      /* smaller padding */
+        text-align: center !important;      
+        font-size: 0.75rem !important;      /* smaller text */
+        line-height: 1.2 !important;        
+    }
+
+    /* Product title */
+    .product-info .product-title {
+        font-size: 0.8rem !important;
+        margin-bottom: 0.2rem !important;
+    }
+
+    /* Product price */
+    .product-info .price {
+        font-size: 0.75rem !important;
+        margin-bottom: 0.2rem !important;
+    }
+
+    /* Buttons inside product card */
+    .product-info .btn {
+        font-size: 0.7rem !important;
+        padding: 0.25rem 0.5rem !important;
+    }
+}
+
+@media (max-width: 768px) {
+
+    /* Refresh Products button */
+    .sync-button {
+        font-size: 0.75rem !important;       /* smaller text */
+        padding: 0.3rem 0.6rem !important;   /* smaller padding */
+        min-width: auto !important;          /* remove extra width if any */
+        flex-shrink: 0 !important;
+    }
+
+    /* Optional: reduce icon size inside */
+    .sync-button i {
+        font-size: 0.8rem !important;
+    }
+}
+
+@media (max-width: 768px) {
+    /* Make header height consistent */
+    .header {
+        position: fixed;       /* keep it fixed if desired */
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 1000;
+    }
+
+    /* Adjust hero so it starts below the header */
+    .hero {
+        margin-top: 120px !important; /* adjust based on mobile header + search height */
+    }
+
+    /* Optional: reduce hero content padding on mobile */
+    .hero-content {
+        padding: 1rem !important;
+    }
+
+    /* Ensure hero images don't overflow */
+    .hero-image {
+        width: 100% !important;
+        overflow: hidden !important;
+    }
+}
+
+
+
+
+@media (max-width: 768px) {
+
+    /* Hide cart in the menu */
+    .nav-menu .cart-icon {
+        display: none !important;
+    }
+
+    /* Move cart just before the nav toggle, smaller hover bubble */
+    .nav-container .cart-icon {
+        position: fixed !important;
+        top: 0rem !important;   
+        right: 3rem !important;   
+        z-index: 1500 !important;
+        display: flex !important;
+        background: white;       
+        padding: 0.15rem !important;   /* reduced padding for smaller bubble */
+        border-radius: 40% !important; /* slightly smaller roundness */
+        transition: background 0.2s ease; /* smooth hover effect */
+    }
+
+    /* Optional hover effect */
+    .nav-container .cart-icon:hover {
+        background: #f3f3f3 !important; /* subtle hover */
+    }
+
+    .nav-container .cart-icon i {
+        font-size: 1.3rem !important;
+    }
+
+    .nav-container .cart-icon .cart-count {
+        font-size: 0.7rem !important;
+        top: -4px !important;    /* adjust badge positioning for smaller bubble */
+        right: -4px !important;
+    }
+}
+
+
+@media (max-width: 768px) {
+
+    /* Remove left padding for mobile */
+    .values-section .container {
+        padding-left: 0 !important;
+        padding-right: 1rem !important; /* keep a little right padding if needed */
+    }
+
+    /* Optional: stack the cards nicely */
+    .values-grid {
+        grid-template-columns: 1fr !important; /* 1 per row */
+        gap: 1rem !important;
+    }
+}
+
+
+@media (max-width: 768px) {
+
+    /* Collections grid: 2 per row */
+    .collections-grid {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important; /* 2 cards per row */
+        gap: 0.75rem !important; /* spacing between cards */
+        padding-left: 0 !important; /* remove left padding */
+        padding-right: 0 !important; /* optional: remove right padding */
+    }
+
+    /* Each collection card */
+    .collection-card {
+        width: 100% !important; /* take full grid column */
+        margin: 0 !important;   /* remove extra margin */
+        position: relative !important; /* make sure overlay stays in place */
+    }
+
+    /* Images fill card nicely */
+    .collection-card img {
+        width: 100% !important;
+        height: auto !important;
+        display: block !important;
+        object-fit: cover !important;
+        border-radius: 8px !important; /* optional rounded corners */
+    }
+
+    /* Collection overlay: ensure it's always visible */
+    .collection-overlay {
+        padding: 1rem !important;           /* space inside the overlay */
+        text-align: center !important;       /* center text */
+        background: rgba(255, 255, 255, 0.8) !important; /* optional semi-transparent background */
+        position: absolute !important;      /* overlay position */
+        bottom: 0 !important;               /* align to the bottom */
+        left: 0 !important;
+        right: 0 !important;
+        border-radius: 0 0 8px 8px !important; /* optional rounded bottom corners */
+        opacity: 1 !important;              /* make sure it's always visible */
+    }
+
+    /* Collection name visible right away */
+    .collection-overlay h3 {
+        font-size: 1rem !important; /* adjust font size */
+        color: #333 !important;     /* text color */
+        margin: 0.5rem 0 !important; /* space above and below text */
+    }
+
+    /* Description below name */
+    .collection-overlay p {
+        font-size: 0.9rem !important; /* smaller description font */
+        color: #666 !important;      /* description color */
+        margin: 0.5rem 0 !important; /* space above and below text */
+    }
+
+    /* Remove hover effect */
+    .collection-card:hover .collection-overlay {
+        opacity: 1 !important; /* ensure overlay remains visible even on hover */
+    }
+}
+
+
+@media (max-width: 768px) {
+
+    /* Hide the entire hero image section */
+    .hero-image {
+        display: none !important;
+    }
+}
+
+
+@media (max-width: 768px) {
+
+    /* Reduce the "View Collection" button size */
+    .btn-collection {
+        font-size: 0.8rem !important;       /* smaller text */
+        padding: 0.4rem 0.8rem !important;  /* smaller padding */
+        border-radius: 20px !important;     /* round corners */
+    }
+}
+
 

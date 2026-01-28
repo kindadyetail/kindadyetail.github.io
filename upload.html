@@ -1084,7 +1084,107 @@
         font-size: 18px;
     }
 }
+/* Admin Link with Badge */
+.admin-subscribers-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: rgb(251, 5, 5);
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    background: linear-gradient(135deg, #ffffff 0%, #667eea 100%);
+    font-weight: 500;
+    font-size: 13px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(237, 100, 166, 0.2);
+}
 
+.admin-subscribers-badge:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(237, 100, 166, 0.3);
+}
+
+.admin-subscribers-badge i {
+    font-size: 14px;
+}
+
+.floating-buttons {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 1000;
+}
+
+.floating-button {
+  background-color: white;
+  color: #ed64a6;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border-radius: 50px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  font-weight: 500;
+  transition: all 0.3s ease;
+  border: 1px solid #f0f0f0;
+}
+
+.floating-button:hover {
+  background-color: #f9f9f9;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  transform: translateY(-3px);
+  color: #d9538c;
+}
+
+.floating-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.floating-button i {
+  font-size: 1.2em;
+}
+
+.floating-button span {
+  font-size: 1em;
+  white-space: nowrap;
+}
+
+/* Optional: Add pulse animation */
+.floating-button {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 4px 12px rgba(237, 100, 166, 0.15);
+  }
+  70% {
+    box-shadow: 0 4px 12px rgba(237, 100, 166, 0.3);
+  }
+  100% {
+    box-shadow: 0 4px 12px rgba(237, 100, 166, 0.15);
+  }
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .floating-buttons {
+    bottom: 20px;
+    right: 20px;
+  }
+  
+  .floating-button {
+    padding: 10px 20px;
+    font-size: 0.9em;
+  }
+  
+  .floating-button span {
+    font-size: 0.9em;
+  }
+}
     </style>
 </head>
 <body>
@@ -1099,6 +1199,10 @@
    <a href="stock-management.html" class="floating-btn home-btn" title="Stock Management">
     <i class="fas fa-warehouse"></i>
 </a>
+<!-- Add this in your footer or navigation -->
+  <a href="admin-subscribers.html" class="floating-button">
+    <i class="fas fa-users"></i>
+  </a>
     </div>
 
     <div class="container">
