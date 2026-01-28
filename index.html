@@ -873,6 +873,7 @@
 </head>
 <body>
    <!-- Update the Navigation section -->
+<!-- Update the Navigation section -->
 <header class="header">
     <nav class="nav-container">
         <div class="logo">
@@ -889,8 +890,8 @@
             </a>
         </div>
         
-        <!-- Search Bar - New Addition -->
-        <div class="search-container">
+        <!-- Search Bar - Desktop -->
+        <div class="search-container" id="desktopSearch">
             <div class="search-box">
                 <i class="fas fa-search search-icon"></i>
                 <input type="text" 
@@ -915,6 +916,14 @@
             <li><a href="#products" class="nav-link">Products</a></li>
             <li><a href="#about" class="nav-link">Our Story</a></li>
             <li><a href="#contact" class="nav-link">Contact</a></li>
+            
+            <!-- Mobile Search Toggle Button -->
+            <li class="mobile-search-toggle" id="mobileSearchToggle">
+                <a href="#search" class="nav-link search-toggle-btn">
+                    <i class="fas fa-search"></i>
+                </a>
+            </li>
+            
             <li class="cart-icon">
                 <a href="#cart" id="cartBtn">
                     <i class="fas fa-shopping-bag"></i>
@@ -930,6 +939,25 @@
         </ul>
 
     </nav>
+    
+    <!-- Mobile Search Bar (Hidden by default) -->
+    <div class="mobile-search-container" id="mobileSearchContainer">
+        <div class="mobile-search-box">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" 
+                   id="mobileUniversalSearch" 
+                   class="mobile-search-input" 
+                   placeholder="Search products, collections, tags..."
+                   onkeyup="handleMobileSearch(event)">
+            <button class="mobile-search-clear" id="mobileSearchClear" onclick="clearMobileSearch()">
+                <i class="fas fa-times"></i>
+            </button>
+            <button class="mobile-search-close" id="mobileSearchClose">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="mobile-search-results" id="mobileSearchResultsDropdown"></div>
+    </div>
 </header>
 
   <!-- Hero Section -->
@@ -5316,7 +5344,7 @@ window.refreshMessages = refreshMessages;
 
 // Brevo configuration - USING YOUR ACTUAL API KEY
 const BREVO_CONFIG = {
-    apiKey: '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', // ✅ Your actual API key
+    apiKey: '', // ✅ Your actual API key
     listId: '2', // ✅ Your list ID from screenshot
     apiUrl: 'https://api.brevo.com/v3/contacts'
 };
@@ -5559,8 +5587,6 @@ document.addEventListener('DOMContentLoaded', function() {
     initBrevoNewsletter();
     checkExistingSubscription();
     
-    // Add test button for admin (remove in production)
-    addTestButton();
 });
 
 // Add test button (remove this in production)

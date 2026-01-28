@@ -1239,7 +1239,7 @@
     /* Move cart just before the nav toggle, smaller hover bubble */
     .nav-container .cart-icon {
         position: fixed !important;
-        top: 0rem !important;   
+        top: -0.25rem !important;   
         right: 3rem !important;   
         z-index: 1500 !important;
         display: flex !important;
@@ -1247,6 +1247,7 @@
         padding: 0.15rem !important;   /* reduced padding for smaller bubble */
         border-radius: 40% !important; /* slightly smaller roundness */
         transition: background 0.2s ease; /* smooth hover effect */
+         height: 40px !important;   /* Match search toggle size */
     }
 
     /* Optional hover effect */
@@ -1363,3 +1364,596 @@
 }
 
 
+
+
+
+
+/* Hide search bar on mobile devices */
+@media (max-width: 768px) {
+    .search-container {
+        display: none !important;
+    }
+    
+    /* Adjust navigation layout to compensate for hidden search */
+    .nav-container {
+        justify-content: space-between;
+    }
+    
+    /* Make logo take more space since search is hidden */
+    .logo {
+        flex: 1;
+    }
+    
+    /* Adjust nav menu if needed */
+    .nav-menu {
+        margin-left: auto;
+    }
+}
+
+/* For very small screens, ensure good spacing */
+@media (max-width: 480px) {
+    .nav-container {
+        padding: 0 15px;
+    }
+}
+
+
+
+
+
+
+/* Mobile Search Toggle Button */
+.mobile-search-toggle {
+    display: none;
+}
+
+.mobile-search-toggle .search-toggle-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(237, 100, 166, 0.1);
+    color: #ed64a6;
+    transition: all 0.3s ease;
+}
+
+.mobile-search-toggle .search-toggle-btn:hover {
+    background: rgba(237, 100, 166, 0.2);
+    transform: translateY(-2px);
+}
+
+/* Mobile Search Container */
+.mobile-search-container {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.98);
+    z-index: 9999;
+    backdrop-filter: blur(10px);
+    animation: slideDown 0.3s ease;
+    padding-top: 80px;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.mobile-search-container.active {
+    display: block;
+}
+
+.mobile-search-box {
+    position: relative;
+    width: 90%;
+    max-width: 600px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    background: white;
+    border-radius: 15px;
+    padding: 15px 20px;
+    border: 2px solid #ed64a6;
+    box-shadow: 0 10px 40px rgba(237, 100, 166, 0.2);
+}
+
+.mobile-search-input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    outline: none;
+    font-size: 16px;
+    color: #374151;
+    font-family: 'Poppins', sans-serif;
+    padding: 0 15px;
+}
+
+.mobile-search-clear,
+.mobile-search-close {
+    background: none;
+    border: none;
+    color: #9ca3af;
+    cursor: pointer;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.mobile-search-clear {
+    margin-right: 10px;
+}
+
+.mobile-search-close {
+    color: #ed64a6;
+    font-size: 20px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(237, 100, 166, 0.1);
+}
+
+.mobile-search-close:hover {
+    background: rgba(237, 100, 166, 0.2);
+    transform: rotate(90deg);
+}
+
+.mobile-search-results {
+    width: 90%;
+    max-width: 600px;
+    margin: 20px auto 0;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    max-height: 60vh;
+    overflow-y: auto;
+    display: none;
+    border: 1px solid #e5e7eb;
+}
+
+.mobile-search-results.show {
+    display: block;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    /* Hide desktop search on mobile */
+    .search-container {
+        display: none !important;
+    }
+    
+    /* Show mobile search toggle */
+    .mobile-search-toggle {
+        display: block;
+        order: -1;
+    }
+    
+    /* Adjust navigation spacing */
+    .nav-menu {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    /* Hide regular nav items on mobile when search is active */
+    .search-active .nav-menu li:not(.mobile-search-toggle):not(.cart-icon):not(.admin-nav-item) {
+        display: none;
+    }
+}
+
+@media (min-width: 769px) {
+    /* Hide mobile search elements on desktop */
+    .mobile-search-toggle {
+        display: none;
+    }
+    
+    .mobile-search-container {
+        display: none !important;
+    }
+}
+
+/* Animation for search toggle */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+.search-toggle-btn.active {
+    background: #ed64a6 !important;
+    color: white !important;
+    animation: pulse 0.5s ease;
+}
+
+/* Mobile search result item */
+.mobile-search-result-item {
+    padding: 15px;
+    border-bottom: 1px solid #f3f4f6;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    transition: background 0.2s ease;
+}
+
+.mobile-search-result-item:hover {
+    background: #f9fafb;
+}
+
+.mobile-search-result-item:last-child {
+    border-bottom: none;
+}
+
+.mobile-search-result-image {
+    width: 60px;
+    height: 60px;
+    border-radius: 10px;
+    object-fit: cover;
+    border: 1px solid #e5e7eb;
+    flex-shrink: 0;
+}
+
+.mobile-search-result-info {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+}
+
+.mobile-search-result-title {
+    font-weight: 600;
+    color: #1f2937;
+    font-size: 15px;
+    margin-bottom: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.mobile-search-result-category {
+    font-size: 12px;
+    color: #6b7280;
+    background: #f3f4f6;
+    padding: 3px 10px;
+    border-radius: 12px;
+    display: inline-block;
+    white-space: nowrap;
+}
+
+.mobile-search-result-price {
+    color: #ed64a6;
+    font-weight: 700;
+    font-size: 15px;
+    margin-left: 10px;
+    flex-shrink: 0;
+}
+
+/* No results message for mobile */
+.mobile-search-no-results {
+    padding: 30px 20px;
+    text-align: center;
+    color: #6b7280;
+}
+
+.mobile-search-no-results i {
+    font-size: 40px;
+    margin-bottom: 15px;
+    display: block;
+    color: #d1d5db;
+}
+
+/* ===== REDUCE SEARCH TOGGLE SIZE ===== */
+@media (max-width: 768px) {
+    /* Reduce search toggle size - smaller than before */
+    .mobile-search-toggle a.search-toggle-btn {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 32px !important;   /* Reduced from 40px */
+        height: 32px !important;  /* Reduced from 40px */
+        border-radius: 50% !important;
+        background: rgba(237, 100, 166, 0.1) !important;
+        color: #ed64a6 !important;
+        text-decoration: none !important;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1) !important;
+        transition: all 0.3s ease !important;
+    }
+
+    /* Reduce search icon size */
+    .mobile-search-toggle a.search-toggle-btn i {
+        font-size: 0.9rem !important;  /* Reduced from 1.2rem */
+    }
+
+    /* Adjust search toggle position to be smaller */
+    .mobile-search-toggle {
+        position: fixed !important;
+        top: 0.8rem !important;        /* Align with cart */
+        right: 4rem !important;        /* Adjust spacing for smaller size */
+        z-index: 1600 !important;
+        display: flex !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        list-style: none !important;
+    }
+
+
+    /* Style the search toggle button */
+    .mobile-search-toggle a.search-toggle-btn {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 40px !important;
+        height: 40px !important;
+        border-radius: 50% !important;
+        background: rgba(237, 100, 166, 0.1) !important;
+        color: #ed64a6 !important;
+        text-decoration: none !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+        transition: all 0.3s ease !important;
+    }
+
+    /* Search icon */
+    .mobile-search-toggle a.search-toggle-btn i {
+        font-size: 1.2rem !important;
+    }
+
+    /* Hover effect */
+    .mobile-search-toggle a.search-toggle-btn:hover {
+        background: rgba(237, 100, 166, 0.2) !important;
+        transform: translateY(-2px) !important;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+    }
+
+    /* Active state when search is open */
+    .mobile-search-toggle a.search-toggle-btn.active {
+        background: #ed64a6 !important;
+        color: white !important;
+        transform: scale(1.1) !important;
+    }
+
+    /* Ensure it floats above everything */
+    .mobile-search-toggle {
+        z-index: 1600 !important; /* Higher than cart icon */
+    }
+
+    /* Adjust cart position to make space for search toggle */
+    .nav-container .cart-icon {
+        right: 1rem !important; /* Move cart slightly to the right */
+    }
+}
+
+/* Adjust for very small screens */
+@media (max-width: 480px) {
+    .mobile-search-toggle {
+        right: 4.5rem !important;
+        top: 0.9rem !important;
+    }
+    
+    .mobile-search-toggle a.search-toggle-btn {
+        width: 32px !important;
+        height: 32px !important;
+    }
+    
+    .mobile-search-toggle a.search-toggle-btn i {
+        font-size: 1.1rem !important;
+    }
+    
+}
+
+/* Ensure it doesn't show on desktop */
+@media (min-width: 769px) {
+    .mobile-search-toggle {
+        display: none !important;
+    }
+}
+
+/* ===== CENTER LOGO / SITE NAME ON MOBILE ===== */
+@media (max-width: 768px) {
+    /* Center the logo in the header */
+    .logo {
+        position: fixed !important;
+        top: 0.8rem !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        z-index: 1400 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        width: auto !important;
+        text-align: center !important;
+    }
+
+    /* Style the logo link */
+    .logo a.logo-link {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        text-decoration: none !important;
+    }
+
+    /* Make logo text centered and visible */
+    .logo-words {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+    }
+
+    .logo-main {
+        font-size: 1.1rem !important;
+        font-weight: 700 !important;
+        color: #1a365d !important;
+        line-height: 1.2 !important;
+    }
+
+    .logo-tagline {
+        font-size: 0.65rem !important;
+        color: #ed64a6 !important;
+        font-weight: 500 !important;
+        line-height: 1 !important;
+    }
+
+    /* Position nav menu toggle on left */
+    .nav-toggle {
+        position: fixed !important;
+        top: 1rem !important;
+        left: 1rem !important;
+        z-index: 1600 !important;
+        margin: 0 !important;
+    }
+
+    /* Hide the original logo container in nav */
+    .nav-container .logo:not(.logo) {
+        display: none !important;
+    }
+
+    /* Adjust header height */
+    .header {
+        height: 60px !important;
+        padding: 0 !important;
+    }
+
+    /* Adjust hero margin to account for centered header */
+    .hero {
+        margin-top: 70px !important;
+    }
+}
+
+/* Adjust for very small screens */
+@media (max-width: 480px) {
+    .logo {
+        top: 0.7rem !important;
+    }
+
+    .logo-main {
+        font-size: 1rem !important;
+    }
+
+    .logo-tagline {
+        font-size: 0.6rem !important;
+    }
+
+    .nav-toggle {
+        top: 0.9rem !important;
+        left: 0.8rem !important;
+    }
+
+    .mobile-search-toggle {
+        right: 4.5rem !important;
+        top: 0.9rem !important;
+    }
+    
+    .nav-container .cart-icon {
+        right: 1rem !important;
+        top: 0.6rem !important;
+    }
+}
+
+/* For tablets */
+@media (min-width: 481px) and (max-width: 768px) {
+    .logo-main {
+        font-size: 1.3rem !important;
+    }
+
+    .logo-tagline {
+        font-size: 0.75rem !important;
+    }
+}
+
+/* ===== REMOVE WHITE BACKGROUND FROM LOGO ONLY - MINIMAL ===== */
+@media (max-width: 768px) {
+    /* Remove background from logo container elements only */
+    .logo,
+    .logo a.logo-link,
+    .logo-combined {
+        background: transparent !important;
+        box-shadow: none !important;
+    }
+    
+    /* Remove background from logo image container only */
+    .logo-image {
+        background: transparent !important;
+        box-shadow: none !important;
+        border: none !important;
+    }
+    
+    /* Remove pseudo-element backgrounds */
+    .logo-image::before {
+        display: none !important;
+    }
+    
+    /* Keep all other styles (gradient text, heart, etc.) intact */
+}
+
+
+/* ===== REDUCE SEARCH TOGGLE SIZE ONLY ===== */
+@media (max-width: 768px) {
+    /* Reduce search toggle button size */
+    .mobile-search-toggle a.search-toggle-btn {
+        width: 32px !important;   /* Reduced from 40px */
+        height: 32px !important;  /* Reduced from 40px */
+        min-width: 32px !important;
+        min-height: 32px !important;
+    }
+
+    /* Reduce search icon size inside the button */
+    .mobile-search-toggle a.search-toggle-btn i {
+        font-size: 0.9rem !important;  /* Reduced from 1.2rem */
+    }
+
+    /* Adjust the toggle container for smaller size - MOVED TO THE LEFT */
+    .mobile-search-toggle {
+        position: fixed !important;
+        top: 0.9rem !important;        /* Slightly adjusted positioning */
+        right: 4.5rem !important;      /* MOVED LEFT from 4rem (more space between search and cart) */
+    }
+
+    /* REMOVE HOVER BACKGROUND EFFECT */
+    .mobile-search-toggle a.search-toggle-btn:hover {
+        background: rgba(237, 100, 166, 0.1) !important; /* Keep original background on hover */
+        transform: none !important;  /* Remove hover lift */
+    }
+
+    /* Adjust cart icon positioning to give more space */
+    .nav-container .cart-icon {
+        right: 1rem !important;        /* Keep cart in place */
+        top: -0.70rem !important;        /* Align with smaller search - MOVED UP */
+    }
+}
+
+/* Adjust for very small screens */
+@media (max-width: 480px) {
+    .mobile-search-toggle a.search-toggle-btn {
+        width: 30px !important;
+        height: 30px !important;
+    }
+    
+    .mobile-search-toggle a.search-toggle-btn i {
+        font-size: 0.85rem !important;
+    }
+    
+    .mobile-search-toggle {
+        right: 4.7rem !important;  /* Moved left for very small screens too */
+    }
+    
+    /* REMOVE HOVER BACKGROUND EFFECT for very small screens */
+    .mobile-search-toggle a.search-toggle-btn:hover {
+        background: rgba(237, 100, 166, 0.1) !important;
+        transform: none !important;
+    }
+}
