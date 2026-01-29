@@ -1093,30 +1093,36 @@
 </section>
 
 <!-- Update Products section - add IDs for dynamic updates -->
+<!-- In your products section -->
 <section class="products-section" id="products">
     <div class="container">
         <h2 class="section-title" id="productsTitle">Featured <span class="highlight">Products</span></h2>
         <p class="section-subtitle" id="productsSubtitle">Kindady's hand-picked favorites</p>
         
         <div class="products-controls">
-       <!-- Update the filter button - remove "shoes" and use "footwear" consistently -->
-<div class="filters">
-    <button class="filter-btn active" data-filter="all" onclick="filterProducts('all')">All Products</button>
-    <button class="filter-btn" data-filter="clothing" onclick="filterProducts('clothing')">Clothing</button>
-    <button class="filter-btn" data-filter="fragrance" onclick="filterProducts('fragrance')">Fragrances</button>
-    <button class="filter-btn" data-filter="footwear" onclick="filterProducts('footwear')">Footwear</button>
-    <button class="filter-btn" data-filter="accessories" onclick="filterProducts('accessories')">Accessories</button>
-</div>
-            
-            <div class="products-stats" id="productsStats">
-                <i class="fas fa-database"></i>
-                <span id="productCount">Loading...</span>
+            <!-- Filters with horizontal scroll -->
+            <div class="filters">
+                <button class="filter-btn active" data-filter="all" onclick="filterProducts('all')">All Products</button>
+                <button class="filter-btn" data-filter="clothing" onclick="filterProducts('clothing')">Clothing</button>
+                <button class="filter-btn" data-filter="fragrance" onclick="filterProducts('fragrance')">Fragrances</button>
+                <button class="filter-btn" data-filter="footwear" onclick="filterProducts('footwear')">Footwear</button>
+                <button class="filter-btn" data-filter="accessories" onclick="filterProducts('accessories')">Accessories</button>
             </div>
             
-            <button class="sync-button" onclick="loadProductsFromFirebase()">
-                <i class="fas fa-sync-alt"></i>
-                Refresh Products
-            </button>
+            <!-- Row for stats and refresh button -->
+            <div class="products-controls-row">
+                <!-- Product count -->
+                <div class="products-stats" id="productsStats">
+                    <i class="fas fa-database"></i>
+                    <span id="productCount">Loading...</span>
+                </div>
+                
+                <!-- Refresh button -->
+                <button class="sync-button" onclick="loadProductsFromFirebase()">
+                    <i class="fas fa-sync-alt"></i>
+                    <span class="sync-text">Refresh</span>
+                </button>
+            </div>
         </div>
         
         <div class="products-grid" id="productsGrid">
@@ -1858,14 +1864,15 @@ async function loadProductsFromFirebase() {
 // Display products function (generic)
 function displayProducts(products) {
     const container = document.getElementById('productsGrid');
+    const isMobile = window.innerWidth <= 768;
     
     if (products.length === 0) {
         container.innerHTML = `
             <div class="product-loading" style="grid-column: 1 / -1;">
-                <i class="fas fa-box-open" style="font-size: 48px; color: #ccc; margin-bottom: 15px;"></i>
-                <p>No products found in your collection</p>
-                <p style="font-size: 14px; color: #666; margin-top: 10px;">
-                    Use the <a href="upload.html" style="color: #ed64a6;">Upload Products</a> page to add products
+                <i class="fas fa-box-open" style="font-size: 36px; color: #ccc; margin-bottom: 10px;"></i>
+                <p style="font-size: 14px;">No products found</p>
+                <p style="font-size: 12px; color: #666; margin-top: 8px;">
+                    Add products from the Upload page
                 </p>
             </div>
         `;
@@ -1879,61 +1886,70 @@ function displayProducts(products) {
         const title = product.name || generateTitle('', category);
         const imageUrl = product.mainImage || product.images?.[0]?.url || product.url || '';
         const tags = productTagMap[productId] || product.tags || [];
+        const brand = product.brand || '';
         
-        // Stock management - get stock from product data
+        // Stock management
         const stock = product.stock !== undefined ? parseInt(product.stock) : 50;
         const stockStatus = getStockStatus(stock);
         
-        // Apply Cloudinary transformations if it's a Cloudinary URL
+        // Apply Cloudinary transformations
         let displayImageUrl = imageUrl;
         if (imageUrl.includes('res.cloudinary.com')) {
-            displayImageUrl = imageUrl.replace('/upload/', '/upload/w_600,h_600,c_fill/');
+            displayImageUrl = isMobile 
+                ? imageUrl.replace('/upload/', '/upload/w_300,h_300,c_fill/')
+                : imageUrl.replace('/upload/', '/upload/w_600,h_600,c_fill/');
         }
         
-        // Escape single quotes in title for JavaScript
+        // Escape for JavaScript
         const safeTitle = title.replace(/'/g, "\\'");
         const safeDescription = (product.description || '').replace(/'/g, "\\'");
         
-        // Stock status HTML - IN DETAILS ONLY
-       // Stock status HTML - IN DETAILS ONLY (without quantity number)
-const stockStatusHTML = `
-    <div class="product-stock-status ${stockStatus.class}">
-        <span class="stock-dot ${stockStatus.class}"></span>
-        <span>${stockStatus.displayText}</span>
-    </div>
-`;
+        // Stock status HTML
+        const stockStatusHTML = `
+            <div class="product-stock-status ${stockStatus.class}">
+                <span class="stock-dot ${stockStatus.class}"></span>
+                <span>${stockStatus.displayText}</span>
+            </div>
+        `;
+        
+        // Determine if out of stock
+        const isOutOfStock = stock === 0;
         
         return `
             <div class="product-card" data-category="${category}" data-firebase-id="${product.firebaseId || ''}" data-tags="${tags.join(',')}" data-stock="${stock}" data-product-id="${productId}">
                 <div class="product-image-container">
-                    <img src="${displayImageUrl || 'https://via.placeholder.com/600x600/cccccc/ffffff?text=Product+Image'}" 
+                    <img src="${displayImageUrl || 'https://via.placeholder.com/300x300/cccccc/ffffff?text=Product'}" 
                          alt="${title}" 
                          class="product-image" 
                          loading="lazy"
-                         onerror="this.src='https://via.placeholder.com/600x600/cccccc/ffffff?text=Image+Not+Available'}">
+                         onerror="this.src='https://via.placeholder.com/300x300/cccccc/ffffff?text=Image+Not+Available'}">
                 </div>
                 <div class="product-details">
                     <span class="product-category">${category.charAt(0).toUpperCase() + category.slice(1)}</span>
                     <h3 class="product-title">${title}</h3>
                     <p class="product-price">GHS ₵${price.toFixed(2)}</p>
                     
-                    <!-- Stock status in details only -->
+                    <!-- Stock status -->
                     ${stockStatusHTML}
                     
+                    <!-- Brand if exists -->
+                    ${brand ? `<p style="font-size: 10px; color: #718096; margin-bottom: 4px;">${brand}</p>` : ''}
+                    
+                    <!-- Tags (hidden on very small screens) -->
                     ${tags.length > 0 ? `
                         <div class="product-tags-container">
-                            ${tags.slice(0, 3).map(tag => `<span class="product-tag">#${tag}</span>`).join('')}
-                            ${tags.length > 3 ? `<span class="product-tag">+${tags.length - 3} more</span>` : ''}
+                            ${tags.slice(0, 2).map(tag => `<span class="product-tag">#${tag}</span>`).join('')}
+                            ${tags.length > 2 ? `<span class="product-tag">+${tags.length - 2}</span>` : ''}
                         </div>
                     ` : ''}
-                    ${product.brand ? `<p style="font-size: 13px; color: #666; margin-bottom: 10px;">${product.brand}</p>` : ''}
-                    ${product.description ? `<p style="font-size: 13px; color: #777; margin-bottom: 15px; line-height: 1.4;">${truncateText(product.description, 80)}</p>` : ''}
+                    
+                    <!-- Add to Cart Button -->
                     <button class="add-to-cart" 
                             onclick="addToCart('${safeTitle}', ${price}, '${imageUrl}', '${safeDescription}', '${productId}', '${category}')"
-                            ${stock === 0 ? 'disabled' : ''}
-                            title="${stock === 0 ? 'This item is currently out of stock' : 'Add to cart'}">
-                        <i class="fas ${stock === 0 ? 'fa-ban' : 'fa-shopping-bag'}"></i> 
-                        ${stock === 0 ? 'Out of Stock' : 'Add to Cart'}
+                            ${isOutOfStock ? 'disabled' : ''}
+                            title="${isOutOfStock ? 'Out of stock' : 'Add to cart'}">
+                        <i class="fas ${isOutOfStock ? 'fa-ban' : 'fa-shopping-bag'}"></i> 
+                        ${isOutOfStock ? 'Out of Stock' : 'Add to Cart'}
                     </button>
                 </div>
             </div>
@@ -5615,7 +5631,6 @@ function addTestButton() {
 const newsletterStyles = `
     /* Newsletter Section Styles */
     .newsletter-section {
-        background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 100%);
         padding: 60px 0;
         border-top: 1px solid #fbcfe8;
         border-bottom: 1px solid #fbcfe8;
