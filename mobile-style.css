@@ -1982,3 +1982,107 @@
         display: none !important;
     }
 }
+
+/* For iPhone and similar portrait devices */
+@media (max-width: 480px) {
+    .logo {
+        left: 0.8rem !important; /* Push even more to the left */
+        max-width: 60% !important; /* Prevent logo from taking full width */
+    }
+    
+    .logo-main {
+        font-size: 1rem !important; /* Smaller font for very small screens */
+    }
+    
+    .logo-tagline {
+        font-size: 0.6rem !important;
+    }
+    
+    /* Adjust spacing between icons */
+    .nav-toggle {
+        right: 3.5rem !important;
+    }
+    
+    .mobile-search-toggle {
+        right: 5rem !important;
+    }
+    
+    .nav-container .cart-icon {
+        right: 1rem !important;
+    }
+}
+
+
+/* For iOS Safari specifically */
+@supports (-webkit-touch-callout: none) {
+    @media (max-width: 768px) {
+        .logo {
+            left: 1rem !important;
+            padding-left: env(safe-area-inset-left) !important;
+        }
+        
+        /* Increase font size for iOS */
+        .logo-main {
+            font-size: 1.3rem !important; /* Increased from 1.1rem */
+        }
+        
+        .logo-tagline {
+            font-size: 0.75rem !important; /* Increased from 0.65rem */
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    /* Keep logo centered but slightly nudged to the left */
+    .logo {
+        left: calc(50% - 20px) !important;
+        transform: translateX(-50%) !important;
+    }
+    
+    /* Increase font size for all mobile devices */
+    .logo-main {
+        font-size: 1.3rem !important; /* Increased from 1.1rem */
+        font-weight: 700 !important;
+        color: #1a365d !important;
+        line-height: 1.2 !important;
+    }
+
+    .logo-tagline {
+        font-size: 0.75rem !important; /* Increased from 0.65rem */
+        color: #ed64a6 !important;
+        font-weight: 500 !important;
+        line-height: 1 !important;
+    }
+}
+
+/* For smaller phones */
+@media (max-width: 480px) {
+    .logo {
+        left: calc(40% - 15px) !important; /* Using 40% as in your updated code */
+    }
+    
+    /* Even larger font for small screens */
+    .logo-main {
+        font-size: 1.2rem !important; /* Slightly smaller but still larger than original */
+    }
+    
+    .logo-tagline {
+        font-size: 0.7rem !important;
+    }
+}
+
+/* For very small phones like Itel City 100 (around 320px) */
+@media (max-width: 380px) {
+    .logo {
+        left: calc(40% - 10px) !important;
+    }
+    
+    /* Adjust font for very small screens */
+    .logo-main {
+        font-size: 1.15rem !important;
+    }
+    
+    .logo-tagline {
+        font-size: 0.65rem !important;
+    }
+}
