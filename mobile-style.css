@@ -1957,3 +1957,28 @@
         transform: none !important;
     }
 }
+
+@media (max-width: 768px) {
+    /* Remove the logo image on mobile */
+    .logo-image {
+        display: none !important;
+    }
+    
+    /* Keep the logo text visible */
+    .logo-words {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+    
+    /* Optional: Adjust logo positioning after removing image */
+    .logo a.logo-link {
+        justify-content: center !important;
+    }
+    
+    /* If you have a logo container with combined image/text */
+    .logo-combined .logo-image {
+        display: none !important;
+    }
+}
