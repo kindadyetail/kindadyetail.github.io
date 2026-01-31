@@ -1,70 +1,57 @@
 /* ===== NAV OR HEADER ===== */
-
 /* ===== HERO ===== */
 @media (max-width: 768px) {
     /* Hero text adjustments */
     .hero-title {
-        font-size: 1.9rem;
-        margin-bottom: 0.75rem;
+        font-size: 1.7rem; /* Reduced from 1.9rem */
+        margin-bottom: 0.25rem; /* Reduced from 0.5rem */
         line-height: 1.1;
         text-align: left;
     }
     
     .hero-subtitle {
-        font-size: 0.8rem;
-        margin-bottom: 1.25rem;
-        line-height: 1.5;
+        font-size: 0.75rem; /* Reduced from 0.8rem */
+        margin-bottom: 0.75rem; /* Reduced from 1rem */
+        line-height: 1.3; /* Tighter line height */
         text-align: left;
     }
     
     /* Reduce heart emoji size */
     .heart-text::before {
-        font-size: 1.2rem;
-        right: -25px;
-        top: -8px;
+        font-size: 1rem; /* Reduced from 1.2rem */
+        right: -20px; /* Adjusted positioning */
+        top: -6px; /* Adjusted positioning */
     }
     
-    /* Hero tags on one line */
+    /* Hero tags - more compact */
     .hero-tags {
         display: flex;
-        flex-wrap: nowrap;
-        overflow-x: auto;
-        gap: 8px;
-        margin-bottom: 1.5rem;
-        padding-bottom: 8px;
-        -webkit-overflow-scrolling: touch;
+        flex-wrap: wrap;
+        gap: 4px; /* Reduced from 6px */
+        margin-bottom: 0.5rem; /* Reduced from 0.75rem */
         max-width: 100%;
         justify-content: flex-start;
         text-align: left;
     }
     
-    /* Hide scrollbar but keep functionality */
-    .hero-tags::-webkit-scrollbar {
-        display: none;
-    }
-    
-    .hero-tags {
-        -ms-overflow-style: none;
-        scrollbar-width: none;
-    }
-    
     /* Smaller tags */
     .tag {
-        padding: 6px 14px;
-        font-size: 0.75rem;
+        padding: 4px 10px; /* Reduced from 5px 12px */
+        font-size: 0.7rem; /* Reduced from 0.75rem */
         white-space: nowrap;
         flex-shrink: 0;
     }
 
-    /* Explore Collections button */
+    /* More compact button */
     .hero .btn-primary {
-        padding: 12px 24px;
-        font-size: 0.85rem;
-        min-height: 44px;
+        padding: 8px 16px; /* Reduced from 10px 20px */
+        font-size: 0.8rem; /* Reduced from 0.85rem */
+        min-height: 38px; /* Reduced from 42px */
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        margin-top: 0.5rem;
+        margin-top: 0.1rem; /* Reduced from 0.25rem */
+        margin-bottom: 0.25rem; /* Added bottom margin reduction */
     }
     
     /* Hide the entire hero image section */
@@ -72,28 +59,29 @@
         display: none !important;
     }
     
-    /* Hero section specific fixes */
+    /* More compact hero section */
     .hero {
         min-height: auto;
-        padding-top: 2rem;
-        padding-bottom: 2rem;
+        padding-top: 1rem; /* Reduced from 1.5rem */
+        padding-bottom: 0.75rem; /* Reduced from 1rem */
     }
     
-    /* Adjust hero so it starts below the header */
+    /* Less space below header */
     .hero {
-        margin-top: 120px !important;
+        margin-top: 80px !important; /* Reduced from 100px */
     }
     
-    /* Optional: reduce hero content padding on mobile */
+    /* Even less hero content padding */
     .hero-content {
-        padding: 1rem !important;
+        padding: 0.5rem 0.5rem 0.25rem 0.5rem !important; /* Reduced bottom padding */
     }
 }
 
 /* ===== VALUE ===== */
+/* ===== VALUE ===== */
 @media (max-width: 768px) {
     .values-section {
-        padding: 2rem 0;
+        padding: 1.5rem 0; /* Reduced from 2rem 0 */
         text-align: left;
     }
     
@@ -101,12 +89,12 @@
         display: flex;
         flex-wrap: nowrap;
         overflow-x: auto;
-        gap: 15px;
+        gap: 12px; /* Reduced from 15px */
         padding-bottom: 5px;
         -webkit-overflow-scrolling: touch;
         scroll-snap-type: x mandatory;
         max-width: 100%;
-        max-height: 200px;
+        max-height: 180px; /* Reduced from 200px */
         justify-content: flex-start;
     }
     
@@ -122,47 +110,53 @@
     
     .value-card {
         flex: 0 0 auto;
-        width: 260px;
-        min-height: 180px;
+        width: 240px; /* Reduced from 260px */
+        min-height: 160px; /* Reduced from 180px */
         scroll-snap-align: start;
-        padding: 1.25rem;
+        padding: 1rem; /* Reduced from 1.25rem */
         text-align: left;
     }
     
     .value-icon {
-        width: 50px;
-        height: 50px;
-        font-size: 1.3rem;
-        margin-bottom: 0.75rem;
+        width: 45px; /* Reduced from 50px */
+        height: 45px; /* Reduced from 50px */
+        font-size: 1.1rem; /* Reduced from 1.3rem */
+        margin-bottom: 0.5rem; /* Reduced from 0.75rem */
     }
     
     .value-card h3 {
-        font-size: 1.2rem;
-        margin-bottom: 0.5rem;
+        font-size: 1.1rem; /* Reduced from 1.2rem */
+        margin-bottom: 0.3rem; /* Reduced from 0.5rem */
         text-align: left;
     }
     
     .value-card p {
-        font-size: 0.85rem;
-        line-height: 1.4;
+        font-size: 0.8rem; /* Reduced from 0.85rem */
+        line-height: 1.3; /* Reduced from 1.4 */
         margin-bottom: 0;
         text-align: left;
     }
     
     /* Values section specific fixes */
     .values-section {
-        padding: 2rem 0;
+        padding: 1.5rem 0; /* Reduced from 2rem 0 */
         min-height: auto;
     }
     
     .values-grid {
-        max-height: 200px;
+        max-height: 180px; /* Reduced from 200px */
     }
     
     /* Remove left padding for mobile */
     .values-section .container {
         padding-left: 0 !important;
         padding-right: 1rem !important;
+    }
+}
+/* ===== VALUE ===== */
+@media (max-width: 768px) {
+    .values-section {
+        display: none !important;
     }
 }
 
@@ -233,6 +227,12 @@
     }
 }
 
+/* ===== COLLECTION ===== */
+@media (max-width: 768px) {
+    .collections-section {
+        display: none !important;
+    }
+}
 /* ===== ABOUT ===== */
 @media (max-width: 768px) {
     /* About Section padding */
@@ -1890,5 +1890,26 @@
     /* Remove pseudo-element backgrounds */
     .logo-image::before {
         display: none !important;
+    }
+}
+
+/* ===== HIDE EXPLORE COLLECTIONS BUTTON ON MOBILE ===== */
+@media (max-width: 768px) {
+    .hero-content .btn-primary {
+        display: none; /* Hides the "Explore Collections" button on mobile */
+    }
+    
+    /* Adjust hero spacing when button is hidden */
+    .hero-content {
+        padding-bottom: 15px;
+    }
+    
+    /* Make sure the hero title and subtitle still look good */
+    .hero-title {
+        margin-bottom: 10px;
+    }
+    
+    .hero-subtitle {
+        margin-bottom: 20px;
     }
 }

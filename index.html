@@ -1818,6 +1818,346 @@
         font-size: 0.8rem !important;
     }
 }
+/* ===== FILTER BUTTONS - NON-SCROLLABLE & WELL ARRANGED ===== */
+@media (max-width: 768px) {
+    /* Main container */
+    .products-controls {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin-bottom: 1.5rem;
+        width: 100%;
+        position: relative;
+    }
+    
+    /* Filter buttons container - NON-SCROLLABLE */
+    .filters {
+        order: 1;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr); /* 4 equal columns */
+        gap: 8px;
+        padding: 0;
+        margin: 0;
+        width: 100%;
+        overflow: visible; /* No scroll */
+        justify-items: center;
+        align-items: center;
+    }
+    
+    /* Individual filter button */
+    .filter-btn {
+        padding: 8px 12px;
+        border: 1.5px solid #e2e8f0;
+        background: white;
+        color: #121e32;
+        border-radius: 20px;
+        cursor: pointer;
+        font-weight: 500;
+        transition: all 0.2s ease;
+        font-size: 12px;
+        white-space: nowrap;
+        text-align: center;
+        line-height: 1.2;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%; /* Take full grid cell */
+        max-width: 120px;
+        min-width: 70px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        overflow: hidden;
+    }
+    
+    /* Ensure icon and text fit */
+    .filter-btn i {
+        font-size: 12px;
+        margin-right: 4px;
+        flex-shrink: 0;
+    }
+    
+    .filter-btn span {
+        display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        flex: 1;
+        text-align: center;
+        font-size: 11px;
+    }
+    
+    .filter-btn.active {
+        background: var(--primary-pink);
+        color: white;
+        border-color: var(--primary-pink);
+        box-shadow: 0 2px 8px rgba(237, 100, 166, 0.25);
+    }
+    
+    .filter-btn:hover:not(.active) {
+        border-color: #cbd5e0;
+        background: #f7fafc;
+        transform: translateY(-1px);
+    }
+    
+    /* Stats and refresh row */
+    .products-controls-row {
+        order: 2;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        gap: 10px;
+        padding: 5px 0;
+        flex-wrap: nowrap;
+    }
+    
+    /* Product count/stats */
+    .products-stats {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 12px;
+        padding: 6px 12px;
+        background: #f8f9fa;
+        border-radius: 18px;
+        color: #4a5568;
+        white-space: nowrap;
+        border: 1px solid #e2e8f0;
+        min-width: 110px;
+        justify-content: center;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+        overflow: hidden;
+    }
+    
+    .products-stats i {
+        color: var(--primary-pink);
+        font-size: 12px;
+        flex-shrink: 0;
+    }
+    
+    #productCount {
+        font-weight: 600;
+        color: var(--primary-navy);
+        font-size: 12px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        max-width: 80px;
+    }
+    
+    /* Refresh button */
+    .sync-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+        padding: 6px 14px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        border-radius: 18px;
+        font-size: 12px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        box-shadow: 0 2px 4px rgba(102, 126, 234, 0.15);
+        white-space: nowrap;
+        min-width: 110px;
+        text-align: center;
+        line-height: 1.2;
+        height: 36px;
+    }
+    
+    .sync-button:hover {
+        background: linear-gradient(135deg, #5a67d8 0%, #6b46a1 100%);
+        transform: translateY(-1px);
+        box-shadow: 0 3px 8px rgba(102, 126, 234, 0.25);
+    }
+    
+    .sync-button i {
+        font-size: 11px;
+        flex-shrink: 0;
+    }
+    
+    .sync-button .sync-text {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: 11px;
+    }
+    
+    /* Products grid spacing */
+    .products-grid {
+        margin-top: 0.5rem;
+    }
+}
+
+/* ===== FOR SMALLER PHONES (480px and below) ===== */
+@media (max-width: 480px) {
+    .products-controls {
+        gap: 10px;
+    }
+    
+    /* Reduce to 2x2 grid for very small screens */
+    .filters {
+        grid-template-columns: repeat(2, 1fr); /* 2 columns */
+        gap: 6px;
+    }
+    
+    .filter-btn {
+        padding: 6px 10px;
+        font-size: 11px;
+        height: 36px;
+        max-width: none; /* Allow full width */
+        min-width: 60px;
+    }
+    
+    .filter-btn i {
+        font-size: 11px;
+        margin-right: 3px;
+    }
+    
+    .filter-btn span {
+        font-size: 10px;
+    }
+    
+    .products-controls-row {
+        gap: 8px;
+        padding: 3px 0;
+    }
+    
+    .products-stats {
+        font-size: 11px;
+        padding: 5px 10px;
+        min-width: 100px;
+        border-radius: 16px;
+    }
+    
+    .products-stats i {
+        font-size: 11px;
+    }
+    
+    #productCount {
+        font-size: 11px;
+        max-width: 70px;
+    }
+    
+    .sync-button {
+        padding: 5px 12px;
+        font-size: 11px;
+        min-width: 100px;
+        gap: 4px;
+        height: 34px;
+        border-radius: 16px;
+    }
+    
+    .sync-button i {
+        font-size: 10px;
+    }
+    
+    .sync-button .sync-text {
+        font-size: 10px;
+    }
+}
+
+/* ===== FOR VERY SMALL PHONES (380px and below) ===== */
+@media (max-width: 380px) {
+    .filters {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 5px;
+    }
+    
+    .filter-btn {
+        padding: 5px 8px;
+        font-size: 10px;
+        height: 34px;
+        min-width: 55px;
+        border-radius: 18px;
+    }
+    
+    .filter-btn i {
+        font-size: 10px;
+        margin-right: 2px;
+    }
+    
+    .filter-btn span {
+        font-size: 9px;
+    }
+    
+    .products-controls-row {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 6px;
+        padding: 5px 0;
+    }
+    
+    .products-stats,
+    .sync-button {
+        width: 100%;
+        justify-content: center;
+        min-width: auto;
+    }
+    
+    .products-stats {
+        border-radius: 15px;
+        padding: 6px 12px;
+    }
+    
+    .sync-button {
+        border-radius: 15px;
+        padding: 6px 12px;
+    }
+}
+
+/* ===== FOR EXTREMELY SMALL SCREENS ===== */
+@media (max-width: 320px) {
+    /* Single column filters for tiny screens */
+    .filters {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 4px;
+    }
+    
+    .filter-btn {
+        padding: 4px 6px;
+        height: 32px;
+        min-width: 50px;
+    }
+    
+    .filter-btn i {
+        margin-right: 1px;
+        font-size: 9px;
+    }
+    
+    .filter-btn span {
+        font-size: 8px;
+    }
+    
+    .products-stats {
+        padding: 5px 10px;
+        font-size: 10px;
+    }
+    
+    .products-stats i {
+        font-size: 10px;
+    }
+    
+    #productCount {
+        font-size: 10px;
+    }
+    
+    .sync-button {
+        padding: 5px 10px;
+        font-size: 10px;
+    }
+    
+    .sync-button i {
+        font-size: 9px;
+    }
+    
+    .sync-button .sync-text {
+        font-size: 9px;
+    }
+}
 
     </style>
 </head>
@@ -3114,12 +3454,32 @@ async function checkForStockUpdates() {
     }
 }
 // Filter products by category
+// Filter products by category - FIXED VERSION
 function filterProducts(category) {
+    console.log(`Filtering products: ${category}, Total products: ${allProducts.length}`);
+    
     currentFilter = category;
     updateFilterButtons(category);
     
     if (category === 'all') {
-        displayProducts(allProducts);
+        // If no products are loaded, try to load them
+        if (allProducts.length === 0) {
+            console.log('No products found, loading...');
+            if (firebaseConnected) {
+                loadProductsFromFirebase();
+            } else {
+                loadProductsFromLocalStorage();
+            }
+            // Try to display after a short delay
+            setTimeout(() => {
+                if (allProducts.length > 0) {
+                    displayProducts(allProducts);
+                }
+            }, 300);
+        } else {
+            displayProducts(allProducts);
+        }
+        
         document.getElementById('productsTitle').innerHTML = 'Featured <span class="highlight">Products</span>';
         document.getElementById('productsSubtitle').textContent = 'Kindady\'s hand-picked favorites';
     } else {
@@ -3128,7 +3488,23 @@ function filterProducts(category) {
             return product.category === category;
         });
         
-        displayProducts(filteredProducts);
+        console.log(`Filtered ${filteredProducts.length} products for ${category}`);
+        
+        if (filteredProducts.length === 0 && allProducts.length > 0) {
+            // No products in this category, show message
+            const container = document.getElementById('productsGrid');
+            container.innerHTML = `
+                <div class="product-loading" style="grid-column: 1 / -1;">
+                    <i class="fas fa-box-open" style="font-size: 48px; color: #ccc; margin-bottom: 15px;"></i>
+                    <p>No ${category} products found</p>
+                    <button class="btn btn-primary" onclick="filterProducts('all')" style="margin-top: 15px;">
+                        <i class="fas fa-th-large"></i> View All Products
+                    </button>
+                </div>
+            `;
+        } else {
+            displayProducts(filteredProducts);
+        }
         
         // Update title based on category
         const categoryTitles = {
@@ -3145,12 +3521,16 @@ function filterProducts(category) {
         document.getElementById('products').scrollIntoView({ behavior: 'smooth' });
     }
     
-    updateProductStats(allProducts.length, 'Firebase', category);
+    // Update stats with proper count
+    setTimeout(() => {
+        updateProductStats();
+    }, 100);
 }
 
-// Filter products by category from collection cards
-// Filter products by category from collection cards
+// Filter products by category from collection cards - FIXED VERSION
 function filterProductsByCategory(category) {
+    console.log(`Filtering by collection card: ${category}`);
+    
     // Map any shoe/slipper click to "footwear"
     if (category === 'shoes' || category === 'slippers') {
         category = 'footwear';
@@ -3163,7 +3543,23 @@ function filterProductsByCategory(category) {
         return product.category === category;
     });
     
-    displayProducts(filteredProducts);
+    console.log(`Filtered ${filteredProducts.length} products for ${category}`);
+    
+    if (filteredProducts.length === 0 && allProducts.length > 0) {
+        // No products in this category, show message
+        const container = document.getElementById('productsGrid');
+        container.innerHTML = `
+            <div class="product-loading" style="grid-column: 1 / -1;">
+                <i class="fas fa-box-open" style="font-size: 48px; color: #ccc; margin-bottom: 15px;"></i>
+                <p>No ${category} products found</p>
+                <button class="btn btn-primary" onclick="filterProducts('all')" style="margin-top: 15px;">
+                    <i class="fas fa-th-large"></i> View All Products
+                </button>
+            </div>
+        `;
+    } else {
+        displayProducts(filteredProducts);
+    }
     
     // Update title based on category
     const categoryTitles = {
@@ -3179,19 +3575,39 @@ function filterProductsByCategory(category) {
     // Scroll to products section
     document.getElementById('products').scrollIntoView({ behavior: 'smooth' });
     
-    updateProductStats(allProducts.length, 'Firebase', category);
-    
-    // REMOVED: showNotification(`Viewing ${categoryTitles[category]} collection`);
+    // Update stats
+    setTimeout(() => {
+        updateProductStats();
+    }, 100);
 }
-// Filter products by tag
+
+// Filter products by tag - FIXED VERSION
 function filterProductsByTag(tag) {
+    console.log(`Filtering by tag: ${tag}`);
+    
     const filteredProducts = allProducts.filter(product => {
         const productId = product.firebaseId || product.id;
         const productTags = productTagMap[productId] || product.tags || [];
         return productTags.includes(tag);
     });
     
-    displayProducts(filteredProducts);
+    console.log(`Found ${filteredProducts.length} products with tag #${tag}`);
+    
+    if (filteredProducts.length === 0) {
+        // No products with this tag
+        const container = document.getElementById('productsGrid');
+        container.innerHTML = `
+            <div class="product-loading" style="grid-column: 1 / -1;">
+                <i class="fas fa-tag" style="font-size: 48px; color: #ccc; margin-bottom: 15px;"></i>
+                <p>No products found with tag <strong>#${tag}</strong></p>
+                <button class="btn btn-primary" onclick="filterProducts('all')" style="margin-top: 15px;">
+                    <i class="fas fa-th-large"></i> View All Products
+                </button>
+            </div>
+        `;
+    } else {
+        displayProducts(filteredProducts);
+    }
     
     // Update title
     document.getElementById('productsTitle').innerHTML = `Tag: <span class="highlight">#${tag}</span>`;
@@ -3204,13 +3620,16 @@ function filterProductsByTag(tag) {
     // Scroll to products section
     document.getElementById('products').scrollIntoView({ behavior: 'smooth' });
     
-    updateProductStats(allProducts.length, 'Firebase', `tag: ${tag}`);
+    // Update stats
+    setTimeout(() => {
+        updateProductStats();
+    }, 100);
     
     // Show notification
-    showNotification(`Showing products tagged #${tag}`);
+    showNotification(`Showing ${filteredProducts.length} products tagged #${tag}`);
 }
 
-// Update filter buttons
+// Update filter buttons - FIXED VERSION
 function updateFilterButtons(selectedCategory) {
     const filterButtons = document.querySelectorAll('.filter-btn');
     filterButtons.forEach(button => {
@@ -3223,26 +3642,49 @@ function updateFilterButtons(selectedCategory) {
     });
 }
 
-// Apply current filter to displayed products
+// Apply current filter to displayed products - FIXED VERSION
 function applyCurrentFilter() {
     const productCards = document.querySelectorAll('.product-card');
+    console.log(`Applying filter: ${currentFilter}, Found ${productCards.length} cards`);
+    
+    let visibleCount = 0;
     
     productCards.forEach(card => {
         if (currentFilter === 'all' || card.getAttribute('data-category') === currentFilter) {
             card.style.display = 'block';
+            visibleCount++;
         } else {
             card.style.display = 'none';
         }
     });
+    
+    console.log(`${visibleCount} products visible after filtering`);
+    
+    // Update stats
+    updateProductStats();
 }
 
-// Update product statistics - SIMPLIFIED VERSION
-function updateProductStats(totalCount, source = 'Local', filter = 'all') {
+// Update product statistics - FIXED VERSION
+function updateProductStats() {
     const statsEl = document.getElementById('productCount');
-    const visibleProducts = document.querySelectorAll('.product-card[style*="block"], .product-card:not([style])').length;
+    if (!statsEl) return;
     
-    if (filter === 'all') {
-        statsEl.innerHTML = `${totalCount} products`;
+    // Count visible products
+    const productCards = document.querySelectorAll('.product-card');
+    const visibleProducts = Array.from(productCards).filter(card => 
+        card.style.display !== 'none'
+    ).length;
+    
+    // Count total products in current filter
+    let totalInFilter;
+    if (currentFilter === 'all') {
+        totalInFilter = allProducts.length;
+    } else {
+        totalInFilter = allProducts.filter(p => p.category === currentFilter).length;
+    }
+    
+    if (currentFilter === 'all') {
+        statsEl.innerHTML = `${allProducts.length} products`;
     } else {
         // Map filter names to better display names
         const filterNames = {
@@ -3252,8 +3694,8 @@ function updateProductStats(totalCount, source = 'Local', filter = 'all') {
             'accessories': 'Accessories'
         };
         
-        const displayFilter = filterNames[filter] || filter;
-        statsEl.innerHTML = `${visibleProducts} ${displayFilter.toLowerCase()} products`;
+        const displayFilter = filterNames[currentFilter] || currentFilter;
+        statsEl.innerHTML = `${totalInFilter} ${displayFilter.toLowerCase()} products`;
     }
 }
 
@@ -3777,9 +4219,19 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.removeItem('refresh_products');
         
         setTimeout(() => {
+            // After products load, set filter to 'all'
+            setTimeout(() => {
+                filterProducts('all');
+            }, 1000);
         }, 1000);
+    } else {
+        // Initial load - set filter to 'all' after products are loaded
+        setTimeout(() => {
+            filterProducts('all');
+        }, 500);
     }
     
+
     const adminLinks = document.querySelectorAll('a[href="upload.html"]');
     adminLinks.forEach(link => {
         link.addEventListener('click', () => {
