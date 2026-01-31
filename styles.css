@@ -1533,11 +1533,6 @@ h3 { font-size: 1.8rem; }
     height: 36px;
 }
 
-.sync-button:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 3px 8px rgba(255, 154, 158, 0.25);
-    background: linear-gradient(135deg, #ff7b81 0%, #f8c5b2 100%);
-}
 
 .sync-button:active {
     transform: translateY(0);
@@ -1565,21 +1560,7 @@ h3 { font-size: 1.8rem; }
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
-}
 
-/* For mobile responsiveness */
-@media (max-width: 768px) {
-    .sync-button {
-        padding: 6px 12px;
-        font-size: 12px;
-        gap: 4px;
-        height: 32px;
-        border-radius: 18px;
-    }
-    
-    .sync-button i {
-        font-size: 12px;
-    }
 }
 
 /* For very small screens */
