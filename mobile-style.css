@@ -239,6 +239,8 @@
     .about-section {
         padding-top: 2rem;
         padding-bottom: 2rem;
+          font-family: 'Poppins', sans-serif;
+    line-height: 1.6;
     }
 
     /* About grid: stack vertically for mobile */
@@ -255,6 +257,7 @@
         height: auto;
         border-radius: 8px;
         display: block;
+        
     }
 
     /* Image badge */
@@ -274,13 +277,16 @@
         line-height: 1.2;
     }
 
-    /* Subtitle / name */
-    .about-section h3 {
-        font-size: 1.2rem;
-        margin-bottom: 0.5rem;
-        text-align: center;
-        line-height: 1.2;
-    }
+  /* Subtitle / name */
+.about-section h3 {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    text-align: center;
+    line-height: 1.2;
+    font-family: 'Poppins', sans-serif;
+    line-height: 1.6;
+    margin-left: 15px; /* Moves it to the right */
+}
 
     /* Paragraphs */
     .about-section p {
@@ -291,6 +297,8 @@
         max-width: 95%;
         margin-left: auto;
         margin-right: auto;
+          font-family: 'Poppins', sans-serif;
+    line-height: 1.6;
     }
 
     /* Button */
@@ -1911,5 +1919,12 @@
     
     .hero-subtitle {
         margin-bottom: 20px;
+    }
+}
+
+/* Hide the hero tags on small screens */
+@media (max-width: 768px) {
+    .hero-tags {
+        display: none;
     }
 }

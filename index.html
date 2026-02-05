@@ -2159,6 +2159,33 @@
     }
 }
 
+/* Hide the hero tags on small screens */
+@media (max-width: 768px) {
+    .hero-tags {
+        display: none;
+    }
+    
+    /* More compact hero section */
+    .hero {
+        min-height: auto;
+        padding-top: 1rem; /* Reduced from 1.5rem */
+        padding-bottom: 0.75rem; /* Reduced from 1rem */
+    }
+    
+    /* Less space below header */
+    .hero {
+        margin-top: 80px !important; /* Reduced from 100px */
+    }
+    
+    /* Even less hero content padding */
+    .hero-content {
+        padding: 0.5rem 0.5rem 0.25rem 0.5rem !important; /* Reduced bottom padding */
+    }
+}
+
+
+
+
     </style>
 </head>
 <body>
