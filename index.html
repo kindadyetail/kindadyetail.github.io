@@ -3302,121 +3302,6 @@ body.search-open {
         padding-right: 10px !important;
     }
 }
-/* Add this CSS */
-@media (max-width: 768px) {
-    .nav-container {
-        position: relative;
-        z-index: 1000;
-    }
-    
-    .logo {
-        position: absolute;
-        left: 50%;
-        transform: translateX(-50%);
-        z-index: 1001;
-        pointer-events: none;
-    }
-    
-    .logo a {
-        pointer-events: auto;
-    }
-    
-    .nav-toggle {
-        position: relative;
-        z-index: 1002;
-        margin-right: 10px;
-    }
-    
-    .mobile-search-toggle {
-        position: relative;
-        z-index: 1002;
-        margin-left: auto;
-        margin-right: 10px;
-    }
-    
-    .cart-icon {
-        position: relative;
-        z-index: 1002;
-    }
-    
-    /* Prevent any clicks on the logo from triggering menu */
-    .logo:active,
-    .logo:focus {
-        pointer-events: none;
-    }
-}
-/* Mobile Search Override Styles */
-@media (max-width: 768px) {
-    .mobile-search-expandable {
-        display: none;
-        position: fixed;
-        top: 70px !important;
-        left: 10px !important;
-        right: 10px !important;
-        z-index: 2000 !important;
-        max-height: 70vh;
-        overflow-y: auto;
-    }
-    
-    .mobile-search-expandable.show {
-        display: block;
-        animation: slideDown 0.3s ease;
-    }
-    
-    @keyframes slideDown {
-        from {
-            opacity: 0;
-            transform: translateY(-20px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-    
-    .mobile-search-expand-box {
-        padding: 15px;
-        background: white;
-        border-radius: 16px;
-        box-shadow: 0 10px 40px rgba(0,0,0,0.15);
-    }
-    
-    /* Fix body scroll */
-    body.search-open {
-        overflow: hidden !important;
-        position: fixed;
-        width: 100%;
-        height: 100%;
-    }
-    
-    /* Fix navigation layout */
-    .nav-menu {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-    }
-    
-    .mobile-search-toggle {
-        order: 2;
-        margin-left: auto;
-    }
-    
-    .cart-icon {
-        order: 3;
-    }
-    
-    /* Make sure toggle button is clickable */
-    .search-toggle-btn {
-        width: 40px !important;
-        height: 40px !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        cursor: pointer !important;
-        z-index: 1002 !important;
-        position: relative !important;
-    }
-}
     </style>
 </head>
 <body>
@@ -3465,24 +3350,10 @@ body.search-open {
             <li><a href="#about" class="nav-link">Our Story</a></li>
             <li><a href="#contact" class="nav-link">Contact</a></li>
             
-            <!-- Mobile Search Toggle Button -->
-          <!-- Mobile Search Toggle Button -->
-<li class="mobile-search-toggle" id="mobileSearchToggle">
-    <button class="search-toggle-btn" aria-label="Open search" style="background: rgba(237, 100, 166, 0.1); color: #ed64a6; border: none;">
-        <i class="fas fa-search"></i>
-    </button>
-</li>
-            
             <li class="cart-icon">
                 <a href="#cart" id="cartBtn">
                     <i class="fas fa-shopping-bag"></i>
                     <span class="cart-count" id="cartCount">0</span>
-                </a>
-            </li>
-            <li class="admin-nav-item">
-                <a href="upload.html" class="nav-link" style="color: #ed64a6;">
-                    <i class="fas fa-cloud-upload-alt"></i>
-                    <span style="font-size: 12px;">Upload</span>
                 </a>
             </li>
         </ul>
@@ -3503,6 +3374,38 @@ body.search-open {
     <div class="mobile-search-expand-results" id="mobileSearchResultsDropdown"></div>
 </div>
 </header>
+<!-- Add this HTML after the header section -->
+<div class="floating-search-container" id="floatingSearchContainer">
+    <div class="floating-search-input-container" id="floatingSearchInputContainer">
+        <button class="floating-search-close" id="floatingSearchClose" onclick="toggleFloatingSearch()">
+            <i class="fas fa-times"></i>
+        </button>
+        
+        <div class="floating-search-input-wrapper">
+            <i class="fas fa-search" style="color: #9ca3af; font-size: 16px;"></i>
+            <input type="text" 
+                   class="floating-search-input" 
+                   id="floatingSearchInput" 
+                   placeholder="Search products, tags, categories..."
+                   onkeyup="handleFloatingSearch(event)">
+            <button class="floating-search-clear" id="floatingSearchClear" onclick="clearFloatingSearch()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <div class="floating-search-results" id="floatingSearchResults"></div>
+        
+        <div class="floating-search-tips">
+            <p><i class="fas fa-lightbulb"></i> Try: perfume, shoes, summer, luxury</p>
+            <p><i class="fas fa-tag"></i> Click on tags for filtered search</p>
+        </div>
+    </div>
+    
+    <button class="floating-search-btn" id="floatingSearchBtn" onclick="toggleFloatingSearch()" title="Search Products">
+        <i class="fas fa-search"></i>
+    </button>
+</div>
+
 
   <!-- Hero Section -->
 <section class="hero" id="home">
@@ -3875,17 +3778,6 @@ body.search-open {
         </div>
     </footer>
 
-    <!-- Admin Upload Link -->
-    <a href="seller.html" class="admin-upload-link">
-        <i class="fas fa-cloud-upload-alt"></i>
-        Dashboard
-    </a>
-
-    <!-- Test Notification Button -->
-   <button class="test-notification-btn" onclick="testNotificationSystem()">
-    <i class="fas fa-bell"></i> Test Notifications
-</button>
-
     <!-- Notification -->
     <div class="notification" id="notification"></div>
 
@@ -3917,7 +3809,272 @@ body.search-open {
             </div>
         </div>
     </div>
+<style>
+/* ===== FLOATING SEARCH FOR SMALL SCREENS - UNDER NAVIGATION, RIGHT SIDE ===== */
 
+/* Hidden on desktop */
+.floating-search-container {
+    display: none;
+}
+
+/* Show and position under navigation on mobile - RIGHT SIDE */
+@media (max-width: 768px) {
+    .floating-search-container {
+        display: flex !important;
+        position: fixed;
+        
+        /* POSITION: Right side, under navigation */
+        top: 70px;
+        right: 15px;
+        
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 10px;
+        z-index: 997;
+    }
+    
+    .floating-search-btn {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #ed64a6 0%, #667eea 100%);
+        color: white;
+        border: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        box-shadow: 0 3px 10px rgba(237, 100, 166, 0.3);
+        transition: all 0.3s ease;
+        position: relative;
+        z-index: 998;
+    }
+    
+    .floating-search-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(237, 100, 166, 0.4);
+    }
+    
+    .floating-search-btn.pulse {
+        animation: searchPulse 2s infinite;
+    }
+    
+    @keyframes searchPulse {
+        0% {
+            box-shadow: 0 3px 10px rgba(237, 100, 166, 0.3);
+        }
+        50% {
+            box-shadow: 0 3px 18px rgba(237, 100, 166, 0.5);
+        }
+        100% {
+            box-shadow: 0 3px 10px rgba(237, 100, 166, 0.3);
+        }
+    }
+    
+    /* Floating Search Input Container */
+    .floating-search-input-container {
+        position: absolute;
+        top: 52px;
+        right: 0;
+        width: calc(100vw - 30px);
+        max-width: 300px;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+        padding: 12px;
+        transform: translateY(-10px);
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 999;
+        border: 1px solid #e5e7eb;
+    }
+    
+    .floating-search-input-container.show {
+        transform: translateY(0);
+        opacity: 1;
+        visibility: visible;
+    }
+    
+    /* ===== HIDDEN: TOP-RIGHT CLOSE BUTTON (CONTAINER X) ===== */
+    .floating-search-close {
+        /* Hide the close button */
+        display: none !important;
+    }
+    
+    /* Hide all hover effects and tooltips for the close button */
+    .floating-search-close:hover,
+    .floating-search-close::after,
+    .floating-search-close::before,
+    .floating-search-close:hover::after,
+    .floating-search-close:hover::before {
+        display: none !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+    }
+    
+    .floating-search-input-wrapper {
+        display: flex;
+        align-items: center;
+        background: #f8fafc;
+        border-radius: 10px;
+        padding: 6px 12px;
+        border: 2px solid #e2e8f0;
+        transition: all 0.3s ease;
+        gap: 6px;
+        /* Remove space for close button since it's hidden */
+        margin-top: 0;
+    }
+    
+    .floating-search-input-wrapper:focus-within {
+        border-color: #ed64a6;
+        background: white;
+        box-shadow: 0 2px 8px rgba(237, 100, 166, 0.15);
+    }
+    
+    .floating-search-input {
+        flex: 1;
+        border: none;
+        background: transparent;
+        outline: none;
+        font-family: 'Poppins', sans-serif;
+        font-size: 14px;
+        color: #374151;
+        padding: 6px 8px;
+    }
+    
+    .floating-search-input::placeholder {
+        color: #9ca3af;
+        font-size: 13px;
+    }
+    
+    /* ===== HIDDEN: CLEAR SEARCH X BUTTON (INSIDE INPUT) ===== */
+    .floating-search-clear {
+        /* Hide the clear button */
+        display: none !important;
+    }
+    
+    /* Hide all hover effects and tooltips for the clear button */
+    .floating-search-clear.show,
+    .floating-search-clear:hover,
+    .floating-search-clear::after,
+    .floating-search-clear::before,
+    .floating-search-clear:hover::after,
+    .floating-search-clear:hover::before,
+    .floating-search-clear.clearing {
+        display: none !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+        animation: none !important;
+    }
+    
+    /* Remove focus styling that referenced clear button */
+    .floating-search-input-wrapper:focus-within .floating-search-clear {
+        display: none !important;
+    }
+    
+    /* Search results */
+    .floating-search-results {
+        max-height: 280px;
+        overflow-y: auto;
+        margin-top: 8px;
+        border-radius: 10px;
+        background: white;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        border: 1px solid #e5e7eb;
+        display: none;
+    }
+    
+    .floating-search-results.show {
+        display: block;
+        animation: slideDown 0.3s ease;
+    }
+    
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    /* Search tips */
+    .floating-search-tips {
+        margin-top: 8px;
+        padding: 8px;
+        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        border-radius: 8px;
+        border: 1px solid #e2e8f0;
+        font-size: 11px;
+        color: #6b7280;
+    }
+    
+    .floating-search-tips p {
+        margin: 3px 0;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+    
+    .floating-search-tips i {
+        color: #ed64a6;
+        font-size: 10px;
+    }
+    
+    /* Adjust for smaller phones */
+    @media (max-width: 480px) {
+        .floating-search-container {
+            top: 65px;
+            right: 10px;
+        }
+        
+        .floating-search-btn {
+            width: 40px;
+            height: 40px;
+            font-size: 16px;
+        }
+        
+        .floating-search-input-container {
+            width: calc(100vw - 20px);
+            top: 50px;
+        }
+    }
+    
+    /* Adjust for tablets */
+    @media (min-width: 481px) and (max-width: 768px) {
+        .floating-search-container {
+            top: 75px;
+            right: 20px;
+        }
+        
+        .floating-search-input-container {
+            max-width: 320px;
+        }
+    }
+    
+    /* Make sure it doesn't interfere with content scrolling */
+    .floating-search-container {
+        pointer-events: none;
+    }
+    
+    .floating-search-btn {
+        pointer-events: auto;
+    }
+    
+    .floating-search-input-container {
+        pointer-events: auto;
+    }
+    
+    /* Hide when keyboard is visible */
+    .floating-search-container.keyboard-visible {
+        display: none !important;
+    }
+}
+</style>
    <script>
     // Send WhatsApp notification to seller
 function sendWhatsAppNotification(orderData) {
@@ -7575,532 +7732,6 @@ window.updateQuantity = updateQuantity;
 window.clearCart = clearCart;
 window.proceedToCheckout = proceedToCheckout;
 
-// =============== CUTE MOBILE SEARCH FUNCTIONALITY ===============
-let mobileSearchTimeout = null;
-
-// Initialize mobile search
-function initMobileSearch() {
-    const mobileSearchToggle = document.getElementById('mobileSearchToggle');
-    const mobileSearchContainer = document.getElementById('mobileSearchContainer');
-    const mobileSearchInput = document.getElementById('mobileUniversalSearch');
-    const mobileSearchClear = document.getElementById('mobileSearchClear');
-    
-    if (!mobileSearchToggle || !mobileSearchContainer) return;
-    
-    // Toggle mobile search
-    mobileSearchToggle.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        
-        const isOpen = mobileSearchContainer.classList.contains('show');
-        
-        if (isOpen) {
-            closeMobileSearch();
-        } else {
-            openMobileSearch();
-        }
-    });
-    
-    // Clear button
-    if (mobileSearchClear) {
-        mobileSearchClear.addEventListener('click', clearMobileSearch);
-    }
-    
-    // Input handling
-    if (mobileSearchInput) {
-        mobileSearchInput.addEventListener('input', (e) => {
-            handleMobileSearch(e);
-        });
-        
-        mobileSearchInput.addEventListener('keyup', (e) => {
-            if (e.key === 'Enter') {
-                performMobileSearch(mobileSearchInput.value.trim());
-            }
-        });
-    }
-    
-    // Close search on overlay click
-    document.addEventListener('click', (e) => {
-        const overlay = document.getElementById('mobileSearchOverlay');
-        if (overlay && overlay.classList.contains('active') && e.target === overlay) {
-            closeMobileSearch();
-        }
-    });
-    
-    // Close on escape key
-    document.addEventListener('keydown', (e) => {
-        const container = document.getElementById('mobileSearchContainer');
-        if (e.key === 'Escape' && container && container.classList.contains('show')) {
-            closeMobileSearch();
-        }
-    });
-}
-
-function openMobileSearch() {
-    const container = document.getElementById('mobileSearchContainer');
-    const input = document.getElementById('mobileUniversalSearch');
-    
-    // Close mobile menu if open
-    const navMenu = document.getElementById('navMenu');
-    if (navMenu && navMenu.classList.contains('show')) {
-        navMenu.classList.remove('show');
-    }
-    
-    // Add class to body to prevent scrolling
-    document.body.classList.add('search-open');
-    
-    // Open search
-    container.classList.add('show');
-    
-    // Focus input with animation
-    setTimeout(() => {
-        input.focus();
-        input.value = '';
-    }, 50);
-    
-    // Add overlay for mobile
-    addMobileSearchOverlay();
-}
-
-function closeMobileSearch() {
-    const container = document.getElementById('mobileSearchContainer');
-    const results = document.getElementById('mobileSearchResultsDropdown');
-    
-    // Remove class from body to restore scrolling
-    document.body.classList.remove('search-open');
-    
-    container.classList.remove('show');
-    
-    if (results) {
-        results.classList.remove('show');
-        results.innerHTML = '';
-    }
-    
-    // Remove overlay
-    removeMobileSearchOverlay();
-}
-
-function handleMobileSearch(event) {
-    const searchInput = document.getElementById('mobileUniversalSearch');
-    const searchQuery = searchInput.value.trim();
-    const clearBtn = document.getElementById('mobileSearchClear');
-    
-    // Show/hide clear button
-    if (searchQuery.length > 0) {
-        clearBtn.classList.add('show');
-    } else {
-        clearBtn.classList.remove('show');
-        hideMobileSearchResults();
-        return;
-    }
-    
-    // Debounce search
-    clearTimeout(mobileSearchTimeout);
-    mobileSearchTimeout = setTimeout(() => {
-        performMobileSearch(searchQuery);
-    }, 300);
-}
-
-function performMobileSearch(query) {
-    if (query.length < 2) {
-        hideMobileSearchResults();
-        return;
-    }
-    
-    const searchResults = searchProductsAndTags(query);
-    displayMobileSearchResults(searchResults, query);
-}
-
-function displayMobileSearchResults(searchData, query) {
-    const resultsDropdown = document.getElementById('mobileSearchResultsDropdown');
-    const { products, tags } = searchData;
-    
-    if (products.length === 0 && tags.length === 0) {
-        resultsDropdown.innerHTML = `
-            <div class="mobile-search-no-results">
-                <i class="fas fa-search"></i>
-                <p>No results for "<strong>${query}</strong>"</p>
-                <p style="font-size: 12px; color: #94a3b8;">Try different keywords</p>
-            </div>
-        `;
-        resultsDropdown.classList.add('show');
-        return;
-    }
-    
-    let resultsHTML = '';
-    
-    // Add tag section
-    if (tags.length > 0) {
-        resultsHTML += `
-            <div class="mobile-search-tag-section">
-                <div class="mobile-search-tag-title">
-                    <i class="fas fa-tags"></i>
-                    <span>Matching Tags</span>
-                </div>
-                <div class="mobile-search-tag-list">
-                    ${tags.map(tag => `
-                        <div class="mobile-search-tag-item" 
-                             onclick="filterProductsByTag('${tag}'); closeMobileSearch();">
-                            #${tag}
-                        </div>
-                    `).join('')}
-                </div>
-            </div>
-        `;
-    }
-    
-    // Add product results
-    if (products.length > 0) {
-        products.forEach(product => {
-            const category = product.category || 'General';
-            const price = product.price || 0;
-            const title = product.name || '';
-            const imageUrl = product.mainImage || product.images?.[0]?.url || '';
-            const productId = product.firebaseId || product.id;
-            const productTags = productTagMap[productId] || product.tags || [];
-            
-            // Highlight search terms
-            const highlightedTitle = highlightText(title, query);
-            
-            // Resize image for mobile
-            let displayImageUrl = imageUrl;
-            if (imageUrl.includes('res.cloudinary.com')) {
-                displayImageUrl = imageUrl.replace('/upload/', '/upload/w_100,h_100,c_fill/');
-            }
-            
-            resultsHTML += `
-                <div class="mobile-search-result-item" 
-                     onclick="goToProduct('${productId}'); closeMobileSearch();">
-                    <img src="${displayImageUrl || 'https://via.placeholder.com/50x50/667eea/ffffff?text=K'}" 
-                         alt="${title}" 
-                         class="mobile-search-result-image">
-                    <div class="mobile-search-result-info">
-                        <div class="mobile-search-result-title">
-                            ${highlightedTitle}
-                            ${product.matchType === 'tag' ? 
-                                '<span class="mobile-search-result-match-type">Tag Match</span>' : ''}
-                        </div>
-                        <span class="mobile-search-result-category">${category}</span>
-                        ${productTags.length > 0 ? `
-                            <div class="mobile-search-result-tags">
-                                ${productTags.slice(0, 3).map(tag => `
-                                    <span class="mobile-search-result-tag">#${tag}</span>
-                                `).join('')}
-                            </div>
-                        ` : ''}
-                    </div>
-                    <div class="mobile-search-result-price">₵${price.toFixed(2)}</div>
-                </div>
-            `;
-        });
-    }
-    
-    resultsDropdown.innerHTML = resultsHTML;
-    resultsDropdown.classList.add('show');
-}
-
-function clearMobileSearch() {
-    const searchInput = document.getElementById('mobileUniversalSearch');
-    const clearBtn = document.getElementById('mobileSearchClear');
-    const resultsDropdown = document.getElementById('mobileSearchResultsDropdown');
-    
-    if (searchInput) searchInput.value = '';
-    if (clearBtn) clearBtn.classList.remove('show');
-    if (resultsDropdown) {
-        resultsDropdown.classList.remove('show');
-        resultsDropdown.innerHTML = '';
-    }
-    
-    searchInput.focus();
-}
-
-function hideMobileSearchResults() {
-    const resultsDropdown = document.getElementById('mobileSearchResultsDropdown');
-    if (resultsDropdown) {
-        resultsDropdown.classList.remove('show');
-    }
-}
-
-// Helper functions for overlay
-function addMobileSearchOverlay() {
-    let overlay = document.getElementById('mobileSearchOverlay');
-    if (!overlay) {
-        overlay = document.createElement('div');
-        overlay.id = 'mobileSearchOverlay';
-        overlay.className = 'mobile-search-overlay';
-        overlay.onclick = closeMobileSearch;
-        document.body.appendChild(overlay);
-    }
-    overlay.classList.add('active');
-}
-
-function removeMobileSearchOverlay() {
-    const overlay = document.getElementById('mobileSearchOverlay');
-    if (overlay) {
-        overlay.classList.remove('active');
-        setTimeout(() => {
-            if (overlay && !overlay.classList.contains('active')) {
-                document.body.removeChild(overlay);
-            }
-        }, 300);
-    }
-}
-// =============== SIMPLIFIED MOBILE SEARCH FIX ===============
-
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM loaded, initializing mobile search...');
-    
-    const searchToggle = document.getElementById('mobileSearchToggle');
-    const searchContainer = document.getElementById('mobileSearchContainer');
-    const searchInput = document.getElementById('mobileUniversalSearch');
-    const searchClear = document.getElementById('mobileSearchClear');
-    const menuToggle = document.getElementById('navToggle');
-    const navMenu = document.getElementById('navMenu');
-    
-    if (!searchToggle || !searchContainer) {
-        console.error('Mobile search elements not found!');
-        return;
-    }
-    
-    console.log('Mobile search elements found');
-    
-    // Toggle mobile search
-    searchToggle.addEventListener('click', function(e) {
-        e.preventDefault();
-        e.stopPropagation(); // Prevent event bubbling
-        
-        console.log('Search toggle clicked');
-        
-        // Close menu if open
-        if (navMenu && navMenu.classList.contains('show')) {
-            navMenu.classList.remove('show');
-        }
-        
-        // Toggle search
-        if (searchContainer.classList.contains('show')) {
-            closeMobileSearch();
-        } else {
-            openMobileSearch();
-        }
-        
-        return false;
-    });
-    
-    // Open mobile search function
-    window.openMobileSearch = function() {
-        console.log('Opening mobile search');
-        
-        // Add overlay
-        let overlay = document.getElementById('mobileSearchOverlay');
-        if (!overlay) {
-            overlay = document.createElement('div');
-            overlay.id = 'mobileSearchOverlay';
-            overlay.className = 'mobile-search-overlay';
-            overlay.style.cssText = `
-                position: fixed;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                background: rgba(0,0,0,0.5);
-                z-index: 999;
-                backdrop-filter: blur(3px);
-            `;
-            overlay.onclick = function() {
-                closeMobileSearch();
-            };
-            document.body.appendChild(overlay);
-        }
-        
-        // Show search container
-        searchContainer.style.display = 'block';
-        setTimeout(() => {
-            searchContainer.classList.add('show');
-            document.body.classList.add('search-open');
-            
-            // Focus input
-            if (searchInput) {
-                setTimeout(() => {
-                    searchInput.focus();
-                    searchInput.value = '';
-                }, 100);
-            }
-        }, 10);
-    };
-    
-    // Close mobile search function
-    window.closeMobileSearch = function() {
-        console.log('Closing mobile search');
-        
-        // Hide search container
-        searchContainer.classList.remove('show');
-        setTimeout(() => {
-            searchContainer.style.display = 'none';
-            document.body.classList.remove('search-open');
-            
-            // Remove overlay
-            const overlay = document.getElementById('mobileSearchOverlay');
-            if (overlay && overlay.parentNode) {
-                overlay.parentNode.removeChild(overlay);
-            }
-        }, 300);
-    };
-    
-    // Handle search input
-    if (searchInput) {
-        searchInput.addEventListener('input', function(e) {
-            handleMobileSearch(e);
-        });
-        
-        searchInput.addEventListener('keyup', function(e) {
-            if (e.key === 'Enter') {
-                performMobileSearch(searchInput.value.trim());
-            }
-        });
-    }
-    
-    // Clear button
-    if (searchClear) {
-        searchClear.addEventListener('click', function() {
-            if (searchInput) {
-                searchInput.value = '';
-                searchInput.focus();
-                hideMobileSearchResults();
-                this.classList.remove('show');
-            }
-        });
-    }
-    
-    // Close on escape key
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && searchContainer.classList.contains('show')) {
-            closeMobileSearch();
-        }
-    });
-    
-    // Prevent menu toggle from interfering
-    if (menuToggle) {
-        menuToggle.addEventListener('click', function(e) {
-            e.stopPropagation();
-            
-            // Close search if open
-            if (searchContainer.classList.contains('show')) {
-                closeMobileSearch();
-            }
-            
-            // Toggle menu
-            if (navMenu) {
-                navMenu.classList.toggle('show');
-            }
-        });
-    }
-    
-    // Click outside to close (for overlay)
-    document.addEventListener('click', function(e) {
-        const overlay = document.getElementById('mobileSearchOverlay');
-        if (overlay && overlay.contains(e.target) && searchContainer.classList.contains('show')) {
-            closeMobileSearch();
-        }
-    });
-});
-
-// Mobile search functions
-window.handleMobileSearch = function(event) {
-    const searchInput = document.getElementById('mobileUniversalSearch');
-    const searchQuery = searchInput.value.trim();
-    const clearBtn = document.getElementById('mobileSearchClear');
-    
-    if (searchQuery.length > 0) {
-        clearBtn.classList.add('show');
-    } else {
-        clearBtn.classList.remove('show');
-        hideMobileSearchResults();
-        return;
-    }
-    
-    clearTimeout(window.mobileSearchTimeout);
-    window.mobileSearchTimeout = setTimeout(() => {
-        performMobileSearch(searchQuery);
-    }, 300);
-};
-
-window.performMobileSearch = function(query) {
-    if (query.length < 2) {
-        hideMobileSearchResults();
-        return;
-    }
-    
-    const searchResults = searchProductsAndTags(query);
-    displayMobileSearchResults(searchResults, query);
-};
-
-window.displayMobileSearchResults = function(searchData, query) {
-    const resultsDropdown = document.getElementById('mobileSearchResultsDropdown');
-    const { products, tags } = searchData;
-    
-    if (products.length === 0 && tags.length === 0) {
-        resultsDropdown.innerHTML = `
-            <div class="search-no-results">
-                <i class="fas fa-search"></i>
-                <p>No results for "<strong>${query}</strong>"</p>
-            </div>
-        `;
-        resultsDropdown.classList.add('show');
-        return;
-    }
-    
-    let resultsHTML = '';
-    
-    // Add products
-    if (products.length > 0) {
-        products.forEach(product => {
-            const category = product.category || 'General';
-            const price = product.price || 0;
-            const title = product.name || '';
-            const imageUrl = product.mainImage || '';
-            
-            resultsHTML += `
-                <div class="search-result-item" 
-                     onclick="goToProduct('${product.firebaseId || product.id}'); closeMobileSearch();">
-                    <img src="${imageUrl || 'https://via.placeholder.com/50x50/cccccc'}" 
-                         alt="${title}" 
-                         class="search-result-image">
-                    <div class="search-result-info">
-                        <div class="search-result-title">${title}</div>
-                        <span class="search-result-category">${category}</span>
-                    </div>
-                    <div class="search-result-price">₵${price.toFixed(2)}</div>
-                </div>
-            `;
-        });
-    }
-    
-    resultsDropdown.innerHTML = resultsHTML;
-    resultsDropdown.classList.add('show');
-};
-
-window.hideMobileSearchResults = function() {
-    const resultsDropdown = document.getElementById('mobileSearchResultsDropdown');
-    if (resultsDropdown) {
-        resultsDropdown.classList.remove('show');
-    }
-};
-
-window.clearMobileSearch = function() {
-    const searchInput = document.getElementById('mobileUniversalSearch');
-    const clearBtn = document.getElementById('mobileSearchClear');
-    const resultsDropdown = document.getElementById('mobileSearchResultsDropdown');
-    
-    if (searchInput) searchInput.value = '';
-    if (clearBtn) clearBtn.classList.remove('show');
-    if (resultsDropdown) {
-        resultsDropdown.classList.remove('show');
-        resultsDropdown.innerHTML = '';
-    }
-    
-    if (searchInput) searchInput.focus();
-};
-
 // =============== CONTACT FORM FUNCTIONALITY ===============
 
 // Save contact to Firebase
@@ -8976,6 +8607,310 @@ const newsletterStyles = `
 const newsletterStyleSheet = document.createElement('style');
 newsletterStyleSheet.textContent = newsletterStyles;
 document.head.appendChild(newsletterStyleSheet);
+</script>
+<script>
+// ===== FLOATING SEARCH FUNCTIONALITY =====
+
+let floatingSearchTimeout;
+let isFloatingSearchOpen = false;
+let floatingSearchResults = [];
+
+// Toggle floating search visibility
+function toggleFloatingSearch() {
+    const container = document.getElementById('floatingSearchInputContainer');
+    const btn = document.getElementById('floatingSearchBtn');
+    const input = document.getElementById('floatingSearchInput');
+    
+    isFloatingSearchOpen = !isFloatingSearchOpen;
+    
+    if (isFloatingSearchOpen) {
+        container.classList.add('show');
+        input.focus();
+        btn.classList.add('pulse');
+        
+        // Add ripple effect
+        createRipple(btn);
+        
+        // Prevent body scrolling on mobile when search is open
+        if (window.innerWidth <= 768) {
+            document.body.style.overflow = 'hidden';
+        }
+    } else {
+        container.classList.remove('show');
+        btn.classList.remove('pulse');
+        clearFloatingSearch();
+        
+        // Restore body scrolling
+        document.body.style.overflow = '';
+    }
+}
+
+// Create ripple effect for button
+function createRipple(button) {
+    const ripple = document.createElement("span");
+    const rect = button.getBoundingClientRect();
+    const size = Math.max(rect.width, rect.height);
+    const x = rect.width / 2 - size / 2;
+    const y = rect.height / 2 - size / 2;
+    
+    ripple.style.cssText = `
+        width: ${size}px;
+        height: ${size}px;
+        left: ${x}px;
+        top: ${y}px;
+    `;
+    ripple.classList.add("ripple");
+    
+    button.appendChild(ripple);
+    
+    // Remove ripple after animation
+    setTimeout(() => {
+        ripple.remove();
+    }, 600);
+}
+
+// Handle floating search input
+function handleFloatingSearch(event) {
+    const searchInput = document.getElementById('floatingSearchInput');
+    const searchQuery = searchInput.value.trim();
+    const clearBtn = document.getElementById('floatingSearchClear');
+    
+    // Show/hide clear button
+    if (searchQuery.length > 0) {
+        clearBtn.classList.add('show');
+    } else {
+        clearBtn.classList.remove('show');
+        hideFloatingSearchResults();
+        return;
+    }
+    
+    // If Enter key is pressed
+    if (event.key === 'Enter') {
+        performFloatingSearch(searchQuery);
+        return;
+    }
+    
+    // Debounce search
+    clearTimeout(floatingSearchTimeout);
+    floatingSearchTimeout = setTimeout(() => {
+        performFloatingSearch(searchQuery);
+    }, 300);
+}
+
+// Perform search with floating search
+function performFloatingSearch(query) {
+    if (query.length < 2) {
+        hideFloatingSearchResults();
+        return;
+    }
+    
+    const searchResults = searchProductsAndTags(query);
+    displayFloatingSearchResults(searchResults, query);
+}
+
+// Display floating search results
+function displayFloatingSearchResults(searchData, query) {
+    const resultsContainer = document.getElementById('floatingSearchResults');
+    const { products, tags } = searchData;
+    
+    if (products.length === 0 && tags.length === 0) {
+        resultsContainer.innerHTML = `
+            <div class="search-no-results">
+                <i class="fas fa-search" style="font-size: 32px; color: #d1d5db; margin-bottom: 10px; display: block;"></i>
+                <p style="text-align: center; color: #6b7280; font-size: 14px;">
+                    No results for "<strong>${query}</strong>"
+                </p>
+                <p style="text-align: center; color: #9ca3af; font-size: 12px; margin-top: 5px;">
+                    Try different keywords
+                </p>
+            </div>
+        `;
+        resultsContainer.classList.add('show');
+        return;
+    }
+    
+    let resultsHTML = '';
+    
+    // Add tag section
+    if (tags.length > 0) {
+        resultsHTML += `
+            <div class="search-tag-section">
+                <div class="search-tag-title">
+                    <i class="fas fa-tags"></i>
+                    <span>Popular Tags</span>
+                </div>
+                <div class="search-tag-list">
+                    ${tags.map(tag => `
+                        <div class="search-tag-item" onclick="filterProductsByTag('${tag}'); closeFloatingSearch();">
+                            #${tag}
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+    }
+    
+    // Add product results
+    if (products.length > 0) {
+        products.forEach(product => {
+            const category = product.category || detectCategory(product.name || '');
+            const price = product.price || generatePrice(0);
+            const title = product.name || generateTitle('', category);
+            const imageUrl = product.mainImage || product.images?.[0]?.url || product.url || '';
+            const productId = product.firebaseId || product.id;
+            const productTags = productTagMap[productId] || product.tags || [];
+            
+            // Apply Cloudinary transformations
+            let displayImageUrl = imageUrl;
+            if (imageUrl.includes('res.cloudinary.com')) {
+                displayImageUrl = imageUrl.replace('/upload/', '/upload/w_80,h_80,c_fill/');
+            }
+            
+            resultsHTML += `
+                <div class="search-result-item" onclick="goToProductFromFloatingSearch('${productId}');">
+                    <img src="${displayImageUrl || 'https://via.placeholder.com/50x50/cccccc/ffffff?text=Product'}" 
+                         alt="${title}" 
+                         class="search-result-image">
+                    <div class="search-result-info">
+                        <div class="search-result-title">${highlightText(title, query)}</div>
+                        <span class="search-result-category">${category.charAt(0).toUpperCase() + category.slice(1)}</span>
+                        ${productTags.length > 0 ? `
+                            <div class="search-result-tags">
+                                ${productTags.slice(0, 2).map(tag => 
+                                    `<span class="search-result-tag">#${tag}</span>`
+                                ).join('')}
+                            </div>
+                        ` : ''}
+                    </div>
+                    <div class="search-result-price">GHS ₵${price.toFixed(2)}</div>
+                </div>
+            `;
+        });
+    }
+    
+    resultsContainer.innerHTML = resultsHTML;
+    resultsContainer.classList.add('show');
+}
+
+// Go to product from floating search
+function goToProductFromFloatingSearch(productId) {
+    const product = allProducts.find(p => 
+        (p.firebaseId && p.firebaseId === productId) || 
+        (p.id && p.id === productId)
+    );
+    
+    if (product) {
+        const category = product.category || detectCategory(product.name || '');
+        filterProductsByCategory(category);
+        closeFloatingSearch();
+        
+        // Highlight the product
+        setTimeout(() => {
+            const productCard = document.querySelector(`[data-product-id="${productId}"]`);
+            if (productCard) {
+                productCard.style.animation = 'pulse 1s';
+                setTimeout(() => {
+                    productCard.style.animation = '';
+                }, 1000);
+            }
+        }, 500);
+    }
+}
+
+// Clear floating search
+function clearFloatingSearch() {
+    const searchInput = document.getElementById('floatingSearchInput');
+    const clearBtn = document.getElementById('floatingSearchClear');
+    const resultsContainer = document.getElementById('floatingSearchResults');
+    
+    searchInput.value = '';
+    clearBtn.classList.remove('show');
+    resultsContainer.classList.remove('show');
+    searchInput.focus();
+}
+
+// Hide floating search results
+function hideFloatingSearchResults() {
+    const resultsContainer = document.getElementById('floatingSearchResults');
+    resultsContainer.classList.remove('show');
+}
+
+// Close floating search
+function closeFloatingSearch() {
+    const container = document.getElementById('floatingSearchInputContainer');
+    const btn = document.getElementById('floatingSearchBtn');
+    
+    container.classList.remove('show');
+    btn.classList.remove('pulse');
+    isFloatingSearchOpen = false;
+    clearFloatingSearch();
+    
+    // Restore body scrolling
+    document.body.style.overflow = '';
+}
+
+// Highlight text in search results
+function highlightText(text, query) {
+    if (!text || !query) return text;
+    
+    const lowerText = text.toLowerCase();
+    const lowerQuery = query.toLowerCase();
+    const index = lowerText.indexOf(lowerQuery);
+    
+    if (index === -1) return text;
+    
+    const before = text.substring(0, index);
+    const match = text.substring(index, index + query.length);
+    const after = text.substring(index + query.length);
+    
+    return `${before}<span style="background: #fff3cd; padding: 1px 3px; border-radius: 3px; color: #856404;">${match}</span>${after}`;
+}
+
+// Initialize floating search
+function initFloatingSearch() {
+    // Close floating search when clicking outside
+    document.addEventListener('click', (event) => {
+        const floatingContainer = document.getElementById('floatingSearchContainer');
+        const floatingBtn = document.getElementById('floatingSearchBtn');
+        const floatingInputContainer = document.getElementById('floatingSearchInputContainer');
+        
+        if (isFloatingSearchOpen && 
+            !floatingContainer.contains(event.target) && 
+            event.target !== floatingBtn) {
+            closeFloatingSearch();
+        }
+    });
+    
+    // Close with Escape key
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && isFloatingSearchOpen) {
+            closeFloatingSearch();
+        }
+    });
+    
+    // Auto-focus search on mobile when opened
+    document.getElementById('floatingSearchInput').addEventListener('focus', function() {
+        if (window.innerWidth <= 768) {
+            setTimeout(() => {
+                this.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 300);
+        }
+    });
+    
+    console.log('✅ Floating search initialized');
+}
+
+// Add to existing DOMContentLoaded event
+document.addEventListener('DOMContentLoaded', function() {
+    // Add this line to your existing DOMContentLoaded
+    initFloatingSearch();
+});
+
+// Make functions globally available
+window.toggleFloatingSearch = toggleFloatingSearch;
+window.handleFloatingSearch = handleFloatingSearch;
+window.clearFloatingSearch = clearFloatingSearch;
+window.closeFloatingSearch = closeFloatingSearch;
 </script>
 <script type="module" src="script.js"></script>
 </body>
