@@ -3302,6 +3302,25 @@ body.search-open {
         padding-right: 10px !important;
     }
 }
+/* QUICK FIX: Prevent logo click on mobile */
+@media (max-width: 768px) {
+    .logo a {
+        pointer-events: none !important;
+    }
+    
+    .logo-main, .logo-tagline {
+        user-select: none !important;
+        -webkit-user-select: none !important;
+        -moz-user-select: none !important;
+        -ms-user-select: none !important;
+    }
+    
+    /* Add spacing between search toggle and other elements */
+    .mobile-search-toggle {
+        margin-right: 10px !important;
+    }
+}
+
     </style>
 </head>
 <body>
