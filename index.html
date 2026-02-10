@@ -3302,6 +3302,11 @@ body.search-open {
         padding-right: 10px !important;
     }
 }
+/* Hide the newsletter section */
+.newsletter-section {
+    display: none !important;
+}
+
     </style>
 </head>
 <body>
@@ -3405,6 +3410,11 @@ body.search-open {
         <i class="fas fa-search"></i>
     </button>
 </div>
+<a href="admin-login.html"
+   id="secretAdminLink"
+   style="display:none; position:fixed; bottom:20px; right:20px;">
+   <i class="fas fa-lock"></i> Admin Access
+</a>
 
 
   <!-- Hero Section -->
@@ -8153,77 +8163,56 @@ window.refreshMessages = refreshMessages;
 <script>
 // =============== BREVO NEWSLETTER INTEGRATION ===============
 
-// Brevo configuration - USING YOUR ACTUAL API KEY
-const BREVO_CONFIG = {
-    apiKey: '', // ✅ Your actual API key
-    listId: '2', // ✅ Your list ID from screenshot
-    apiUrl: 'https://api.brevo.com/v3/contacts'
-};
-
 // Initialize Brevo newsletter form
 function initBrevoNewsletter() {
     const newsletterForm = document.getElementById('brevoNewsletterForm');
-    
     if (!newsletterForm) return;
-    
+
     newsletterForm.addEventListener('submit', async function(e) {
         e.preventDefault();
-        
+
         const emailInput = document.getElementById('brevoEmail');
         const subscribeBtn = document.getElementById('subscribeBtn');
         const subscribeText = document.getElementById('subscribeText');
         const subscribeSpinner = document.getElementById('subscribeSpinner');
-        const messageDiv = document.getElementById('newsletterMessage');
-        
+
         const email = emailInput.value.trim();
-        
-        // Validate email
+
         if (!isValidEmail(email)) {
             showNewsletterMessage('Please enter a valid email address', 'error');
             return;
         }
-        
-        // Show loading state
+
+        // Loading state
         subscribeBtn.disabled = true;
         subscribeText.style.display = 'none';
         subscribeSpinner.style.display = 'inline';
-        
+
         try {
-            // Subscribe to Brevo
-            const result = await subscribeToBrevo(email);
-            
+            const result = await subscribeToServer(email);
+
             if (result.success) {
-                // Show success message
                 showNewsletterMessage(
-                    '<i class="fas fa-check-circle"></i> Thank you! You\'ve been subscribed to our newsletter.',
+                    '<i class="fas fa-check-circle"></i> Thank you! You\'ve been subscribed.',
                     'success'
                 );
-                
-                // Reset form
                 newsletterForm.reset();
-                
-                // Save to localStorage to remember subscription
                 localStorage.setItem('kindadys_newsletter_subscribed', 'true');
-                
-                // Optional: Show different UI for subscribed users
                 showSubscribedState();
-                
             } else {
                 showNewsletterMessage(
-                    `<i class="fas fa-exclamation-circle"></i> ${result.message}`,
+                    `<i class="fas fa-exclamation-circle"></i> ${result.message || 'Subscription failed'}`,
                     'error'
                 );
             }
-            
+
         } catch (error) {
-            console.error('Brevo subscription error:', error);
+            console.error('Subscription error:', error);
             showNewsletterMessage(
                 '<i class="fas fa-exclamation-triangle"></i> Something went wrong. Please try again later.',
                 'error'
             );
-            
         } finally {
-            // Reset button state
             subscribeBtn.disabled = false;
             subscribeText.style.display = 'inline';
             subscribeSpinner.style.display = 'none';
@@ -8231,84 +8220,38 @@ function initBrevoNewsletter() {
     });
 }
 
-// Subscribe to Brevo
-async function subscribeToBrevo(email) {
-    try {
-        // Prepare contact data for Brevo API
-        const contactData = {
-            email: email,
-            listIds: [parseInt(BREVO_CONFIG.listId)],
-            updateEnabled: true,
-            attributes: {
-                SOURCE: 'Kindady Website',
-                SUBSCRIBED_AT: new Date().toISOString(),
-                COUNTRY: 'Ghana',
-                LANGUAGE: 'English'
-            }
-        };
-        
-        // Make API call to Brevo
-        const response = await fetch(BREVO_CONFIG.apiUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'api-key': BREVO_CONFIG.apiKey
-            },
-            body: JSON.stringify(contactData)
-        });
-        
-        const data = await response.json();
-        
-        // Handle response
-        if (response.ok) {
-            return {
-                success: true,
-                message: 'Successfully subscribed to newsletter',
-                data: data
-            };
-        } else {
-            // Handle specific error cases
-            let errorMessage = 'Failed to subscribe';
-            
-            if (data.code === 'duplicate_parameter') {
-                errorMessage = 'This email is already subscribed';
-            } else if (data.message) {
-                errorMessage = data.message;
-            }
-            
-            return {
-                success: false,
-                message: errorMessage
-            };
-        }
-        
-    } catch (error) {
-        console.error('Brevo API error:', error);
-        throw error;
-    }
-}
+// Call server endpoint
+async function subscribeToServer(email) {
+    const response = await fetch('/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+    });
 
-// Show newsletter message
-function showNewsletterMessage(message, type = 'success') {
-    const messageDiv = document.getElementById('newsletterMessage');
-    
-    if (!messageDiv) return;
-    
-    // Set styling based on type
-    messageDiv.className = `newsletter-message ${type}`;
-    messageDiv.innerHTML = message;
-    messageDiv.style.display = 'block';
-    
-    // Auto-hide after 5 seconds
-    setTimeout(() => {
-        messageDiv.style.display = 'none';
-    }, 5000);
+    if (!response.ok) {
+        throw new Error(`Server responded with status ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data;
 }
 
 // Email validation
 function isValidEmail(email) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(email);
+}
+
+// Show message
+function showNewsletterMessage(message, type = 'success') {
+    const messageDiv = document.getElementById('newsletterMessage');
+    if (!messageDiv) return;
+
+    messageDiv.className = `newsletter-message ${type}`;
+    messageDiv.innerHTML = message;
+    messageDiv.style.display = 'block';
+
+    setTimeout(() => { messageDiv.style.display = 'none'; }, 5000);
 }
 
 // Show subscribed state
@@ -8328,15 +8271,12 @@ function showSubscribedState() {
     }
 }
 
-// Reset newsletter form
+// Reset form
 function resetNewsletterForm() {
     const newsletterForm = document.getElementById('brevoNewsletterForm');
     if (newsletterForm) {
         newsletterForm.innerHTML = `
-            <input type="email" 
-                   id="brevoEmail" 
-                   placeholder="Your email address" 
-                   required>
+            <input type="email" id="brevoEmail" placeholder="Your email address" required>
             <button type="submit" class="btn btn-primary" id="subscribeBtn">
                 <span id="subscribeText">Subscribe</span>
                 <span id="subscribeSpinner" style="display: none;">
@@ -8349,265 +8289,20 @@ function resetNewsletterForm() {
     }
 }
 
-// Check if already subscribed on page load
+// Check subscription on load
 function checkExistingSubscription() {
-    const isSubscribed = localStorage.getItem('kindadys_newsletter_subscribed');
-    
-    if (isSubscribed === 'true') {
+    if (localStorage.getItem('kindadys_newsletter_subscribed') === 'true') {
         showSubscribedState();
     }
 }
 
-// Test Brevo connection (for admin)
-function testBrevoConnection() {
-    const testEmail = 'test@kindady.com';
-    
-    fetch(BREVO_CONFIG.apiUrl, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'api-key': BREVO_CONFIG.apiKey
-        },
-        body: JSON.stringify({
-            email: testEmail,
-            listIds: [parseInt(BREVO_CONFIG.listId)],
-            updateEnabled: false
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.id) {
-            console.log('✅ Brevo connection successful!');
-            alert('Brevo is working correctly!');
-        } else if (data.code === 'duplicate_parameter') {
-            console.log('✅ Brevo connection successful (email already exists)');
-            alert('Brevo is working correctly!');
-        } else {
-            console.error('❌ Brevo error:', data);
-            alert('Brevo error: ' + (data.message || 'Check configuration'));
-        }
-    })
-    .catch(error => {
-        console.error('❌ Connection failed:', error);
-        alert('Connection failed. Check API key.');
-    });
-}
-
-// Initialize on page load
 document.addEventListener('DOMContentLoaded', function() {
     initBrevoNewsletter();
     checkExistingSubscription();
-    
 });
-
-// Add test button (remove this in production)
-function addTestButton() {
-    const testBtn = document.createElement('button');
-    testBtn.innerHTML = '<i class="fas fa-vial"></i> Test Brevo';
-    testBtn.className = 'test-brevo-btn';
-    testBtn.style.cssText = `
-        position: fixed;
-        bottom: 80px;
-        right: 20px;
-        background: #667eea;
-        color: white;
-        border: none;
-        padding: 10px 15px;
-        border-radius: 5px;
-        cursor: pointer;
-        z-index: 1000;
-        font-size: 12px;
-    `;
-    testBtn.onclick = testBrevoConnection;
-    document.body.appendChild(testBtn);
-}
-
-// CSS Styles for newsletter
-const newsletterStyles = `
-    /* Newsletter Section Styles */
-    .newsletter-section {
-        padding: 60px 0;
-        border-top: 1px solid #fbcfe8;
-        border-bottom: 1px solid #fbcfe8;
-        margin: 40px 0;
-    }
-    
-    .newsletter-box {
-        background: white;
-        border-radius: 20px;
-        padding: 40px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        box-shadow: 0 10px 40px rgba(237, 100, 166, 0.1);
-        gap: 40px;
-    }
-    
-    .newsletter-content h3 {
-        color: #1a365d;
-        font-size: 28px;
-        margin-bottom: 10px;
-        font-family: 'Playfair Display', serif;
-    }
-    
-    .newsletter-content p {
-        color: #6b7280;
-        font-size: 16px;
-        margin-bottom: 15px;
-    }
-    
-    .privacy-note {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        color: #9ca3af;
-        font-size: 13px;
-    }
-    
-    .privacy-note i {
-        color: #ed64a6;
-    }
-    
-    .newsletter-form {
-        flex: 0 0 400px;
-    }
-    
-    #brevoNewsletterForm {
-        display: flex;
-        gap: 10px;
-    }
-    
-    #brevoNewsletterForm input[type="email"] {
-        flex: 1;
-        padding: 12px 20px;
-        border: 2px solid #e5e7eb;
-        border-radius: 10px;
-        font-family: 'Poppins', sans-serif;
-        font-size: 14px;
-        transition: all 0.3s ease;
-    }
-    
-    #brevoNewsletterForm input[type="email"]:focus {
-        outline: none;
-        border-color: #ed64a6;
-        box-shadow: 0 0 0 3px rgba(237, 100, 166, 0.1);
-    }
-    
-    #newsletterMessage {
-        margin-top: 10px;
-        padding: 10px 15px;
-        border-radius: 8px;
-        font-size: 14px;
-        animation: slideDown 0.3s ease;
-    }
-    
-    @keyframes slideDown {
-        from {
-            opacity: 0;
-            transform: translateY(-10px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-    
-    .newsletter-message.success {
-        background: #d1fae5;
-        color: #065f46;
-        border-left: 4px solid #10b981;
-    }
-    
-    .newsletter-message.error {
-        background: #fee2e2;
-        color: #991b1b;
-        border-left: 4px solid #ef4444;
-    }
-    
-    .newsletter-message.info {
-        background: #eff6ff;
-        color: #1e40af;
-        border-left: 4px solid #3b82f6;
-    }
-    
-    .already-subscribed {
-        text-align: center;
-        padding: 30px;
-        background: #f0fdf4;
-        border-radius: 12px;
-        border: 2px solid #10b981;
-        width: 100%;
-    }
-    
-    .already-subscribed i {
-        color: #10b981;
-        font-size: 40px;
-        margin-bottom: 15px;
-    }
-    
-    .already-subscribed p {
-        color: #065f46;
-        margin: 0;
-        font-weight: 600;
-        font-size: 16px;
-    }
-    
-    .already-subscribed small {
-        color: #059669;
-        display: block;
-        margin-top: 5px;
-        font-size: 13px;
-    }
-    
-    .btn-outline {
-        background: white;
-        border: 2px solid #10b981;
-        color: #10b981;
-        padding: 8px 20px;
-        border-radius: 6px;
-        cursor: pointer;
-        font-weight: 500;
-        transition: all 0.3s;
-    }
-    
-    .btn-outline:hover {
-        background: #10b981;
-        color: white;
-    }
-    
-    /* Responsive Styles */
-    @media (max-width: 768px) {
-        .newsletter-box {
-            flex-direction: column;
-            text-align: center;
-            padding: 30px;
-            gap: 25px;
-        }
-        
-        .newsletter-form {
-            flex: none;
-            width: 100%;
-        }
-        
-        #brevoNewsletterForm {
-            flex-direction: column;
-        }
-        
-        #brevoNewsletterForm input[type="email"] {
-            width: 100%;
-        }
-        
-        .already-subscribed {
-            padding: 20px;
-        }
-    }
-`;
-
-// Inject styles
-const newsletterStyleSheet = document.createElement('style');
-newsletterStyleSheet.textContent = newsletterStyles;
-document.head.appendChild(newsletterStyleSheet);
 </script>
+
+
 <script>
 // ===== FLOATING SEARCH FUNCTIONALITY =====
 
@@ -8912,6 +8607,24 @@ window.handleFloatingSearch = handleFloatingSearch;
 window.clearFloatingSearch = clearFloatingSearch;
 window.closeFloatingSearch = closeFloatingSearch;
 </script>
+<script>
+let buffer = "";
+const secret = "stephanie12mensah"; // change this anytime
+
+document.addEventListener("keydown", (e) => {
+    buffer += e.key.toLowerCase();
+
+    if (buffer.length > secret.length) {
+        buffer = buffer.slice(-secret.length);
+    }
+
+    if (buffer === secret) {
+        document.getElementById("secretAdminLink").style.display = "block";
+        console.log("👀 Admin link revealed");
+    }
+});
+</script>
+
 <script type="module" src="script.js"></script>
 </body>
 </html>

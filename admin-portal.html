@@ -1,0 +1,1267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kindady's Admin Portal</title>
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDfpoqyjtO7VueYtcGEYTfkWHOl4YNG7sk",
+            authDomain: "kindadys-9924e.firebaseapp.com",
+            projectId: "kindadys-9924e",
+            storageBucket: "kindadys-9924e.firebasestorage.app",
+            messagingSenderId: "772017587580",
+            appId: "1:772017587580:web:82cd5c27edf6bfc44c50f9",
+            measurementId: "G-D74KTPX92D"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        
+        // Export to global scope
+        window.firebaseAuth = auth;
+        window.firebaseSignOut = signOut;
+        window.firebaseOnAuthStateChanged = onAuthStateChanged;
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .admin-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        /* Header */
+        .admin-header {
+            background: white;
+            border-radius: 20px;
+            padding: 30px 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 5px solid #667eea;
+        }
+        
+        .header-left h1 {
+            color: #1a365d;
+            font-size: 28px;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .header-left h1 i {
+            color: #ed64a6;
+        }
+        
+        .header-left p {
+            color: #6b7280;
+            font-size: 14px;
+        }
+        
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .user-info {
+            text-align: right;
+        }
+        
+        .user-email {
+            color: #4a5568;
+            font-weight: 500;
+            font-size: 15px;
+        }
+        
+        .user-status {
+            color: #10b981;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 3px;
+        }
+        
+        .logout-btn {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .logout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(239, 68, 68, 0.2);
+        }
+        
+        /* Quick Access Section */
+        .quick-access {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+        
+        .section-title {
+            color: #1a365d;
+            font-size: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section-title i {
+            color: #ed64a6;
+        }
+        
+        .access-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+        
+        .access-card {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 20px;
+            border: 2px solid #e2e8f0;
+            transition: all 0.3s;
+        }
+        
+        .access-card:hover {
+            border-color: #667eea;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.1);
+        }
+        
+        .access-title {
+            color: #2d3748;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .access-title i {
+            color: #667eea;
+            font-size: 14px;
+        }
+        
+        .access-desc {
+            color: #718096;
+            font-size: 13px;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+        
+        .access-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: #667eea;
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .access-btn:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+        }
+        
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .dashboard-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+            border-color: #e2e8f0;
+        }
+        
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+        }
+        
+        .card-title {
+            color: #1a365d;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .card-desc {
+            color: #718096;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+        
+        .card-actions {
+            margin-top: 25px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .card-btn {
+            flex: 1;
+            padding: 12px 15px;
+            border-radius: 10px;
+            font-weight: 500;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+            border: 2px solid;
+        }
+        
+        .primary-btn {
+            background: linear-gradient(135deg, #ed64a6 0%, #667eea 100%);
+            color: white;
+            border-color: transparent;
+        }
+        
+        .primary-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(237, 100, 166, 0.2);
+        }
+        
+        .secondary-btn {
+            background: white;
+            color: #667eea;
+            border-color: #667eea;
+        }
+        
+        .secondary-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+        
+        /* Hidden Tools Section */
+        .hidden-tools {
+            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+            border: 2px solid #f59e0b;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .hidden-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .hidden-header i {
+            color: #d97706;
+            font-size: 24px;
+        }
+        
+        .hidden-header h2 {
+            color: #92400e;
+            font-size: 20px;
+        }
+        
+        .hidden-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .hidden-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            text-decoration: none;
+            color: #4b5563;
+            border: 2px solid #f59e0b;
+            transition: all 0.3s;
+        }
+        
+        .hidden-link:hover {
+            background: #f59e0b;
+            color: white;
+            transform: translateY(-3px);
+        }
+        
+        .hidden-link i {
+            color: #d97706;
+            font-size: 16px;
+            transition: color 0.3s;
+        }
+        
+        .hidden-link:hover i {
+            color: white;
+        }
+        
+        .hidden-text {
+            flex: 1;
+        }
+        
+        .hidden-title {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 3px;
+        }
+        
+        .hidden-desc {
+            font-size: 11px;
+            opacity: 0.8;
+        }
+        
+        /* Quick Stats */
+        .quick-stats {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 20px;
+            background: #f8fafc;
+            border-radius: 10px;
+        }
+        
+        .stat-number {
+            font-size: 32px;
+            font-weight: 700;
+            color: #1a365d;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            color: #718096;
+            font-size: 14px;
+        }
+        
+        /* Security Notice */
+        .security-notice {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            border: 2px solid #10b981;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 40px;
+            color: #065f46;
+        }
+        
+        .security-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .security-header i {
+            font-size: 24px;
+            color: #059669;
+        }
+        
+        .security-header h3 {
+            font-size: 18px;
+            color: #065f46;
+        }
+        
+        .security-content ul {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+        
+        .security-content li {
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .admin-header {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+                padding: 25px;
+            }
+            
+            .header-left, .header-right {
+                width: 100%;
+            }
+            
+            .user-info {
+                text-align: center;
+            }
+            
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .card-actions {
+                flex-direction: column;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .hidden-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Loading State */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Logout Confirmation */
+        .logout-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+        
+        .logout-modal.show {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .logout-content {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            animation: slideUp 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .logout-icon {
+            font-size: 48px;
+            color: #ef4444;
+            margin-bottom: 20px;
+        }
+        
+        .logout-text {
+            color: #1a365d;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .logout-subtext {
+            color: #718096;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+        
+        .logout-actions {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .cancel-btn {
+            flex: 1;
+            padding: 14px;
+            background: #e2e8f0;
+            color: #4a5568;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .cancel-btn:hover {
+            background: #cbd5e0;
+        }
+        
+        .confirm-logout-btn {
+            flex: 1;
+            padding: 14px;
+            background: #ef4444;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .confirm-logout-btn:hover {
+            background: #dc2626;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+    </div>
+    
+    <!-- Logout Confirmation Modal -->
+    <div class="logout-modal" id="logoutModal">
+        <div class="logout-content">
+            <div class="logout-icon">
+                <i class="fas fa-sign-out-alt"></i>
+            </div>
+            <div class="logout-text">Logout Confirmation</div>
+            <div class="logout-subtext">
+                Are you sure you want to logout from the admin portal?<br>
+                You will need to login again to access admin features.
+            </div>
+            <div class="logout-actions">
+                <button class="cancel-btn" id="cancelLogout">Cancel</button>
+                <button class="confirm-logout-btn" id="confirmLogout">Yes, Logout</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="admin-container">
+        <!-- Header -->
+        <header class="admin-header">
+            <div class="header-left">
+                <h1><i class="fas fa-user-shield"></i> Admin Dashboard</h1>
+                <p>Kindady's E-tail Management System</p>
+            </div>
+            <div class="header-right">
+                <div class="user-info">
+                    <div class="user-email" id="userEmail">Loading...</div>
+                    <div class="user-status">
+                        <i class="fas fa-circle" style="font-size: 8px;"></i>
+                        <span>Admin Online</span>
+                    </div>
+                </div>
+                <button class="logout-btn" id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </header>
+        
+        <!-- Quick Access Section -->
+        <section class="quick-access">
+            <h2 class="section-title">
+                <i class="fas fa-bolt"></i>
+                Quick Access
+            </h2>
+            <div class="access-grid">
+                <div class="access-card">
+                    <h3 class="access-title">
+                        <i class="fas fa-store"></i>
+                        Main Store
+                    </h3>
+                    <p class="access-desc">View your live store as customers see it</p>
+                    <a href="index.html" target="_blank" class="access-btn">
+                        <i class="fas fa-external-link-alt"></i> Visit Store
+                    </a>
+                </div>
+                
+                <div class="access-card">
+                    <h3 class="access-title">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        Product Upload
+                    </h3>
+                    <p class="access-desc">Upload new products to your store</p>
+                    <a href="upload.html" target="_blank" class="access-btn">
+                        <i class="fas fa-upload"></i> Upload Products
+                    </a>
+                </div>
+                
+                <div class="access-card">
+                    <h3 class="access-title">
+                        <i class="fas fa-chart-line"></i>
+                        Seller Dashboard
+                    </h3>
+                    <p class="access-desc">Manage all products and inventory</p>
+                    <a href="seller.html" target="_blank" class="access-btn">
+                        <i class="fas fa-tachometer-alt"></i> Open Dashboard
+                    </a>
+                </div>
+                
+                <div class="access-card">
+                    <h3 class="access-title">
+                        Subscribers
+                    </h3>
+                    <p class="access-desc">People on Newsletter</p>
+ <a href="admin-subscribers.html" target="_blank" class="access-btn"></a>
+                      
+                </div>
+            </div>
+        </section>
+        
+        <!-- Hidden Admin Tools Section -->
+        <section class="hidden-tools">
+            <div class="hidden-header">
+                <i class="fas fa-tools"></i>
+                <h2>Hidden Admin Tools</h2>
+            </div>
+            <div class="hidden-grid">
+                <!-- Notification Test Tools -->
+                <a href="#" onclick="testNotificationSystem(); return false;" class="hidden-link">
+                    <i class="fas fa-bell"></i>
+                    <div class="hidden-text">
+                        <div class="hidden-title">Test Notification System</div>
+                        <div class="hidden-desc">Send test WhatsApp notifications</div>
+                    </div>
+                </a>
+                
+                <!-- Direct Upload Link -->
+                <a href="upload.html" target="_blank" class="hidden-link">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <div class="hidden-text">
+                        <div class="hidden-title">Direct Upload Page</div>
+                        <div class="hidden-desc">Upload individual products</div>
+                    </div>
+                </a>
+                
+                <!-- Seller Dashboard -->
+                <a href="seller.html" target="_blank" class="hidden-link">
+                    <i class="fas fa-chart-bar"></i>
+                    <div class="hidden-text">
+                        <div class="hidden-title">Seller Dashboard</div>
+                        <div class="hidden-desc">Full product management</div>
+                    </div>
+                </a>
+                
+                <!-- Store Frontend -->
+                <a href="index.html" target="_blank" class="hidden-link">
+                    <i class="fas fa-store"></i>
+                    <div class="hidden-text">
+                        <div class="hidden-title">Live Store View</div>
+                        <div class="hidden-desc">See customer-facing store</div>
+                    </div>
+                </a>
+                
+                <!-- Contact Messages -->
+                <a href="index.html#contact" target="_blank" class="hidden-link">
+                    <i class="fas fa-envelope"></i>
+                    <div class="hidden-text">
+                        <div class="hidden-title">Contact Form</div>
+                        <div class="hidden-desc">View customer messages</div>
+                    </div>
+                </a>
+                
+                <!-- Admin Settings -->
+                <a href="#" onclick="showAdminSettings(); return false;" class="hidden-link">
+                    <i class="fas fa-cog"></i>
+                    <div class="hidden-text">
+                        <div class="hidden-title">Admin Settings</div>
+                        <div class="hidden-desc">Configure admin preferences</div>
+                    </div>
+                </a>
+                
+                <!-- View Orders -->
+                <a href="#" onclick="viewRecentOrders(); return false;" class="hidden-link">
+                    <i class="fas fa-shopping-bag"></i>
+                    <div class="hidden-text">
+                        <div class="hidden-title">View Orders</div>
+                        <div class="hidden-desc">See recent customer orders</div>
+                    </div>
+                </a>
+                
+                <!-- Export Data -->
+                <a href="#" onclick="exportData(); return false;" class="hidden-link">
+                    <i class="fas fa-download"></i>
+                    <div class="hidden-text">
+                        <div class="hidden-title">Export Data</div>
+                        <div class="hidden-desc">Download store data (CSV/Excel)</div>
+                    </div>
+                </a>
+            </div>
+        </section>
+        
+        <!-- Quick Stats -->
+        <div class="quick-stats">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number" id="productCount">0</div>
+                    <div class="stat-label">Total Products</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="orderCount">0</div>
+                    <div class="stat-label">Recent Orders</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="messageCount">0</div>
+                    <div class="stat-label">New Messages</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">24/7</div>
+                    <div class="stat-label">Access</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Dashboard Grid -->
+        <div class="dashboard-grid">
+            <!-- Product Management -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-box"></i>
+                    </div>
+                    <div>
+                        <h3 class="card-title">Product Management</h3>
+                        <p class="card-desc">Add, edit, or remove products from your store</p>
+                    </div>
+                </div>
+                <div class="card-actions">
+                    <a href="seller.html" target="_blank" class="card-btn primary-btn">
+                        <i class="fas fa-cloud-upload-alt"></i> Seller Dashboard
+                    </a>
+                    <a href="upload.html" target="_blank" class="card-btn secondary-btn">
+                        <i class="fas fa-plus"></i> Quick Upload
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Order Management -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-shopping-bag"></i>
+                    </div>
+                    <div>
+                        <h3 class="card-title">Order Management</h3>
+                        <p class="card-desc">View and manage customer orders</p>
+                    </div>
+                </div>
+                <div class="card-actions">
+                    <button class="card-btn primary-btn" onclick="viewRecentOrders()">
+                        <i class="fas fa-list"></i> View Orders
+                    </button>
+                    <button class="card-btn secondary-btn" onclick="testNotificationSystem()">
+                        <i class="fas fa-bell"></i> Test Notifications
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Customer Messages -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div>
+                        <h3 class="card-title">Customer Support</h3>
+                        <p class="card-desc">Manage customer inquiries and messages</p>
+                    </div>
+                </div>
+                <div class="card-actions">
+                    <button class="card-btn primary-btn" onclick="viewMessages()">
+                        <i class="fas fa-inbox"></i> View Messages
+                    </button>
+                    <a href="index.html#contact" target="_blank" class="card-btn secondary-btn">
+                        <i class="fas fa-comments"></i> Contact Form
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Analytics -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div>
+                        <h3 class="card-title">Store Analytics</h3>
+                        <p class="card-desc">View store performance and insights</p>
+                    </div>
+                </div>
+                <div class="card-actions">
+                    <button class="card-btn primary-btn" onclick="viewAnalytics()">
+                        <i class="fas fa-chart-bar"></i> View Analytics
+                    </button>
+                    <button class="card-btn secondary-btn" onclick="exportData()">
+                        <i class="fas fa-download"></i> Export Data
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Security Notice -->
+        <div class="security-notice">
+            <div class="security-header">
+                <i class="fas fa-shield-alt"></i>
+                <h3>Security Best Practices</h3>
+            </div>
+            <div class="security-content">
+                <ul>
+                    <li>Always logout when finished using the admin panel</li>
+                    <li>Never share your login credentials with anyone</li>
+                    <li>Use strong, unique passwords for admin accounts</li>
+                    <li>Regularly monitor login activity</li>
+                    <li>Keep this admin portal URL confidential</li>
+                    <li>Bookmark this page for quick access: <strong>admin-portal.html</strong></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        const logoutModal = document.getElementById('logoutModal');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const cancelLogout = document.getElementById('cancelLogout');
+        const confirmLogout = document.getElementById('confirmLogout');
+        const userEmail = document.getElementById('userEmail');
+        
+        // Check authentication on page load
+        window.addEventListener('load', async function() {
+            loadingOverlay.style.display = 'flex';
+            
+            // Check Firebase authentication
+            window.firebaseOnAuthStateChanged(window.firebaseAuth, async (user) => {
+                if (user) {
+                    // User is signed in
+                    console.log('✅ Admin authenticated:', user.email);
+                    userEmail.textContent = user.email;
+                    localStorage.setItem('kindadys_admin_logged_in', 'true');
+                    localStorage.setItem('kindadys_admin_email', user.email);
+                    
+                    // Load dashboard data
+                    await loadDashboardData();
+                    
+                    // Hide loading overlay
+                    setTimeout(() => {
+                        loadingOverlay.style.display = 'none';
+                    }, 500);
+                    
+                } else {
+                    // User is not signed in, redirect to login
+                    console.log('❌ Not authenticated, redirecting to login');
+                    localStorage.removeItem('kindadys_admin_logged_in');
+                    localStorage.removeItem('kindadys_admin_email');
+                    window.location.href = 'admin-login.html';
+                }
+            });
+            
+            // Set timeout in case auth check fails
+            setTimeout(() => {
+                if (loadingOverlay.style.display === 'flex') {
+                    loadingOverlay.style.display = 'none';
+                }
+            }, 5000);
+        });
+        
+        // Load dashboard data
+        async function loadDashboardData() {
+            try {
+                // You can fetch real data from Firestore here
+                // For now, we'll use placeholder data
+                document.getElementById('productCount').textContent = 'Loading...';
+                document.getElementById('orderCount').textContent = '0';
+                document.getElementById('messageCount').textContent = '0';
+                
+                // Simulate loading data
+                setTimeout(() => {
+                    document.getElementById('productCount').textContent = '24';
+                    document.getElementById('orderCount').textContent = '5';
+                    document.getElementById('messageCount').textContent = '3';
+                }, 1000);
+                
+            } catch (error) {
+                console.error('Error loading dashboard data:', error);
+            }
+        }
+        
+        // Logout functionality
+        logoutBtn.addEventListener('click', function() {
+            logoutModal.classList.add('show');
+        });
+        
+        cancelLogout.addEventListener('click', function() {
+            logoutModal.classList.remove('show');
+        });
+        
+        confirmLogout.addEventListener('click', async function() {
+            try {
+                await window.firebaseSignOut(window.firebaseAuth);
+                
+                // Clear local storage
+                localStorage.removeItem('kindadys_admin_logged_in');
+                localStorage.removeItem('kindadys_admin_email');
+                
+                // Redirect to login page
+                window.location.href = 'admin-login.html';
+                
+            } catch (error) {
+                console.error('Logout error:', error);
+                alert('Logout failed. Please try again.');
+            }
+        });
+        
+        // Dashboard functions
+        
+        function testNotificationSystem() {
+            alert('🔔 Test notification system activated!\n\nThis would send a test WhatsApp notification to the seller number (0595736002).\n\nCheck your WhatsApp for the test notification.');
+            
+            // Optional: Open WhatsApp with test message
+            setTimeout(() => {
+                const testMessage = encodeURIComponent(
+                    '🔔 TEST NOTIFICATION - Kindady\'s E-tail\n\n' +
+                    'This is a test notification from the admin panel.\n' +
+                    'Time: ' + new Date().toLocaleString() + '\n' +
+                    'Status: Test successful\n\n' +
+                    'This confirms that WhatsApp notifications are working.'
+                );
+                window.open(`https://wa.me/233595736002?text=${testMessage}`, '_blank');
+            }, 500);
+        }
+        
+        function viewRecentOrders() {
+            alert('📋 Recent Orders\n\nThis would show a list of recent customer orders from Firestore.\n\nFeatures:\n• View order details\n• Update order status\n• Contact customers\n• Process payments');
+            
+            // Optional: Create a modal with order data
+            showModal('Recent Orders', `
+                <div style="padding: 20px;">
+                    <h4>Order Management</h4>
+                    <p>This feature would connect to your Firestore database to show:</p>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>Customer orders with details</li>
+                        <li>Payment status tracking</li>
+                        <li>Delivery information</li>
+                        <li>Order history</li>
+                    </ul>
+                    <div style="margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 10px;">
+                        <strong>Quick Actions:</strong>
+                        <button onclick="alert('Feature: Mark order as shipped')" style="margin: 5px; padding: 8px 15px; background: #10b981; color: white; border: none; border-radius: 5px;">Mark as Shipped</button>
+                        <button onclick="alert('Feature: Contact customer')" style="margin: 5px; padding: 8px 15px; background: #3b82f6; color: white; border: none; border-radius: 5px;">Contact Customer</button>
+                        <button onclick="alert('Feature: View order details')" style="margin: 5px; padding: 8px 15px; background: #8b5cf6; color: white; border: none; border-radius: 5px;">View Details</button>
+                    </div>
+                </div>
+            `);
+        }
+        
+        function viewMessages() {
+            alert('📨 Customer Messages\n\nThis would show customer inquiries from the contact form.\n\nYou can:\n• Read messages\n• Reply via WhatsApp\n• Mark as read\n• Archive messages');
+            
+            // Optional: Show message interface
+            showModal('Customer Messages', `
+                <div style="padding: 20px;">
+                    <h4>Message Inbox</h4>
+                    <div style="margin-top: 15px;">
+                        <div style="padding: 10px; background: #f0f9ff; border-radius: 8px; margin-bottom: 10px;">
+                            <strong>John Doe</strong> - Just now<br>
+                            <small>Question about shoe sizes</small>
+                            <button onclick="replyToMessage('John Doe')" style="float: right; padding: 5px 10px; background: #25D366; color: white; border: none; border-radius: 4px; font-size: 12px;">Reply via WhatsApp</button>
+                        </div>
+                        <div style="padding: 10px; background: #f0f9ff; border-radius: 8px; margin-bottom: 10px;">
+                            <strong>Sarah Smith</strong> - 2 hours ago<br>
+                            <small>Order #ORD-12345 inquiry</small>
+                            <button onclick="replyToMessage('Sarah Smith')" style="float: right; padding: 5px 10px; background: #25D366; color: white; border: none; border-radius: 4px; font-size: 12px;">Reply</button>
+                        </div>
+                        <div style="padding: 10px; background: #f0f9ff; border-radius: 8px;">
+                            <strong>Michael Brown</strong> - Yesterday<br>
+                            <small>Product availability question</small>
+                            <button onclick="replyToMessage('Michael Brown')" style="float: right; padding: 5px 10px; background: #25D366; color: white; border: none; border-radius: 4px; font-size: 12px;">Reply</button>
+                        </div>
+                    </div>
+                </div>
+            `);
+        }
+        
+        function replyToMessage(customerName) {
+            alert(`📱 Opening WhatsApp to reply to ${customerName}...\n\nPhone number: 0595736002\n\nYou can send your reply directly via WhatsApp.`);
+            
+            const message = encodeURIComponent(`Hello ${customerName}, regarding your inquiry to Kindady's E-tail...`);
+            window.open(`https://wa.me/233595736002?text=${message}`, '_blank');
+        }
+        
+        function viewAnalytics() {
+            alert('📊 Store Analytics\n\nThis would show detailed analytics about your store:\n\n• Sales performance\n• Popular products\n• Customer demographics\n• Traffic sources\n• Conversion rates');
+            
+            showModal('Store Analytics', `
+                <div style="padding: 20px;">
+                    <h4>Analytics Dashboard</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">
+                        <div style="background: #f0f9ff; padding: 15px; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 24px; font-weight: bold; color: #3b82f6;">₵2,450</div>
+                            <div style="font-size: 12px; color: #6b7280;">Total Revenue</div>
+                        </div>
+                        <div style="background: #f0fdf4; padding: 15px; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 24px; font-weight: bold; color: #10b981;">45</div>
+                            <div style="font-size: 12px; color: #6b7280;">Total Orders</div>
+                        </div>
+                        <div style="background: #fef3c7; padding: 15px; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 24px; font-weight: bold; color: #f59e0b;">324</div>
+                            <div style="font-size: 12px; color: #6b7280;">Visitors</div>
+                        </div>
+                        <div style="background: #fef2f2; padding: 15px; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 24px; font-weight: bold; color: #ef4444;">12.5%</div>
+                            <div style="font-size: 12px; color: #6b7280;">Conversion Rate</div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 20px;">
+                        <strong>Top Products:</strong>
+                        <ol style="margin-left: 20px; margin-top: 10px;">
+                            <li>Designer Handbag - ₵450</li>
+                            <li>Leather Shoes - ₵380</li>
+                            <li>Perfume Set - ₵320</li>
+                            <li>Evening Dress - ₵280</li>
+                        </ol>
+                    </div>
+                </div>
+            `);
+        }
+        
+        function exportData() {
+            alert('📥 Export Data\n\nThis would export your store data in various formats:\n\n• Products (CSV/Excel)\n• Orders (CSV/Excel)\n• Customers (CSV)\n• Analytics (PDF)\n\nData would be downloaded to your computer.');
+            
+            showModal('Export Data', `
+                <div style="padding: 20px;">
+                    <h4>Export Options</h4>
+                    <div style="margin-top: 15px;">
+                        <div style="margin-bottom: 15px;">
+                            <strong>Select Data to Export:</strong>
+                            <div style="margin-top: 10px;">
+                                <label style="display: block; margin-bottom: 8px;">
+                                    <input type="checkbox" checked> Products Inventory
+                                </label>
+                                <label style="display: block; margin-bottom: 8px;">
+                                    <input type="checkbox" checked> Order History
+                                </label>
+                                <label style="display: block; margin-bottom: 8px;">
+                                    <input type="checkbox"> Customer List
+                                </label>
+                                <label style="display: block; margin-bottom: 8px;">
+                                    <input type="checkbox"> Sales Analytics
+                                </label>
+                            </div>
+                        </div>
+                        <div style="margin-bottom: 15px;">
+                            <strong>Export Format:</strong>
+                            <div style="margin-top: 10px;">
+                                <label style="display: inline-block; margin-right: 15px;">
+                                    <input type="radio" name="format" checked> CSV
+                                </label>
+                                <label style="display: inline-block; margin-right: 15px;">
+                                    <input type="radio" name="format"> Excel
+                                </label>
+                                <label style="display: inline-block;">
+                                    <input type="radio" name="format"> PDF
+                                </label>
+                            </div>
+                        </div>
+                        <button onclick="alert('Data export started. Download will begin shortly.')" style="width: 100%; padding: 12px; background: #10b981; color: white; border: none; border-radius: 8px; font-weight: bold;">Start Export</button>
+                    </div>
+                </div>
+            `);
+        }
+        
+        function showAdminSettings() {
+            showModal('Admin Settings', `
+                <div style="padding: 20px;">
+                    <h4>Admin Configuration</h4>
+                    <div style="margin-top: 15px;">
+                        <div style="margin-bottom: 15px;">
+                            <strong>Notification Settings:</strong>
+                            <div style="margin-top: 10px;">
+                                <label style="display: block; margin-bottom: 8px;">
+                                    <input type="checkbox" checked> WhatsApp Notifications
+                                </label>
+                                <label style="display: block; margin-bottom: 8px;">
+                                    <input type="checkbox" checked> Email Notifications
+                                </label>
+                                <label style="display: block; margin-bottom: 8px;">
+                                    <input type="checkbox"> SMS Notifications
+                                </label>
+                            </div>
+                        </div>
+                        <div style="margin-bottom: 15px;">
+                            <strong>Store Settings:</strong>
+                            <div style="margin-top: 10px;">
+                                <input type="text" placeholder="Store Name" value="Kindady's E-tail" style="width: 100%; padding: 8px; margin-bottom: 8px; border: 1px solid #e5e7eb; border-radius: 5px;">
+                                <input type="text" placeholder="Contact Number" value="0595736002" style="width: 100%; padding: 8px; margin-bottom: 8px; border: 1px solid #e5e7eb; border-radius: 5px;">
+                                <input type="email" placeholder="Store Email" value="kindadyetail@gmail.com" style="width: 100%; padding: 8px; border: 1px solid #e5e7eb; border-radius: 5px;">
+                            </div>
+                        </div>
+                        <button onclick="alert('Settings saved successfully!')" style="width: 100%; padding: 12px; background: #667eea; color: white; border: none; border-radius: 8px; font-weight: bold;">Save Settings</button>
+                    </div>
+                </div>
+            `);
+        }
+        
+        // Modal function
+        function showModal(title, content) {
+            const modal = document.createElement('div');
+            modal.innerHTML = `
+                <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 3000; display: flex; align-items: center; justify-content: center;">
+                    <div style="background: white; border-radius: 15px; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto;">
+                        <div style="padding: 20px; border-bottom: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: center;">
+                            <h3 style="margin: 0; color: #1a365d;">${title}</h3>
+                            <button onclick="this.parentElement.parentElement.parentElement.remove()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #6b7280;">×</button>
+                        </div>
+                        ${content}
+                        <div style="padding: 20px; border-top: 1px solid #e5e7eb; text-align: right;">
+                            <button onclick="this.parentElement.parentElement.parentElement.remove()" style="padding: 10px 20px; background: #e5e7eb; border: none; border-radius: 8px; cursor: pointer;">Close</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+        
+        // Auto-logout after 1 hour of inactivity
+        let inactivityTimer;
+        function resetInactivityTimer() {
+            clearTimeout(inactivityTimer);
+            inactivityTimer = setTimeout(() => {
+                alert('Session expired due to inactivity. Please login again.');
+                window.firebaseSignOut(window.firebaseAuth);
+                window.location.href = 'admin-login.html';
+            }, 60 * 60 * 1000); // 1 hour
+        }
+        
+        // Reset timer on user activity
+        ['click', 'mousemove', 'keypress', 'scroll'].forEach(event => {
+            document.addEventListener(event, resetInactivityTimer);
+        });
+        
+        // Initialize timer
+        resetInactivityTimer();
+        
+        // Keyboard shortcut to open main store in new tab
+        document.addEventListener('keydown', function(e) {
+            // Alt + S to open store
+            if (e.altKey && e.key === 's') {
+                window.open('index.html', '_blank');
+                e.preventDefault();
+            }
+            // Alt + D to open dashboard
+            if (e.altKey && e.key === 'd') {
+                window.open('seller.html', '_blank');
+                e.preventDefault();
+            }
+            // Alt + U to open upload
+            if (e.altKey && e.key === 'u') {
+                window.open('upload.html', '_blank');
+                e.preventDefault();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kindady's Admin Portal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .admin-portal {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        
+        .admin-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .admin-header h1 {
+            color: #1a365d;
+            margin-bottom: 10px;
+        }
+        
+        .admin-header p {
+            color: #6b7280;
+            font-size: 14px;
+        }
+        
+        .admin-links {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .admin-link {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 18px 20px;
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            color: #4b5563;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .admin-link:hover {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+        
+        .admin-link i {
+            font-size: 20px;
+            width: 30px;
+        }
+        
+        .link-info {
+            flex: 1;
+        }
+        
+        .link-title {
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+        
+        .link-desc {
+            font-size: 13px;
+            color: inherit;
+            opacity: 0.8;
+        }
+        
+        .security-note {
+            background: #f0f9ff;
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #bae6fd;
+            color: #0369a1;
+            font-size: 13px;
+            margin-top: 20px;
+        }
+        
+        .security-note i {
+            margin-right: 8px;
+        }
+        
+        .logout-btn {
+            width: 100%;
+            padding: 12px;
+            background: #ef4444;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 20px;
+        }
+        
+        .logout-btn:hover {
+            background: #dc2626;
+            transform: translateY(-2px);
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="admin-portal">
+        <div class="admin-header">
+            <h1><i class="fas fa-lock"></i> Admin Portal</h1>
+            <p>Kindady's E-tail Management System</p>
+        </div>
+        
+        <div class="admin-links">
+            <a href="seller.html" class="admin-link">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <div class="link-info">
+                    <div class="link-title">Product Upload Dashboard</div>
+                    <div class="link-desc">Add, edit, or remove products</div>
+                </div>
+                <i class="fas fa-arrow-right"></i>
+            </a>
+            
+            <a href="upload.html" class="admin-link">
+                <i class="fas fa-plus-circle"></i>
+                <div class="link-info">
+                    <div class="link-title">Quick Product Upload</div>
+                    <div class="link-desc">Upload individual products quickly</div>
+                </div>
+                <i class="fas fa-arrow-right"></i>
+            </a>
+            
+            <a href="#" class="admin-link" onclick="testNotificationSystem(); return false;">
+                <i class="fas fa-bell"></i>
+                <div class="link-info">
+                    <div class="link-title">Test Notifications</div>
+                    <div class="link-desc">Test WhatsApp order notifications</div>
+                </div>
+                <i class="fas fa-play"></i>
+            </a>
+            
+            <a href="#contact" class="admin-link" onclick="scrollToContact(); return false;">
+                <i class="fas fa-envelope"></i>
+                <div class="link-info">
+                    <div class="link-title">View Messages</div>
+                    <div class="link-desc">Check customer inquiries</div>
+                </div>
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+        
+        <div class="security-note">
+            <i class="fas fa-shield-alt"></i>
+            This portal is accessible only via secret keyboard combination
+        </div>
+        
+        <button class="logout-btn" onclick="logoutAdmin()">
+            <i class="fas fa-sign-out-alt"></i> Logout & Return to Main Site
+        </button>
+    </div>
+
+    <script>
+        function testNotificationSystem() {
+            // Call the test function from main page
+            if (window.opener) {
+                window.opener.testNotificationSystem();
+            } else {
+                alert('Test notification system would run here');
+                // You can copy the test function here if needed
+            }
+        }
+        
+        function scrollToContact() {
+            if (window.opener) {
+                window.opener.location.hash = '#contact';
+            }
+        }
+        
+        function logoutAdmin() {
+            // Close the admin window/tab
+            window.close();
+            
+            // If window won't close, redirect to main site
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 100);
+        }
+        
+        // Auto-close if opened directly without secret combo
+        setTimeout(() => {
+            if (!sessionStorage.getItem('admin_authorized')) {
+                alert('Unauthorized access. Redirecting...');
+                window.location.href = 'index.html';
+            }
+        }, 1000);
+    </script>
+</body>
+</html>
