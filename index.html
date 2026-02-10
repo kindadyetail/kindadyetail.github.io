@@ -3302,80 +3302,116 @@ body.search-open {
         padding-right: 10px !important;
     }
 }
-
-
-/* ===== MOBILE SEARCH CONFLICT FIX - 480px and below ===== */
+/* ===== COMPLETE MOBILE NAVIGATION FIX ===== */
 @media (max-width: 480px) {
-    /* Add more visual distinction for active search toggle */
+    /* Completely isolate click areas */
+    .nav-toggle,
+    .mobile-search-toggle,
+    .cart-icon,
+    .logo {
+        pointer-events: auto !important;
+        position: relative;
+        z-index: 10;
+    }
+    
+    /* Make sure nav container doesn't intercept clicks */
+    .nav-container {
+        pointer-events: none; /* Container doesn't get clicks */
+    }
+    
+    .nav-container > * {
+        pointer-events: auto; /* But children do */
+    }
+    
+    /* Search toggle active state - very clear */
     .mobile-search-toggle .search-toggle-btn.active {
         background: #ed64a6 !important;
         color: white !important;
-        transform: scale(1.05);
-        box-shadow: 0 0 0 3px rgba(237, 100, 166, 0.3);
+        transform: scale(1.1);
+        box-shadow: 0 0 0 3px rgba(237, 100, 166, 0.4);
+        border: 2px solid white !important;
     }
     
-    /* Ensure proper spacing between navigation elements */
+    /* Menu toggle when search is open */
+    body.search-open .nav-toggle {
+        opacity: 0.5;
+        transform: scale(0.9);
+    }
+    
+    /* Search container z-index */
+    .mobile-search-expandable {
+        z-index: 10000 !important;
+        pointer-events: auto !important;
+    }
+    
+    /* Prevent menu from overlapping search */
+    .nav-menu.show {
+        z-index: 9999;
+    }
+    
+    /* When search is open, menu items should not be clickable */
+    body.search-open .nav-menu:not(.show) {
+        pointer-events: none;
+    }
+    
+    /* Logo should never trigger menu */
+    .logo a {
+        pointer-events: auto !important;
+        display: block;
+    }
+    
+    /* Navigation items spacing */
     .nav-menu {
-        gap: 8px !important;
-        padding-right: 10px !important;
+        gap: 10px !important;
+        padding: 0 10px !important;
     }
     
     .mobile-search-toggle {
-        margin-left: 0 !important;
-        margin-right: 8px !important;
+        order: 2;
+        margin: 0 5px !important;
     }
     
     .nav-toggle {
-        margin-right: 12px !important;
+        order: 1;
+        margin-right: 10px !important;
     }
     
     .cart-icon {
-        margin-left: 8px !important;
+        order: 3;
+        margin-left: 5px !important;
     }
     
-    /* When search is open, slightly hide menu toggle */
-    body.search-open .nav-toggle {
-        opacity: 0.7;
-        pointer-events: none;
-    }
-    
-    /* When menu is open, hide search toggle */
-    .nav-menu.show ~ .mobile-search-expandable,
-    .nav-menu.show ~ .mobile-search-toggle .search-toggle-btn {
-        opacity: 0.5;
-        pointer-events: none;
-    }
-    
-    /* Ensure mobile search overlay is on top */
-    .mobile-search-overlay {
-        z-index: 9998 !important;
-    }
-    
-    .mobile-search-expandable {
-        z-index: 9999 !important;
+    .admin-nav-item {
+        order: 4;
     }
 }
 
-/* For very small screens (320px and below) */
+/* For very small screens */
 @media (max-width: 320px) {
     .nav-menu {
         gap: 5px !important;
+        padding: 0 5px !important;
     }
     
     .mobile-search-toggle .search-toggle-btn,
     .nav-toggle i,
     .cart-icon a {
-        width: 34px !important;
-        height: 34px !important;
+        width: 32px !important;
+        height: 32px !important;
+        font-size: 14px !important;
     }
 }
 
-/* Prevent body scrolling when search is open - enhanced */
+/* Body states */
 body.search-open {
     overflow: hidden !important;
     position: fixed !important;
     width: 100% !important;
     height: 100% !important;
+}
+
+body.menu-open {
+    overflow: hidden !important;
 }
     </style>
 </head>
@@ -7537,9 +7573,10 @@ window.proceedToCheckout = proceedToCheckout;
 
 // =============== CUTE MOBILE SEARCH FUNCTIONALITY ===============
 let mobileSearchTimeout = null;
-let mobileSearchOpen = false; // Track search state
+let mobileSearchOpen = false;
+let menuOpen = false; // Track menu state
 
-// Initialize mobile search - FIXED VERSION
+// Initialize mobile search - COMPREHENSIVE FIX
 function initMobileSearch() {
     const mobileSearchToggle = document.getElementById('mobileSearchToggle');
     const mobileSearchContainer = document.getElementById('mobileSearchContainer');
@@ -7548,31 +7585,54 @@ function initMobileSearch() {
     
     if (!mobileSearchToggle || !mobileSearchContainer) return;
     
-    // Toggle mobile search - WITH FIXED EVENT HANDLING
+    // Get the search toggle button inside the list item
+    const searchToggleBtn = mobileSearchToggle.querySelector('.search-toggle-btn');
+    
+    // Toggle mobile search - COMPLETE ISOLATION
+    if (searchToggleBtn) {
+        searchToggleBtn.addEventListener('click', function(e) {
+            console.log('Search button clicked directly');
+            e.preventDefault();
+            e.stopPropagation();
+            e.stopImmediatePropagation();
+            
+            const isOpen = mobileSearchContainer.classList.contains('show');
+            
+            if (isOpen) {
+                closeMobileSearch();
+            } else {
+                openMobileSearch();
+            }
+            
+            // Don't let the event reach the parent li or nav
+            return false;
+        }, true);
+    }
+    
+    // Also add to parent li but only as fallback
     mobileSearchToggle.addEventListener('click', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        e.stopImmediatePropagation();
-        
-        console.log('Mobile search toggle clicked');
-        
-        const isOpen = mobileSearchContainer.classList.contains('show');
-        
-        if (isOpen) {
-            closeMobileSearch();
-        } else {
-            openMobileSearch();
+        // Only handle if click is directly on the li (not the button)
+        if (e.target === mobileSearchToggle || e.target.tagName === 'LI') {
+            console.log('Search LI clicked - fallback');
+            e.preventDefault();
+            e.stopPropagation();
+            
+            const isOpen = mobileSearchContainer.classList.contains('show');
+            
+            if (isOpen) {
+                closeMobileSearch();
+            } else {
+                openMobileSearch();
+            }
         }
-        
-        return false; // Prevent any default behavior
-    }, true); // Use capture phase
+    }, true);
     
     // Clear button
     if (mobileSearchClear) {
         mobileSearchClear.addEventListener('click', function(e) {
             e.stopPropagation();
             clearMobileSearch();
-        });
+        }, true);
     }
     
     // Input handling
@@ -7580,19 +7640,19 @@ function initMobileSearch() {
         mobileSearchInput.addEventListener('input', (e) => {
             e.stopPropagation();
             handleMobileSearch(e);
-        });
+        }, true);
         
         mobileSearchInput.addEventListener('keyup', (e) => {
             e.stopPropagation();
             if (e.key === 'Enter') {
                 performMobileSearch(mobileSearchInput.value.trim());
             }
-        });
+        }, true);
         
         // Prevent input clicks from bubbling
         mobileSearchInput.addEventListener('click', (e) => {
             e.stopPropagation();
-        });
+        }, true);
     }
     
     // Close search on overlay click
@@ -7601,7 +7661,7 @@ function initMobileSearch() {
         if (overlay && overlay.classList.contains('active') && e.target === overlay) {
             closeMobileSearch();
         }
-    }, true); // Use capture phase
+    }, true);
     
     // Close on escape key
     document.addEventListener('keydown', (e) => {
@@ -7609,38 +7669,25 @@ function initMobileSearch() {
             closeMobileSearch();
         }
     });
-    
-    // FIX: Prevent menu toggle from interfering when search is open
-    const navToggle = document.getElementById('navToggle');
-    if (navToggle) {
-        const originalClick = navToggle.onclick;
-        navToggle.addEventListener('click', function(e) {
-            if (mobileSearchOpen) {
-                e.stopPropagation();
-                e.preventDefault();
-                closeMobileSearch();
-                return false;
-            }
-        }, true);
-    }
 }
 
 function openMobileSearch() {
     const container = document.getElementById('mobileSearchContainer');
     const input = document.getElementById('mobileUniversalSearch');
     const searchToggleBtn = document.querySelector('.mobile-search-toggle .search-toggle-btn');
+    const navMenu = document.getElementById('navMenu');
     
     if (!container || !input) return;
     
     console.log('Opening mobile search');
     
     // Close mobile menu if open
-    const navMenu = document.getElementById('navMenu');
     if (navMenu && navMenu.classList.contains('show')) {
         navMenu.classList.remove('show');
+        menuOpen = false;
     }
     
-    // Mark search as open
+    // Mark search as open, menu as closed
     mobileSearchOpen = true;
     
     // Update toggle button visual state
@@ -7703,6 +7750,7 @@ function closeMobileSearch() {
     removeMobileSearchOverlay();
 }
 
+// Rest of your functions remain the same...
 function handleMobileSearch(event) {
     const searchInput = document.getElementById('mobileUniversalSearch');
     const searchQuery = searchInput.value.trim();
@@ -7881,19 +7929,77 @@ document.addEventListener('DOMContentLoaded', function() {
     const navMenu = document.getElementById('navMenu');
     
     if (navToggle && navMenu) {
+        // Store original click handler
+        const originalClick = navToggle.onclick;
+        
         navToggle.addEventListener('click', function(e) {
-            // If search is open, close it instead of toggling menu
+            console.log('Nav toggle clicked');
+            
+            // If search is open, close it and don't open menu
             if (mobileSearchOpen) {
-                e.stopPropagation();
+                console.log('Search is open, closing it instead');
                 e.preventDefault();
+                e.stopPropagation();
                 closeMobileSearch();
                 return false;
             }
             
             // Otherwise, toggle menu normally
+            menuOpen = !menuOpen;
             navMenu.classList.toggle('show');
-        }, true); // Use capture phase
+            
+            // Close search if open (just in case)
+            if (mobileSearchOpen) {
+                closeMobileSearch();
+            }
+        }, true);
+        
+        // Also add click handler to hamburger icon specifically
+        const hamburgerIcon = navToggle.querySelector('i.fa-bars');
+        if (hamburgerIcon) {
+            hamburgerIcon.addEventListener('click', function(e) {
+                e.stopPropagation();
+            }, true);
+        }
     }
+    
+    // PREVENT CLICKS ON LOGO/NAME FROM TRIGGERING MENU
+    const logo = document.querySelector('.logo');
+    if (logo) {
+        logo.addEventListener('click', function(e) {
+            console.log('Logo clicked - stopping propagation');
+            e.stopPropagation();
+            // Logo clicks should only navigate to home, not trigger menu
+        }, true);
+    }
+    
+    // PREVENT CLICKS ON NAV LINKS FROM TRIGGERING MENU
+    const navLinks = document.querySelectorAll('.nav-link');
+    navLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            console.log('Nav link clicked - stopping propagation');
+            e.stopPropagation();
+            // Close menu if open (optional)
+            if (navMenu && navMenu.classList.contains('show')) {
+                navMenu.classList.remove('show');
+                menuOpen = false;
+            }
+        }, true);
+    });
+    
+    // Close menu when clicking outside
+    document.addEventListener('click', function(e) {
+        const navMenu = document.getElementById('navMenu');
+        const navToggle = document.getElementById('navToggle');
+        
+        if (navMenu && navMenu.classList.contains('show') && menuOpen) {
+            // If click is NOT on menu or toggle, close menu
+            if (!navMenu.contains(e.target) && !navToggle.contains(e.target)) {
+                navMenu.classList.remove('show');
+                menuOpen = false;
+            }
+        }
+    });
     
     // Make functions globally available
     window.clearMobileSearch = clearMobileSearch;
