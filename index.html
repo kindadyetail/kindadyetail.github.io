@@ -2975,306 +2975,180 @@ body.search-open {
     }
 }
 
-/* ===== HIDE "ALL PRODUCTS" FILTER BUTTON ===== */
-
-/* Hide the All Products filter button */
-.filter-btn[data-filter="all"] {
-    display: none !important;
-}
-
-/* If it has a specific onclick attribute */
-.filter-btn[onclick="filterProducts('all')"] {
-    display: none !important;
-}
-
-/* Alternative: Hide by button text content */
-.filter-btn:contains("All Products") {
-    display: none !important;
-}
-
-/* If the first filter button is All Products */
-.filters .filter-btn:first-child {
-    display: none !important;
-}
-
-/* Make sure the other buttons adjust properly */
-.filters {
-    justify-content: center;
-    gap: 10px;
-}
-
-/* For mobile grid layout */
-@media (max-width: 768px) {
-    .filters {
-        grid-template-columns: repeat(4, 1fr);
-    }
-    
-    .filter-btn[data-filter="all"] {
-        display: none !important;
-    }
-}
-
-/* ===== ULTRA SMALL SCREEN LAYOUT (iPhone SE, small phones) ===== */
+/* ===== FILTER LEFT, PRODUCT COUNT RIGHT AT 480px ===== */
 @media (max-width: 480px) {
+    /* Main container - horizontal layout */
     .products-controls {
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
-        margin-bottom: 1.5rem;
+        display: flex !important;
+        flex-direction: row !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        gap: 10px !important;
+        margin-bottom: 15px !important;
+        width: 100% !important;
+        flex-wrap: nowrap !important;
     }
     
-    /* Filter buttons - horizontal scrollable row */
+    /* Filter buttons container - on the LEFT */
     .filters {
-        order: 1;
-        display: flex;
-        flex-wrap: nowrap;
-        overflow-x: auto;
-        gap: 8px;
-        padding: 10px 0 15px;
-        margin: 0 -10px;
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: none;
-        width: calc(100% + 20px);
-        padding-left: 10px;
-        padding-right: 10px;
+        order: 1 !important;
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        grid-template-rows: auto auto !important;
+        gap: 4px !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        flex: 1 !important; /* Takes available space */
+        min-width: 0 !important; /* Allows shrinking */
+        overflow: visible !important;
     }
     
-    /* Hide scrollbar */
-    .filters::-webkit-scrollbar {
-        display: none;
-    }
-    
+    /* Make filter buttons compact */
     .filter-btn {
-        padding: 8px 16px;
-        font-size: 12px;
-        white-space: nowrap;
-        flex-shrink: 0;
-        min-width: fit-content;
-        border-radius: 20px;
-        border: 2px solid #e2e8f0;
-        background: white;
-        color: #4a5568;
-        font-weight: 500;
-        height: 36px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        padding: 6px 8px !important;
+        font-size: 0.75rem !important;
+        min-height: 30px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+        border-radius: 4px !important;
+        border-width: 1.5px !important;
+        text-align: center !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
     }
     
-    .filter-btn.active {
-        background: var(--primary-pink);
-        color: white;
-        border-color: var(--primary-pink);
-    }
-    
-    /* Hide "All Products" filter if still visible */
-    .filter-btn[data-filter="all"] {
-        display: none !important;
-    }
-    
-    /* Stats and refresh row - side by side */
+    /* Products stats container - on the RIGHT */
     .products-controls-row {
-        order: 2;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        width: 100%;
-        gap: 10px;
-        padding: 0 5px;
+        order: 2 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: flex-end !important;
+        gap: 8px !important;
+        flex-shrink: 0 !important; /* Don't shrink */
+        min-width: 100px !important; /* Minimum width */
+        padding: 0 !important;
+        margin: 0 !important;
     }
     
-    /* Product count - left side */
+    /* Product count/stats - smaller and on right */
     .products-stats {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        font-size: 11px;
-        padding: 6px 12px;
-        background: #f8f9fa;
-        border-radius: 18px;
-        color: #4a5568;
-        white-space: nowrap;
-        border: 1px solid #e2e8f0;
-        min-width: 100px;
-        max-width: 45%;
-        overflow: hidden;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 6px !important;
+        font-size: 0.7rem !important;
+        padding: 6px 10px !important;
+        background: #f8f9fa !important;
+        border-radius: 15px !important;
+        color: #4a5568 !important;
+        white-space: nowrap !important;
+        border: 1px solid #e2e8f0 !important;
+        width: 100% !important;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.05) !important;
+        text-align: center !important;
+        min-width: 100px !important;
     }
     
     .products-stats i {
-        color: var(--primary-pink);
-        font-size: 11px;
-        flex-shrink: 0;
+        color: var(--primary-pink) !important;
+        font-size: 0.7rem !important;
     }
     
     #productCount {
-        font-weight: 600;
-        color: var(--primary-navy);
-        font-size: 11px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
+        font-weight: 600 !important;
+        color: var(--primary-navy) !important;
+        font-size: 0.7rem !important;
     }
     
-    /* Refresh button - right side */
+    /* Refresh button - smaller and on right */
     .sync-button {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 5px;
-        padding: 6px 14px;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        border: none;
-        border-radius: 18px;
-        font-size: 11px;
-        font-weight: 500;
-        cursor: pointer;
-        white-space: nowrap;
-        min-width: 100px;
-        max-width: 45%;
-        text-align: center;
-        height: 34px;
-        flex-shrink: 0;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 4px !important;
+        padding: 6px 10px !important;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+        color: white !important;
+        border: none !important;
+        border-radius: 15px !important;
+        font-size: 0.7rem !important;
+        font-weight: 500 !important;
+        cursor: pointer !important;
+        transition: all 0.2s ease !important;
+        box-shadow: 0 2px 4px rgba(102, 126, 234, 0.15) !important;
+        white-space: nowrap !important;
+        width: 100% !important;
+        text-align: center !important;
+        min-width: 100px !important;
     }
     
     .sync-button:hover {
-        background: linear-gradient(135deg, #5a67d8 0%, #6b46a1 100%);
+        background: linear-gradient(135deg, #5a67d8 0%, #6b46a1 100%) !important;
+        transform: translateY(-1px) !important;
+        box-shadow: 0 3px 8px rgba(102, 126, 234, 0.25) !important;
     }
     
     .sync-button i {
-        font-size: 10px;
+        font-size: 0.65rem !important;
     }
     
     .sync-button .sync-text {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        font-size: 11px;
-    }
-}
-
-/* ===== EXTRA SMALL SCREENS (iPhone SE, Galaxy Fold) ===== */
-@media (max-width: 380px) {
-    .filters {
-        gap: 6px;
-        padding: 8px 0 12px;
+        font-size: 0.7rem !important;
     }
     
-    .filter-btn {
-        padding: 6px 12px;
-        font-size: 11px;
-        height: 34px;
-        min-width: 75px;
-    }
-    
-    .products-stats {
-        font-size: 10px;
-        padding: 5px 10px;
-        min-width: 90px;
-    }
-    
-    #productCount {
-        font-size: 10px;
-    }
-    
-    .sync-button {
-        padding: 5px 12px;
-        font-size: 10px;
-        min-width: 90px;
-        height: 32px;
-    }
-    
-    .sync-button i {
-        font-size: 9px;
-    }
-    
-    .sync-button .sync-text {
-        font-size: 10px;
-    }
-}
-
-/* ===== ULTRA SMALL (Under 320px) ===== */
-@media (max-width: 320px) {
-    .filters {
-        gap: 4px;
-    }
-    
-    .filter-btn {
-        padding: 5px 10px;
-        font-size: 10px;
-        height: 32px;
-        min-width: 70px;
-        border-radius: 18px;
-    }
-    
-    .products-stats {
-        font-size: 9px;
-        padding: 4px 8px;
-        min-width: 80px;
-        border-radius: 16px;
-    }
-    
-    .products-stats i {
-        font-size: 9px;
-    }
-    
-    #productCount {
-        font-size: 9px;
-    }
-    
-    .sync-button {
-        padding: 4px 10px;
-        font-size: 9px;
-        min-width: 80px;
-        height: 30px;
-        border-radius: 16px;
-    }
-    
-    .sync-button i {
-        font-size: 8px;
-    }
-    
-    .sync-button .sync-text {
-        font-size: 9px;
-    }
-}
-
-/* ===== PREVENT TEXT OVERFLOW IN FILTER BUTTONS ===== */
-.filter-btn span {
-    display: block;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    max-width: 100%;
-}
-
-/* For extra small screens, shorten button text if needed */
-@media (max-width: 350px) {
-    .filter-btn[data-filter="clothing"] span {
-        max-width: 60px;
-    }
-    
-    .filter-btn[data-filter="fragrance"] span {
-        max-width: 65px;
-    }
-    
-    .filter-btn[data-filter="footwear"] span {
-        max-width: 60px;
-    }
-    
-    .filter-btn[data-filter="accessories"] span {
-        max-width: 70px;
-    }
-}
-
-/* ===== ENSURE PROPER SPACING ===== */
-@media (max-width: 480px) {
-    .products-section .container {
-        padding: 0 10px;
-    }
-    
+    /* Products grid should be beneath */
     .products-grid {
-        margin-top: 0.5rem;
+        margin-top: 1rem !important;
+        clear: both !important;
+    }
+}
+
+/* For even smaller screens */
+@media (max-width: 400px) {
+    .filters {
+        gap: 3px !important;
+    }
+    
+    .filter-btn {
+        padding: 5px 6px !important;
+        font-size: 0.7rem !important;
+        min-height: 28px !important;
+    }
+    
+    .products-stats {
+        font-size: 0.65rem !important;
+        padding: 5px 8px !important;
+        min-width: 90px !important;
+    }
+    
+    .sync-button {
+        font-size: 0.65rem !important;
+        padding: 5px 8px !important;
+        min-width: 90px !important;
+    }
+}
+
+/* For very small screens */
+@media (max-width: 350px) {
+    .products-controls {
+        flex-direction: column !important;
+        align-items: stretch !important;
+    }
+    
+    .filters {
+        width: 100% !important;
+        margin-bottom: 10px !important;
+    }
+    
+    .products-controls-row {
+        width: 100% !important;
+        align-items: stretch !important;
+    }
+    
+    .products-stats,
+    .sync-button {
+        min-width: auto !important;
     }
 }
     </style>
