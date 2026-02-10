@@ -3302,6 +3302,81 @@ body.search-open {
         padding-right: 10px !important;
     }
 }
+
+
+/* ===== MOBILE SEARCH CONFLICT FIX - 480px and below ===== */
+@media (max-width: 480px) {
+    /* Add more visual distinction for active search toggle */
+    .mobile-search-toggle .search-toggle-btn.active {
+        background: #ed64a6 !important;
+        color: white !important;
+        transform: scale(1.05);
+        box-shadow: 0 0 0 3px rgba(237, 100, 166, 0.3);
+    }
+    
+    /* Ensure proper spacing between navigation elements */
+    .nav-menu {
+        gap: 8px !important;
+        padding-right: 10px !important;
+    }
+    
+    .mobile-search-toggle {
+        margin-left: 0 !important;
+        margin-right: 8px !important;
+    }
+    
+    .nav-toggle {
+        margin-right: 12px !important;
+    }
+    
+    .cart-icon {
+        margin-left: 8px !important;
+    }
+    
+    /* When search is open, slightly hide menu toggle */
+    body.search-open .nav-toggle {
+        opacity: 0.7;
+        pointer-events: none;
+    }
+    
+    /* When menu is open, hide search toggle */
+    .nav-menu.show ~ .mobile-search-expandable,
+    .nav-menu.show ~ .mobile-search-toggle .search-toggle-btn {
+        opacity: 0.5;
+        pointer-events: none;
+    }
+    
+    /* Ensure mobile search overlay is on top */
+    .mobile-search-overlay {
+        z-index: 9998 !important;
+    }
+    
+    .mobile-search-expandable {
+        z-index: 9999 !important;
+    }
+}
+
+/* For very small screens (320px and below) */
+@media (max-width: 320px) {
+    .nav-menu {
+        gap: 5px !important;
+    }
+    
+    .mobile-search-toggle .search-toggle-btn,
+    .nav-toggle i,
+    .cart-icon a {
+        width: 34px !important;
+        height: 34px !important;
+    }
+}
+
+/* Prevent body scrolling when search is open - enhanced */
+body.search-open {
+    overflow: hidden !important;
+    position: fixed !important;
+    width: 100% !important;
+    height: 100% !important;
+}
     </style>
 </head>
 <body>
@@ -7462,8 +7537,9 @@ window.proceedToCheckout = proceedToCheckout;
 
 // =============== CUTE MOBILE SEARCH FUNCTIONALITY ===============
 let mobileSearchTimeout = null;
+let mobileSearchOpen = false; // Track search state
 
-// Initialize mobile search
+// Initialize mobile search - FIXED VERSION
 function initMobileSearch() {
     const mobileSearchToggle = document.getElementById('mobileSearchToggle');
     const mobileSearchContainer = document.getElementById('mobileSearchContainer');
@@ -7472,10 +7548,13 @@ function initMobileSearch() {
     
     if (!mobileSearchToggle || !mobileSearchContainer) return;
     
-    // Toggle mobile search
-    mobileSearchToggle.addEventListener('click', (e) => {
+    // Toggle mobile search - WITH FIXED EVENT HANDLING
+    mobileSearchToggle.addEventListener('click', function(e) {
         e.preventDefault();
         e.stopPropagation();
+        e.stopImmediatePropagation();
+        
+        console.log('Mobile search toggle clicked');
         
         const isOpen = mobileSearchContainer.classList.contains('show');
         
@@ -7484,51 +7563,90 @@ function initMobileSearch() {
         } else {
             openMobileSearch();
         }
-    });
+        
+        return false; // Prevent any default behavior
+    }, true); // Use capture phase
     
     // Clear button
     if (mobileSearchClear) {
-        mobileSearchClear.addEventListener('click', clearMobileSearch);
+        mobileSearchClear.addEventListener('click', function(e) {
+            e.stopPropagation();
+            clearMobileSearch();
+        });
     }
     
     // Input handling
     if (mobileSearchInput) {
         mobileSearchInput.addEventListener('input', (e) => {
+            e.stopPropagation();
             handleMobileSearch(e);
         });
         
         mobileSearchInput.addEventListener('keyup', (e) => {
+            e.stopPropagation();
             if (e.key === 'Enter') {
                 performMobileSearch(mobileSearchInput.value.trim());
             }
         });
+        
+        // Prevent input clicks from bubbling
+        mobileSearchInput.addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
     }
     
     // Close search on overlay click
-    document.addEventListener('click', (e) => {
+    document.addEventListener('click', function(e) {
         const overlay = document.getElementById('mobileSearchOverlay');
         if (overlay && overlay.classList.contains('active') && e.target === overlay) {
             closeMobileSearch();
         }
-    });
+    }, true); // Use capture phase
     
     // Close on escape key
     document.addEventListener('keydown', (e) => {
-        const container = document.getElementById('mobileSearchContainer');
-        if (e.key === 'Escape' && container && container.classList.contains('show')) {
+        if (e.key === 'Escape' && mobileSearchOpen) {
             closeMobileSearch();
         }
     });
+    
+    // FIX: Prevent menu toggle from interfering when search is open
+    const navToggle = document.getElementById('navToggle');
+    if (navToggle) {
+        const originalClick = navToggle.onclick;
+        navToggle.addEventListener('click', function(e) {
+            if (mobileSearchOpen) {
+                e.stopPropagation();
+                e.preventDefault();
+                closeMobileSearch();
+                return false;
+            }
+        }, true);
+    }
 }
 
 function openMobileSearch() {
     const container = document.getElementById('mobileSearchContainer');
     const input = document.getElementById('mobileUniversalSearch');
+    const searchToggleBtn = document.querySelector('.mobile-search-toggle .search-toggle-btn');
+    
+    if (!container || !input) return;
+    
+    console.log('Opening mobile search');
     
     // Close mobile menu if open
     const navMenu = document.getElementById('navMenu');
     if (navMenu && navMenu.classList.contains('show')) {
         navMenu.classList.remove('show');
+    }
+    
+    // Mark search as open
+    mobileSearchOpen = true;
+    
+    // Update toggle button visual state
+    if (searchToggleBtn) {
+        searchToggleBtn.classList.add('active');
+        searchToggleBtn.setAttribute('aria-label', 'Close search');
     }
     
     // Add class to body to prevent scrolling
@@ -7550,6 +7668,20 @@ function openMobileSearch() {
 function closeMobileSearch() {
     const container = document.getElementById('mobileSearchContainer');
     const results = document.getElementById('mobileSearchResultsDropdown');
+    const searchToggleBtn = document.querySelector('.mobile-search-toggle .search-toggle-btn');
+    
+    if (!container) return;
+    
+    console.log('Closing mobile search');
+    
+    // Mark search as closed
+    mobileSearchOpen = false;
+    
+    // Update toggle button visual state
+    if (searchToggleBtn) {
+        searchToggleBtn.classList.remove('active');
+        searchToggleBtn.setAttribute('aria-label', 'Open search');
+    }
     
     // Remove class from body to restore scrolling
     document.body.classList.remove('search-open');
@@ -7559,6 +7691,12 @@ function closeMobileSearch() {
     if (results) {
         results.classList.remove('show');
         results.innerHTML = '';
+    }
+    
+    // Clear any search timeout
+    if (mobileSearchTimeout) {
+        clearTimeout(mobileSearchTimeout);
+        mobileSearchTimeout = null;
     }
     
     // Remove overlay
@@ -7713,7 +7851,10 @@ function addMobileSearchOverlay() {
         overlay = document.createElement('div');
         overlay.id = 'mobileSearchOverlay';
         overlay.className = 'mobile-search-overlay';
-        overlay.onclick = closeMobileSearch;
+        overlay.onclick = function(e) {
+            e.stopPropagation();
+            closeMobileSearch();
+        };
         document.body.appendChild(overlay);
     }
     overlay.classList.add('active');
@@ -7734,6 +7875,25 @@ function removeMobileSearchOverlay() {
 // Initialize on DOM ready
 document.addEventListener('DOMContentLoaded', function() {
     initMobileSearch();
+    
+    // FIX: Update mobile menu initialization to prevent conflict
+    const navToggle = document.getElementById('navToggle');
+    const navMenu = document.getElementById('navMenu');
+    
+    if (navToggle && navMenu) {
+        navToggle.addEventListener('click', function(e) {
+            // If search is open, close it instead of toggling menu
+            if (mobileSearchOpen) {
+                e.stopPropagation();
+                e.preventDefault();
+                closeMobileSearch();
+                return false;
+            }
+            
+            // Otherwise, toggle menu normally
+            navMenu.classList.toggle('show');
+        }, true); // Use capture phase
+    }
     
     // Make functions globally available
     window.clearMobileSearch = clearMobileSearch;
