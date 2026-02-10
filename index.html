@@ -3194,6 +3194,114 @@ body.search-open {
         justify-content: center !important;
     }
 }
+/* ===== FIX MOBILE SEARCH TOGGLE CONFLICT ===== */
+@media (max-width: 768px) {
+    /* Ensure mobile search toggle is properly positioned */
+    .mobile-search-toggle {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        order: 2 !important; /* Position it before cart icon */
+        margin-left: auto !important;
+        list-style: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    
+    /* Make the search toggle button match your existing style */
+    .mobile-search-toggle .search-toggle-btn {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 32px !important;
+        height: 32px !important;
+        border-radius: 50% !important;
+        background: rgba(237, 100, 166, 0.1) !important; /* Your pink background */
+        color: #ed64a6 !important; /* Your pink color */
+        border: none !important;
+        cursor: pointer !important;
+        font-size: 16px !important;
+        position: relative !important;
+        z-index: 1002 !important; /* Higher than menu toggle */
+        transition: all 0.3s ease !important;
+        box-shadow: 0 2px 5px rgba(237, 100, 166, 0.2) !important;
+    }
+    
+    /* Hover effect - maintains your color scheme */
+    .mobile-search-toggle .search-toggle-btn:hover {
+        background: rgba(237, 100, 166, 0.2) !important;
+        transform: translateY(-2px) !important;
+        box-shadow: 0 4px 10px rgba(237, 100, 166, 0.3) !important;
+    }
+    
+    /* Active state when search is open */
+    .mobile-search-toggle .search-toggle-btn.active {
+        background: #ed64a6 !important; /* Solid pink when active */
+        color: white !important;
+    }
+    
+    /* Ensure search toggle doesn't interfere with menu toggle */
+    .nav-toggle {
+        order: 1 !important;
+        z-index: 1001 !important;
+        margin-right: 10px !important;
+    }
+    
+    /* Adjust cart icon position */
+    .cart-icon {
+        order: 3 !important;
+        margin-left: 10px !important;
+    }
+    
+    /* Position the elements in the nav menu */
+    .nav-menu {
+        display: flex !important;
+        align-items: center !important;
+        gap: 10px !important;
+        padding-right: 15px !important;
+    }
+    
+    /* Prevent menu from overlapping search */
+    .nav-menu.show ~ .mobile-search-expandable {
+        display: none !important;
+    }
+    
+    /* Fix for the logo positioning to prevent overlap */
+    .logo {
+        position: absolute !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        z-index: 1000 !important;
+    }
+    
+    /* Make sure nav container has proper spacing */
+    .nav-container {
+        padding: 0 15px !important;
+        min-height: 60px !important;
+    }
+}
+
+/* For smaller screens (480px) */
+@media (max-width: 480px) {
+    .mobile-search-toggle {
+        margin-left: 5px !important;
+    }
+    
+    .mobile-search-toggle .search-toggle-btn {
+        width: 30px !important;
+        height: 30px !important;
+        font-size: 14px !important;
+    }
+    
+    .nav-container {
+        padding: 0 10px !important;
+    }
+    
+    .nav-menu {
+        gap: 8px !important;
+        padding-right: 10px !important;
+    }
+}
     </style>
 </head>
 <body>
@@ -3243,11 +3351,12 @@ body.search-open {
             <li><a href="#contact" class="nav-link">Contact</a></li>
             
             <!-- Mobile Search Toggle Button -->
-            <li class="mobile-search-toggle" id="mobileSearchToggle">
-                <a href="#search" class="nav-link search-toggle-btn">
-                    <i class="fas fa-search"></i>
-                </a>
-            </li>
+          <!-- Mobile Search Toggle Button -->
+<li class="mobile-search-toggle" id="mobileSearchToggle">
+    <button class="search-toggle-btn" aria-label="Open search" style="background: rgba(237, 100, 166, 0.1); color: #ed64a6; border: none;">
+        <i class="fas fa-search"></i>
+    </button>
+</li>
             
             <li class="cart-icon">
                 <a href="#cart" id="cartBtn">
