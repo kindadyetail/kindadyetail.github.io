@@ -3194,85 +3194,113 @@ body.search-open {
         justify-content: center !important;
     }
 }
-/* Mobile Search Overlay */
-.mobile-search-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 999;
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(3px);
+/* ===== FIX MOBILE SEARCH TOGGLE CONFLICT ===== */
+@media (max-width: 768px) {
+    /* Ensure mobile search toggle is properly positioned */
+    .mobile-search-toggle {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        order: 2 !important; /* Position it before cart icon */
+        margin-left: auto !important;
+        list-style: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    
+    /* Make the search toggle button match your existing style */
+    .mobile-search-toggle .search-toggle-btn {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 32px !important;
+        height: 32px !important;
+        border-radius: 50% !important;
+        background: rgba(237, 100, 166, 0.1) !important; /* Your pink background */
+        color: #ed64a6 !important; /* Your pink color */
+        border: none !important;
+        cursor: pointer !important;
+        font-size: 16px !important;
+        position: relative !important;
+        z-index: 1002 !important; /* Higher than menu toggle */
+        transition: all 0.3s ease !important;
+        box-shadow: 0 2px 5px rgba(237, 100, 166, 0.2) !important;
+    }
+    
+    /* Hover effect - maintains your color scheme */
+    .mobile-search-toggle .search-toggle-btn:hover {
+        background: rgba(237, 100, 166, 0.2) !important;
+        transform: translateY(-2px) !important;
+        box-shadow: 0 4px 10px rgba(237, 100, 166, 0.3) !important;
+    }
+    
+    /* Active state when search is open */
+    .mobile-search-toggle .search-toggle-btn.active {
+        background: #ed64a6 !important; /* Solid pink when active */
+        color: white !important;
+    }
+    
+    /* Ensure search toggle doesn't interfere with menu toggle */
+    .nav-toggle {
+        order: 1 !important;
+        z-index: 1001 !important;
+        margin-right: 10px !important;
+    }
+    
+    /* Adjust cart icon position */
+    .cart-icon {
+        order: 3 !important;
+        margin-left: 10px !important;
+    }
+    
+    /* Position the elements in the nav menu */
+    .nav-menu {
+        display: flex !important;
+        align-items: center !important;
+        gap: 10px !important;
+        padding-right: 15px !important;
+    }
+    
+    /* Prevent menu from overlapping search */
+    .nav-menu.show ~ .mobile-search-expandable {
+        display: none !important;
+    }
+    
+    /* Fix for the logo positioning to prevent overlap */
+    .logo {
+        position: absolute !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        z-index: 1000 !important;
+    }
+    
+    /* Make sure nav container has proper spacing */
+    .nav-container {
+        padding: 0 15px !important;
+        min-height: 60px !important;
+    }
 }
 
-.mobile-search-overlay.active {
-    opacity: 1;
-    visibility: visible;
-}
-
-/* Prevent body scroll when search is open */
-body.search-open {
-    overflow: hidden;
-}
-
-/* Ensure the mobile search container is properly positioned */
-.mobile-search-expandable {
-    position: absolute;
-    top: 100%;
-    left: 10px;
-    right: 10px;
-    background: white;
-    z-index: 1000;
-    border-radius: 16px;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
-    border: 1px solid #e5e7eb;
-    max-height: 0;
-    overflow: hidden;
-    opacity: 0;
-    transform: translateY(-10px) scale(0.95);
-    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-    margin-top: 10px;
-}
-
-.mobile-search-expandable.show {
-    max-height: 70vh;
-    opacity: 1;
-    transform: translateY(0) scale(1);
-}
-
-/* Mobile search results */
-.mobile-search-expand-results {
-    max-height: calc(70vh - 60px); /* Subtract search box height */
-    overflow-y: auto;
-}
-
-/* Make sure the mobile search toggle button is visible */
-.mobile-search-toggle {
-    display: flex !important;
-}
-
-.mobile-search-toggle .search-toggle-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    background: rgba(237, 100, 166, 0.1);
-    color: #ed64a6;
-    border: none;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-size: 18px;
-}
-
-.mobile-search-toggle .search-toggle-btn:hover {
-    background: rgba(237, 100, 166, 0.2);
-    transform: scale(1.05);
+/* For smaller screens (480px) */
+@media (max-width: 480px) {
+    .mobile-search-toggle {
+        margin-left: 5px !important;
+    }
+    
+    .mobile-search-toggle .search-toggle-btn {
+        width: 30px !important;
+        height: 30px !important;
+        font-size: 14px !important;
+    }
+    
+    .nav-container {
+        padding: 0 10px !important;
+    }
+    
+    .nav-menu {
+        gap: 8px !important;
+        padding-right: 10px !important;
+    }
 }
     </style>
 </head>
@@ -3315,34 +3343,34 @@ body.search-open {
             <i class="fas fa-bars"></i>
         </div>
         
-        <!-- In your nav-menu -->
-<ul class="nav-menu" id="navMenu">
-    <li><a href="#home" class="nav-link active">Home</a></li>
-    <li><a href="#collections" class="nav-link">Collections</a></li>
-    <li><a href="#products" class="nav-link">Products</a></li>
-    <li><a href="#about" class="nav-link">Our Story</a></li>
-    <li><a href="#contact" class="nav-link">Contact</a></li>
-    
-    <!-- Mobile Search Toggle Button -->
-    <li class="mobile-search-toggle" id="mobileSearchToggle">
-        <button class="search-toggle-btn" aria-label="Open search">
-            <i class="fas fa-search"></i>
-        </button>
-    </li>
-    
-    <li class="cart-icon">
-        <a href="#cart" id="cartBtn">
-            <i class="fas fa-shopping-bag"></i>
-            <span class="cart-count" id="cartCount">0</span>
-        </a>
-    </li>
-    <li class="admin-nav-item">
-        <a href="upload.html" class="nav-link" style="color: #ed64a6;">
-            <i class="fas fa-cloud-upload-alt"></i>
-            <span style="font-size: 12px;">Upload</span>
-        </a>
-    </li>
-</ul>
+        <ul class="nav-menu" id="navMenu">
+            <li><a href="#home" class="nav-link active">Home</a></li>
+            <li><a href="#collections" class="nav-link">Collections</a></li>
+            <li><a href="#products" class="nav-link">Products</a></li>
+            <li><a href="#about" class="nav-link">Our Story</a></li>
+            <li><a href="#contact" class="nav-link">Contact</a></li>
+            
+            <!-- Mobile Search Toggle Button -->
+          <!-- Mobile Search Toggle Button -->
+<li class="mobile-search-toggle" id="mobileSearchToggle">
+    <button class="search-toggle-btn" aria-label="Open search" style="background: rgba(237, 100, 166, 0.1); color: #ed64a6; border: none;">
+        <i class="fas fa-search"></i>
+    </button>
+</li>
+            
+            <li class="cart-icon">
+                <a href="#cart" id="cartBtn">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span class="cart-count" id="cartCount">0</span>
+                </a>
+            </li>
+            <li class="admin-nav-item">
+                <a href="upload.html" class="nav-link" style="color: #ed64a6;">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <span style="font-size: 12px;">Upload</span>
+                </a>
+            </li>
+        </ul>
     </nav>
     <!-- Mobile Search Container (Hidden by default) -->
 <div class="mobile-search-expandable" id="mobileSearchContainer">
@@ -7432,136 +7460,135 @@ window.updateQuantity = updateQuantity;
 window.clearCart = clearCart;
 window.proceedToCheckout = proceedToCheckout;
 
+// =============== CUTE MOBILE SEARCH FUNCTIONALITY ===============
+let mobileSearchTimeout = null;
 
-    
-  // =============== MOBILE SEARCH FUNCTIONALITY ===============
-let mobileSearchOpen = false;
-
+// Initialize mobile search
 function initMobileSearch() {
-    console.log('Initializing mobile search...');
-    
     const mobileSearchToggle = document.getElementById('mobileSearchToggle');
     const mobileSearchContainer = document.getElementById('mobileSearchContainer');
-    const mobileSearchOverlay = document.createElement('div');
-    mobileSearchOverlay.className = 'mobile-search-overlay';
-    mobileSearchOverlay.id = 'mobileSearchOverlay';
+    const mobileSearchInput = document.getElementById('mobileUniversalSearch');
+    const mobileSearchClear = document.getElementById('mobileSearchClear');
     
-    // Add overlay to page
-    document.body.appendChild(mobileSearchOverlay);
+    if (!mobileSearchToggle || !mobileSearchContainer) return;
     
-    if (mobileSearchToggle && mobileSearchContainer) {
-        // Open mobile search
-        mobileSearchToggle.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            openMobileSearch();
-        });
+    // Toggle mobile search
+    mobileSearchToggle.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
         
-        // Close search when clicking overlay
-        mobileSearchOverlay.addEventListener('click', function(e) {
-            e.stopPropagation();
+        const isOpen = mobileSearchContainer.classList.contains('show');
+        
+        if (isOpen) {
             closeMobileSearch();
-        });
-        
-        // Close search with Escape key
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape' && mobileSearchOpen) {
-                closeMobileSearch();
-            }
-        });
-        
-        // Close search when scrolling (optional)
-        window.addEventListener('scroll', function() {
-            if (mobileSearchOpen) {
-                closeMobileSearch();
-            }
-        });
-        
-        console.log('Mobile search initialized');
-    } else {
-        console.log('Mobile search elements not found');
+        } else {
+            openMobileSearch();
+        }
+    });
+    
+    // Clear button
+    if (mobileSearchClear) {
+        mobileSearchClear.addEventListener('click', clearMobileSearch);
     }
+    
+    // Input handling
+    if (mobileSearchInput) {
+        mobileSearchInput.addEventListener('input', (e) => {
+            handleMobileSearch(e);
+        });
+        
+        mobileSearchInput.addEventListener('keyup', (e) => {
+            if (e.key === 'Enter') {
+                performMobileSearch(mobileSearchInput.value.trim());
+            }
+        });
+    }
+    
+    // Close search on overlay click
+    document.addEventListener('click', (e) => {
+        const overlay = document.getElementById('mobileSearchOverlay');
+        if (overlay && overlay.classList.contains('active') && e.target === overlay) {
+            closeMobileSearch();
+        }
+    });
+    
+    // Close on escape key
+    document.addEventListener('keydown', (e) => {
+        const container = document.getElementById('mobileSearchContainer');
+        if (e.key === 'Escape' && container && container.classList.contains('show')) {
+            closeMobileSearch();
+        }
+    });
 }
 
 function openMobileSearch() {
-    if (mobileSearchOpen) return;
+    const container = document.getElementById('mobileSearchContainer');
+    const input = document.getElementById('mobileUniversalSearch');
     
-    const mobileSearchContainer = document.getElementById('mobileSearchContainer');
-    const mobileSearchOverlay = document.getElementById('mobileSearchOverlay');
-    const mobileSearchInput = document.getElementById('mobileUniversalSearch');
-    
-    if (!mobileSearchContainer) return;
-    
-    // Show elements
-    mobileSearchContainer.classList.add('show');
-    if (mobileSearchOverlay) mobileSearchOverlay.classList.add('active');
+    // Close mobile menu if open
+    const navMenu = document.getElementById('navMenu');
+    if (navMenu && navMenu.classList.contains('show')) {
+        navMenu.classList.remove('show');
+    }
     
     // Add class to body to prevent scrolling
     document.body.classList.add('search-open');
     
-    // Focus on input with a slight delay for animation
-    setTimeout(() => {
-        if (mobileSearchInput) {
-            mobileSearchInput.focus();
-        }
-    }, 300);
+    // Open search
+    container.classList.add('show');
     
-    mobileSearchOpen = true;
-    console.log('Mobile search opened');
+    // Focus input with animation
+    setTimeout(() => {
+        input.focus();
+        input.value = '';
+    }, 50);
+    
+    // Add overlay for mobile
+    addMobileSearchOverlay();
 }
 
 function closeMobileSearch() {
-    if (!mobileSearchOpen) return;
+    const container = document.getElementById('mobileSearchContainer');
+    const results = document.getElementById('mobileSearchResultsDropdown');
     
-    const mobileSearchContainer = document.getElementById('mobileSearchContainer');
-    const mobileSearchOverlay = document.getElementById('mobileSearchOverlay');
-    
-    // Hide elements
-    mobileSearchContainer.classList.remove('show');
-    if (mobileSearchOverlay) mobileSearchOverlay.classList.remove('active');
-    
-    // Remove class from body
+    // Remove class from body to restore scrolling
     document.body.classList.remove('search-open');
     
-    // Clear search
-    clearMobileSearch();
+    container.classList.remove('show');
     
-    mobileSearchOpen = false;
-    console.log('Mobile search closed');
+    if (results) {
+        results.classList.remove('show');
+        results.innerHTML = '';
+    }
+    
+    // Remove overlay
+    removeMobileSearchOverlay();
 }
 
 function handleMobileSearch(event) {
     const searchInput = document.getElementById('mobileUniversalSearch');
     const searchQuery = searchInput.value.trim();
     const clearBtn = document.getElementById('mobileSearchClear');
-    const resultsDropdown = document.getElementById('mobileSearchResultsDropdown');
     
     // Show/hide clear button
     if (searchQuery.length > 0) {
-        clearBtn?.classList.add('show');
+        clearBtn.classList.add('show');
     } else {
-        clearBtn?.classList.remove('show');
-        if (resultsDropdown) resultsDropdown.classList.remove('show');
-        return;
-    }
-    
-    // If Enter key is pressed
-    if (event.key === 'Enter') {
-        performMobileSearch(searchQuery);
+        clearBtn.classList.remove('show');
+        hideMobileSearchResults();
         return;
     }
     
     // Debounce search
-    clearTimeout(searchTimeout);
-    searchTimeout = setTimeout(() => {
+    clearTimeout(mobileSearchTimeout);
+    mobileSearchTimeout = setTimeout(() => {
         performMobileSearch(searchQuery);
     }, 300);
 }
 
 function performMobileSearch(query) {
     if (query.length < 2) {
-        const resultsDropdown = document.getElementById('mobileSearchResultsDropdown');
-        if (resultsDropdown) resultsDropdown.classList.remove('show');
+        hideMobileSearchResults();
         return;
     }
     
@@ -7573,14 +7600,12 @@ function displayMobileSearchResults(searchData, query) {
     const resultsDropdown = document.getElementById('mobileSearchResultsDropdown');
     const { products, tags } = searchData;
     
-    if (!resultsDropdown) return;
-    
     if (products.length === 0 && tags.length === 0) {
         resultsDropdown.innerHTML = `
             <div class="mobile-search-no-results">
                 <i class="fas fa-search"></i>
                 <p>No results for "<strong>${query}</strong>"</p>
-                <p style="font-size: 13px; margin-top: 5px;">Try different keywords or tags</p>
+                <p style="font-size: 12px; color: #94a3b8;">Try different keywords</p>
             </div>
         `;
         resultsDropdown.classList.add('show');
@@ -7589,17 +7614,18 @@ function displayMobileSearchResults(searchData, query) {
     
     let resultsHTML = '';
     
-    // Add tag section if there are matching tags
+    // Add tag section
     if (tags.length > 0) {
         resultsHTML += `
             <div class="mobile-search-tag-section">
                 <div class="mobile-search-tag-title">
                     <i class="fas fa-tags"></i>
-                    <span>Popular Tags</span>
+                    <span>Matching Tags</span>
                 </div>
                 <div class="mobile-search-tag-list">
                     ${tags.map(tag => `
-                        <div class="mobile-search-tag-item" onclick="filterProductsByTag('${tag}'); closeMobileSearch();">
+                        <div class="mobile-search-tag-item" 
+                             onclick="filterProductsByTag('${tag}'); closeMobileSearch();">
                             #${tag}
                         </div>
                     `).join('')}
@@ -7611,46 +7637,44 @@ function displayMobileSearchResults(searchData, query) {
     // Add product results
     if (products.length > 0) {
         products.forEach(product => {
-            const category = product.category || detectCategory(product.name || '');
-            const price = product.price || generatePrice(0);
-            const title = product.name || generateTitle('', category);
-            const imageUrl = product.mainImage || product.images?.[0]?.url || product.url || '';
+            const category = product.category || 'General';
+            const price = product.price || 0;
+            const title = product.name || '';
+            const imageUrl = product.mainImage || product.images?.[0]?.url || '';
             const productId = product.firebaseId || product.id;
             const productTags = productTagMap[productId] || product.tags || [];
-            const matchingTags = product.tagMatches || [];
             
-            // Apply Cloudinary transformations for thumbnail
+            // Highlight search terms
+            const highlightedTitle = highlightText(title, query);
+            
+            // Resize image for mobile
             let displayImageUrl = imageUrl;
             if (imageUrl.includes('res.cloudinary.com')) {
-                displayImageUrl = imageUrl.replace('/upload/', '/upload/w_80,h_80,c_fill/');
-            }
-            
-            // Get match type indicator
-            let matchTypeIndicator = '';
-            if (product.matchType === 'tag') {
-                matchTypeIndicator = '<span class="mobile-search-result-match-type">Tag</span>';
+                displayImageUrl = imageUrl.replace('/upload/', '/upload/w_100,h_100,c_fill/');
             }
             
             resultsHTML += `
-                <div class="mobile-search-result-item" onclick="goToProduct('${productId}'); closeMobileSearch();">
-                    <img src="${displayImageUrl || 'https://via.placeholder.com/80x80/cccccc/ffffff?text=Product'}" 
+                <div class="mobile-search-result-item" 
+                     onclick="goToProduct('${productId}'); closeMobileSearch();">
+                    <img src="${displayImageUrl || 'https://via.placeholder.com/50x50/667eea/ffffff?text=K'}" 
                          alt="${title}" 
                          class="mobile-search-result-image">
                     <div class="mobile-search-result-info">
-                        <h4 class="mobile-search-result-title">${title}</h4>
-                        <span class="mobile-search-result-category">${category.charAt(0).toUpperCase() + category.slice(1)}</span>
-                        ${matchTypeIndicator}
+                        <div class="mobile-search-result-title">
+                            ${highlightedTitle}
+                            ${product.matchType === 'tag' ? 
+                                '<span class="mobile-search-result-match-type">Tag Match</span>' : ''}
+                        </div>
+                        <span class="mobile-search-result-category">${category}</span>
                         ${productTags.length > 0 ? `
                             <div class="mobile-search-result-tags">
-                                ${productTags.slice(0, 2).map(tag => {
-                                    const isMatch = matchingTags.includes(tag);
-                                    return `<span class="mobile-search-result-tag ${isMatch ? 'highlighted' : ''}">#${tag}</span>`;
-                                }).join('')}
-                                ${productTags.length > 2 ? `<span class="mobile-search-result-tag">+${productTags.length - 2}</span>` : ''}
+                                ${productTags.slice(0, 3).map(tag => `
+                                    <span class="mobile-search-result-tag">#${tag}</span>
+                                `).join('')}
                             </div>
                         ` : ''}
                     </div>
-                    <div class="mobile-search-result-price">GHS ₵${price.toFixed(2)}</div>
+                    <div class="mobile-search-result-price">₵${price.toFixed(2)}</div>
                 </div>
             `;
         });
@@ -7672,20 +7696,46 @@ function clearMobileSearch() {
         resultsDropdown.innerHTML = '';
     }
     
-    // Keep focus on input
-    setTimeout(() => {
-        if (searchInput) searchInput.focus();
-    }, 10);
+    searchInput.focus();
 }
 
-// Make sure to call initMobileSearch on DOMContentLoaded
+function hideMobileSearchResults() {
+    const resultsDropdown = document.getElementById('mobileSearchResultsDropdown');
+    if (resultsDropdown) {
+        resultsDropdown.classList.remove('show');
+    }
+}
+
+// Helper functions for overlay
+function addMobileSearchOverlay() {
+    let overlay = document.getElementById('mobileSearchOverlay');
+    if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.id = 'mobileSearchOverlay';
+        overlay.className = 'mobile-search-overlay';
+        overlay.onclick = closeMobileSearch;
+        document.body.appendChild(overlay);
+    }
+    overlay.classList.add('active');
+}
+
+function removeMobileSearchOverlay() {
+    const overlay = document.getElementById('mobileSearchOverlay');
+    if (overlay) {
+        overlay.classList.remove('active');
+        setTimeout(() => {
+            if (overlay && !overlay.classList.contains('active')) {
+                document.body.removeChild(overlay);
+            }
+        }, 300);
+    }
+}
+
+// Initialize on DOM ready
 document.addEventListener('DOMContentLoaded', function() {
-    // ... your existing DOMContentLoaded code ...
-    
-    // Initialize mobile search
     initMobileSearch();
     
-    // Make functions available globally
+    // Make functions globally available
     window.clearMobileSearch = clearMobileSearch;
     window.handleMobileSearch = handleMobileSearch;
     window.closeMobileSearch = closeMobileSearch;
