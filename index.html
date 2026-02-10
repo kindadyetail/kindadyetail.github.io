@@ -3194,6 +3194,28 @@ body.search-open {
         justify-content: center !important;
     }
 }
+/* ===== MAKE CLOTHING FILTER BUTTON ACTIVE BY DEFAULT ===== */
+@media (max-width: 480px) {
+    /* Target the Clothing filter button and make it active */
+    .filter-btn[data-filter="Clothing"],
+    .filter-btn[onclick*="Clothing"],
+    .filter-btn:contains("Clothing"),
+    .filter-btn:nth-child(2) { /* If Clothing is the 2nd button after "All Products" */
+        background: var(--primary-pink) !important;
+        color: white !important;
+        border-color: var(--primary-pink) !important;
+        box-shadow: 0 2px 8px rgba(237, 100, 166, 0.25) !important;
+        font-weight: 600 !important;
+    }
+    
+    /* Add active state indicator */
+    .filter-btn[data-filter="Clothing"]::after,
+    .filter-btn[onclick*="Clothing"]::after {
+        content: " ✓";
+        font-weight: bold;
+        margin-left: 3px;
+    }
+}
     </style>
 </head>
 <body>
