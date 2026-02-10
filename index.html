@@ -3177,6 +3177,23 @@ body.search-open {
         width: 48% !important;
     }
 }
+/* ===== HIDE REFRESH BUTTON ON SMALL SCREENS ===== */
+@media (max-width: 480px) {
+    .sync-button {
+        display: none !important;
+    }
+    
+    /* Adjust spacing since refresh button is hidden */
+    .products-controls-row {
+        gap: 0 !important;
+    }
+    
+    /* Make product count fill the left column */
+    .products-stats {
+        width: 100% !important;
+        justify-content: center !important;
+    }
+}
     </style>
 </head>
 <body>
