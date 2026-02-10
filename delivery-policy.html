@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delivery Policy - Kindady's E-tail</title>
+    
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Reset & Base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #fdf2f8 0%, #f3f4f6 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* Container */
+        .policy-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        /* Header */
+        .policy-header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding: 30px 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(237, 100, 166, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .policy-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #ed64a6, #667eea);
+        }
+        
+        .policy-header h1 {
+            font-family: 'Playfair Display', serif;
+            color: #1a365d;
+            font-size: clamp(2rem, 5vw, 3rem);
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .policy-header p {
+            color: #666;
+            font-size: clamp(0.9rem, 2vw, 1.1rem);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .header-icon {
+            font-size: clamp(2.5rem, 6vw, 3.5rem);
+            background: linear-gradient(135deg, #ed64a6, #667eea);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 20px;
+        }
+        
+        /* Content Sections */
+        .section {
+            background: white;
+            border-radius: 15px;
+            padding: clamp(25px, 4vw, 35px);
+            margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(237, 100, 166, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+        }
+        
+        .section-title {
+            color: #1a365d;
+            font-size: clamp(1.3rem, 3vw, 1.8rem);
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+        }
+        
+        .section-title i {
+            color: #ed64a6;
+            font-size: 1.3em;
+        }
+        
+        /* Notice Boxes */
+        .notice-box {
+            background: linear-gradient(135deg, rgba(255, 243, 205, 0.9), rgba(255, 193, 7, 0.1));
+            border-left: 4px solid #ffc107;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .notice-box h3 {
+            color: #856404;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: clamp(1rem, 2vw, 1.2rem);
+        }
+        
+        /* Contact Box */
+        .contact-box {
+            background: linear-gradient(135deg, rgba(209, 236, 241, 0.9), rgba(23, 162, 184, 0.1));
+            border-left: 4px solid #17a2b8;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 25px 0;
+        }
+        
+        .contact-box h3 {
+            color: #0c5460;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: clamp(1rem, 2vw, 1.2rem);
+        }
+        
+        /* Lists */
+        ul {
+            padding-left: 20px;
+            margin: 15px 0;
+        }
+        
+        li {
+            margin-bottom: 12px;
+            padding-left: 5px;
+            font-size: clamp(0.9rem, 2vw, 1rem);
+        }
+        
+        li strong {
+            color: #1a365d;
+        }
+        
+        /* Regions Grid */
+        .regions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 25px 0;
+        }
+        
+        .region-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .region-card:hover {
+            background: white;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            border-color: #ed64a6;
+        }
+        
+        .region-card h4 {
+            color: #1a365d;
+            margin-bottom: 8px;
+            font-size: clamp(0.9rem, 2vw, 1.1rem);
+        }
+        
+        .region-card p {
+            color: #666;
+            font-size: 0.85rem;
+        }
+        
+        /* Links */
+        .contact-link {
+            color: #ed64a6;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .contact-link:hover {
+            color: #1a365d;
+            text-decoration: underline;
+        }
+        
+        /* FLOATING HOME BUTTON */
+        .floating-home-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #ed64a6, #667eea);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 24px;
+            box-shadow: 0 8px 25px rgba(237, 100, 166, 0.4);
+            z-index: 1000;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .floating-home-btn:hover {
+            transform: scale(1.1) rotate(360deg);
+            box-shadow: 0 12px 30px rgba(237, 100, 166, 0.6);
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .policy-container {
+                padding: 20px 15px;
+            }
+            
+            .policy-header {
+                padding: 25px 15px;
+                margin-bottom: 30px;
+            }
+            
+            .section {
+                padding: 25px 20px;
+                margin-bottom: 25px;
+            }
+            
+            .regions-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: 12px;
+            }
+            
+            .floating-home-btn {
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
+                bottom: 20px;
+                right: 20px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .policy-container {
+                padding: 15px 12px;
+            }
+            
+            .policy-header {
+                padding: 20px 15px;
+            }
+            
+            .section {
+                padding: 20px 15px;
+            }
+            
+            .regions-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .section-title {
+                font-size: 1.2rem;
+            }
+            
+            .floating-home-btn {
+                width: 45px;
+                height: 45px;
+                font-size: 18px;
+                bottom: 15px;
+                right: 15px;
+            }
+        }
+        
+        /* Extra Small Phones */
+        @media (max-width: 360px) {
+            .policy-container {
+                padding: 12px 10px;
+            }
+            
+            .section {
+                padding: 18px 12px;
+            }
+            
+            .policy-header h1 {
+                font-size: 1.6rem;
+            }
+            
+            .header-icon {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="policy-container">
+        <!-- Header -->
+        <div class="policy-header">
+            <div class="header-icon">
+                <i class="fas fa-shipping-fast"></i>
+            </div>
+            <h1>Delivery Policy</h1>
+            <p>Kindady's E-tail - E-tail with Heart</p>
+        </div>
+        
+        <!-- Important Notice -->
+        <div class="section notice-box">
+            <h3><i class="fas fa-exclamation-circle"></i> Important Notice</h3>
+            <p><strong>Delivery fees vary by region and are not fixed.</strong> Please contact Miss Dora at 
+            <a href="tel:0595736002" class="contact-link">0595736002</a> to discuss your specific delivery fee before placing your order.</p>
+        </div>
+        
+        <!-- Delivery Process -->
+        <div class="section">
+            <h2 class="section-title"><i class="fas fa-clipboard-list"></i> Delivery Process</h2>
+            <p>At Kindady's E-tail, we ensure your orders are delivered with care and attention. Here's how our delivery process works:</p>
+            
+            <ul>
+                <li><strong>Order Confirmation:</strong> After placing your order, you'll receive a confirmation via WhatsApp/call</li>
+                <li><strong>Delivery Fee Discussion:</strong> We'll contact you to discuss the exact delivery fee based on your location</li>
+                <li><strong>Processing:</strong> Orders are processed within 24-48 hours after payment confirmation</li>
+                <li><strong>Delivery Time:</strong> 3-7 business days within Ghana, depending on your region</li>
+                <li><strong>Tracking:</strong> You'll receive updates on your order status via WhatsApp</li>
+            </ul>
+        </div>
+        
+        <!-- Regions -->
+        <div class="section">
+            <h2 class="section-title"><i class="fas fa-map-marked-alt"></i> Regions We Serve</h2>
+            <p>We deliver across all 16 regions of Ghana:</p>
+            
+            <div class="regions-grid">
+                <div class="region-card">
+                    <h4>Greater Accra</h4>
+                    <p>Accra, Tema, etc.</p>
+                </div>
+                <div class="region-card">
+                    <h4>Ashanti Region</h4>
+                    <p>Kumasi, etc.</p>
+                </div>
+                <div class="region-card">
+                    <h4>Western Region</h4>
+                    <p>Takoradi, etc.</p>
+                </div>
+                <div class="region-card">
+                    <h4>Central Region</h4>
+                    <p>Cape Coast, etc.</p>
+                </div>
+                <div class="region-card">
+                    <h4>Eastern Region</h4>
+                    <p>Koforidua, etc.</p>
+                </div>
+                <div class="region-card">
+                    <h4>Northern Region</h4>
+                    <p>Tamale, etc.</p>
+                </div>
+                <div class="region-card">
+                    <h4>Volta Region</h4>
+                    <p>Ho, etc.</p>
+                </div>
+                <div class="region-card">
+                    <h4>Bono Region</h4>
+                    <p>Sunyani, etc.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Guidelines -->
+        <div class="section">
+            <h2 class="section-title"><i class="fas fa-tasks"></i> Delivery Guidelines</h2>
+            <ul>
+                <li>Please ensure your delivery address is complete and accurate</li>
+                <li>Include landmarks to help our delivery personnel locate you easily</li>
+                <li>Someone must be available to receive the delivery</li>
+                <li>Delivery times are between 9 AM - 6 PM, Monday to Saturday</li>
+                <li>Special arrangements can be made for weekend deliveries</li>
+                <li>Contact us if you need to change your delivery address after ordering</li>
+            </ul>
+        </div>
+        
+        <!-- Contact -->
+        <div class="section contact-box">
+            <h3><i class="fas fa-headset"></i> Need Help?</h3>
+            <p>For delivery inquiries, questions about fees, or to track your order:</p>
+            <p><strong>Call/WhatsApp:</strong> <a href="tel:0595736002" class="contact-link">0595736002</a></p>
+            <p><strong>Email:</strong> <a href="mailto:kindadyetail@gmail.com" class="contact-link">kindadyetail@gmail.com</a></p>
+            <p><strong>Response Time:</strong> Within 24 hours</p>
+        </div>
+    </div>
+    
+    <!-- FLOATING HOME BUTTON -->
+    <a href="index.html" class="floating-home-btn">
+        <i class="fas fa-home"></i>
+    </a>
+</body>
+</html>

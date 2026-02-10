@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ - Kindady's E-tail</title>
+    
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Reset & Base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #fdf2f8 0%, #f3f4f6 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* Container */
+        .faq-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        /* Header */
+        .faq-header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding: 30px 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(237, 100, 166, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .faq-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #ed64a6, #667eea);
+        }
+        
+        .faq-header h1 {
+            font-family: 'Playfair Display', serif;
+            color: #1a365d;
+            font-size: clamp(2rem, 5vw, 3rem);
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .faq-header p {
+            color: #666;
+            font-size: clamp(0.9rem, 2vw, 1.1rem);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .header-icon {
+            font-size: clamp(2.5rem, 6vw, 3.5rem);
+            background: linear-gradient(135deg, #ed64a6, #667eea);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 20px;
+        }
+        
+        /* Search Box */
+        .search-box {
+            max-width: 600px;
+            margin: 30px auto;
+            position: relative;
+        }
+        
+        .search-box input {
+            width: 100%;
+            padding: 18px 25px;
+            padding-left: 55px;
+            border: 2px solid #e2e8f0;
+            border-radius: 50px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s;
+            background: white;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+        }
+        
+        .search-box input:focus {
+            outline: none;
+            border-color: #ed64a6;
+            box-shadow: 0 5px 25px rgba(237, 100, 166, 0.2);
+        }
+        
+        .search-box i {
+            position: absolute;
+            left: 25px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+            font-size: 1.2rem;
+        }
+        
+        /* FAQ Sections */
+        .faq-section {
+            margin-bottom: 40px;
+        }
+        
+        .section-title {
+            color: #1a365d;
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-weight: 600;
+        }
+        
+        .section-title i {
+            color: #ed64a6;
+            font-size: 1.5rem;
+        }
+        
+        /* FAQ Items */
+        .faq-item {
+            background: white;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            border: 1px solid rgba(237, 100, 166, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .faq-item:hover {
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .faq-question {
+            padding: 22px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            color: #2d3748;
+            background: #f8fafc;
+            transition: all 0.3s;
+            font-size: clamp(0.95rem, 2vw, 1.1rem);
+        }
+        
+        .faq-question:hover {
+            background: #f0f9ff;
+        }
+        
+        .faq-question.active {
+            background: white;
+            color: #ed64a6;
+        }
+        
+        .faq-icon {
+            color: #ed64a6;
+            transition: transform 0.3s;
+            font-size: 1.1rem;
+        }
+        
+        .faq-question.active .faq-icon {
+            transform: rotate(45deg);
+        }
+        
+        .faq-answer {
+            padding: 0 22px;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            background: white;
+        }
+        
+        .faq-answer.show {
+            padding: 0 22px 22px;
+            max-height: 1000px;
+        }
+        
+        .faq-answer p {
+            color: #666;
+            font-size: clamp(0.9rem, 2vw, 1rem);
+            line-height: 1.7;
+        }
+        
+        /* Contact Box */
+        .contact-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            margin-top: 50px;
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.3);
+        }
+        
+        .contact-box h3 {
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        
+        .contact-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+        
+        .contact-link {
+            background: white;
+            color: #667eea;
+            padding: 15px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .contact-link:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .contact-link.whatsapp {
+            background: #25D366;
+            color: white;
+        }
+        
+        .contact-link.phone {
+            background: #ed64a6;
+            color: white;
+        }
+        
+        /* Links */
+        .contact-link-inline {
+            color: #ed64a6;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .contact-link-inline:hover {
+            color: #1a365d;
+            text-decoration: underline;
+        }
+        
+        /* FLOATING HOME BUTTON */
+        .floating-home-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #ed64a6, #667eea);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 24px;
+            box-shadow: 0 8px 25px rgba(237, 100, 166, 0.4);
+            z-index: 1000;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .floating-home-btn:hover {
+            transform: scale(1.1) rotate(360deg);
+            box-shadow: 0 12px 30px rgba(237, 100, 166, 0.6);
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .faq-container {
+                padding: 20px 15px;
+            }
+            
+            .faq-header {
+                padding: 25px 15px;
+                margin-bottom: 30px;
+            }
+            
+            .faq-question {
+                padding: 18px;
+            }
+            
+            .faq-answer {
+                padding: 0 18px;
+            }
+            
+            .faq-answer.show {
+                padding: 0 18px 18px;
+            }
+            
+            .search-box input {
+                padding: 15px 20px;
+                padding-left: 50px;
+            }
+            
+            .contact-box {
+                padding: 30px 20px;
+            }
+            
+            .contact-link {
+                padding: 12px 25px;
+                font-size: 0.9rem;
+            }
+            
+            .floating-home-btn {
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
+                bottom: 20px;
+                right: 20px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .faq-container {
+                padding: 15px 12px;
+            }
+            
+            .faq-header {
+                padding: 20px 15px;
+            }
+            
+            .faq-question {
+                padding: 15px;
+                font-size: 0.9rem;
+            }
+            
+            .section-title {
+                font-size: 1.3rem;
+            }
+            
+            .contact-links {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .contact-link {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+            
+            .floating-home-btn {
+                width: 45px;
+                height: 45px;
+                font-size: 18px;
+                bottom: 15px;
+                right: 15px;
+            }
+        }
+        
+        /* Extra Small Phones */
+        @media (max-width: 360px) {
+            .faq-container {
+                padding: 12px 10px;
+            }
+            
+            .faq-header h1 {
+                font-size: 1.6rem;
+            }
+            
+            .header-icon {
+                font-size: 2rem;
+            }
+            
+            .faq-question {
+                padding: 12px;
+                font-size: 0.85rem;
+            }
+            
+            .faq-answer p {
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="faq-container">
+        <!-- Header -->
+        <div class="faq-header">
+            <div class="header-icon">
+                <i class="fas fa-question-circle"></i>
+            </div>
+            <h1>Frequently Asked Questions</h1>
+            <p>Find quick answers to common questions about Kindady's E-tail</p>
+        </div>
+        
+        <!-- Search -->
+        <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" id="faqSearch" placeholder="Search for questions...">
+        </div>
+        
+        <!-- Ordering Questions -->
+        <div class="faq-section" id="orderingSection">
+            <h2 class="section-title"><i class="fas fa-shopping-cart"></i> Ordering Questions</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>How do I place an order?</span>
+                    <i class="fas fa-plus faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>You can place orders directly through our website by adding items to your cart and proceeding to checkout. Alternatively, you can WhatsApp Miss Dora at <a href="tel:0595736002" class="contact-link-inline">0595736002</a> with the items you want to order.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Can I modify or cancel my order after placing it?</span>
+                    <i class="fas fa-plus faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Yes, you can modify or cancel your order within 1 hour of placing it. Contact us immediately at <a href="tel:0595736002" class="contact-link-inline">0595736002</a>. After 1 hour, orders enter processing and changes may not be possible.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Delivery Questions -->
+        <div class="faq-section" id="deliverySection">
+            <h2 class="section-title"><i class="fas fa-truck"></i> Delivery Questions</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>How much is delivery and how is it calculated?</span>
+                    <i class="fas fa-plus faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    <p><strong>Delivery fees vary by region and are not fixed.</strong> You must contact Miss Dora at <a href="tel:0595736002" class="contact-link-inline">0595736002</a> to discuss your specific delivery fee before placing your order. Fees depend on your location within Ghana.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>How long does delivery take?</span>
+                    <i class="fas fa-plus faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Delivery times vary by region:
+                        <br>• Greater Accra: 1-2 business days
+                        <br>• Other major cities: 2-4 business days
+                        <br>• Remote areas: 5-7 business days
+                        <br>All orders are processed within 24-48 hours after payment confirmation.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Payment Questions -->
+        <div class="faq-section" id="paymentSection">
+            <h2 class="section-title"><i class="fas fa-credit-card"></i> Payment Questions</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>What payment methods do you accept?</span>
+                    <i class="fas fa-plus faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>We accept:
+                        <br>• Mobile Money (MTN, Vodafone Cash, AirtelTigo Money)
+                        <br>• Cash on Delivery (available in select areas)
+                        <br>• Bank Transfer
+                        <br>Payment details are provided during checkout.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Returns Questions -->
+        <div class="faq-section" id="returnsSection">
+            <h2 class="section-title"><i class="fas fa-exchange-alt"></i> Returns & Exchanges</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>What is your return policy?</span>
+                    <i class="fas fa-plus faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>We accept returns within 7 days of delivery for defective, damaged, or wrong items. Items must be unused with original tags and packaging. Contact us at <a href="tel:0595736002" class="contact-link-inline">0595736002</a> before returning any items.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Can I exchange an item for a different size?</span>
+                    <i class="fas fa-plus faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Yes, size exchanges are available if the desired size is in stock. Contact us within 7 days of receiving your order. Return shipping costs are the customer's responsibility.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Contact Box -->
+        <div class="contact-box">
+            <h3>Still have questions?</h3>
+            <p>We're here to help! Contact Miss Dora directly for personalized assistance.</p>
+            
+            <div class="contact-links">
+                <a href="https://wa.me/233595736002" class="contact-link whatsapp" target="_blank">
+                    <i class="fab fa-whatsapp"></i> WhatsApp: 0595736002
+                </a>
+                <a href="tel:0595736002" class="contact-link phone">
+                    <i class="fas fa-phone"></i> Call: 0595736002
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- FLOATING HOME BUTTON -->
+    <a href="index.html" class="floating-home-btn">
+        <i class="fas fa-home"></i>
+    </a>
+    
+    <script>
+        // FAQ Accordion Functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const faqQuestions = document.querySelectorAll('.faq-question');
+            const searchInput = document.getElementById('faqSearch');
+            
+            // Toggle FAQ answers
+            faqQuestions.forEach(question => {
+                question.addEventListener('click', function() {
+                    const answer = this.nextElementSibling;
+                    const icon = this.querySelector('.faq-icon');
+                    
+                    // Toggle active class
+                    this.classList.toggle('active');
+                    
+                    // Toggle answer visibility
+                    if (answer.classList.contains('show')) {
+                        answer.classList.remove('show');
+                        icon.classList.remove('fa-minus');
+                        icon.classList.add('fa-plus');
+                    } else {
+                        answer.classList.add('show');
+                        icon.classList.remove('fa-plus');
+                        icon.classList.add('fa-minus');
+                    }
+                });
+            });
+            
+            // Search functionality
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                const faqItems = document.querySelectorAll('.faq-item');
+                
+                faqItems.forEach(item => {
+                    const question = item.querySelector('.faq-question span').textContent.toLowerCase();
+                    const answer = item.querySelector('.faq-answer').textContent.toLowerCase();
+                    
+                    if (question.includes(searchTerm) || answer.includes(searchTerm)) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+            
+            // Open first FAQ by default
+            if (faqQuestions.length > 0) {
+                faqQuestions[0].click();
+            }
+        });
+    </script>
+</body>
+</html>

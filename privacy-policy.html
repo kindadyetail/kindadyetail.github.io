@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy - Kindady's E-tail</title>
+    
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Reset & Base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #fdf2f8 0%, #f3f4f6 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* Container */
+        .policy-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        /* Header */
+        .policy-header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding: 30px 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(237, 100, 166, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .policy-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #ed64a6, #667eea);
+        }
+        
+        .policy-header h1 {
+            font-family: 'Playfair Display', serif;
+            color: #1a365d;
+            font-size: clamp(2rem, 5vw, 3rem);
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .policy-header p {
+            color: #666;
+            font-size: clamp(0.9rem, 2vw, 1.1rem);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .header-icon {
+            font-size: clamp(2.5rem, 6vw, 3.5rem);
+            background: linear-gradient(135deg, #ed64a6, #667eea);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 20px;
+        }
+        
+        /* Last Updated */
+        .last-updated {
+            background: linear-gradient(135deg, rgba(230, 247, 255, 0.9), rgba(24, 144, 255, 0.1));
+            border-left: 4px solid #1890ff;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-size: 0.9rem;
+        }
+        
+        /* Content Sections */
+        .section {
+            background: white;
+            border-radius: 15px;
+            padding: clamp(25px, 4vw, 35px);
+            margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(237, 100, 166, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+        }
+        
+        .section-title {
+            color: #1a365d;
+            font-size: clamp(1.3rem, 3vw, 1.8rem);
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+        }
+        
+        .section-title i {
+            color: #ed64a6;
+            font-size: 1.3em;
+        }
+        
+        /* Info Boxes */
+        .info-box {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #6c757d;
+        }
+        
+        .rights-section {
+            background: linear-gradient(135deg, rgba(209, 250, 229, 0.9), rgba(16, 185, 129, 0.1));
+            border-left: 4px solid #10b981;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 25px 0;
+        }
+        
+        .rights-section h3 {
+            color: #065f46;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: clamp(1rem, 2vw, 1.2rem);
+        }
+        
+        /* Contact Box */
+        .contact-box {
+            background: linear-gradient(135deg, rgba(209, 236, 241, 0.9), rgba(23, 162, 184, 0.1));
+            border-left: 4px solid #17a2b8;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 25px 0;
+        }
+        
+        .contact-box h3 {
+            color: #0c5460;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: clamp(1rem, 2vw, 1.2rem);
+        }
+        
+        /* Policy Highlight */
+        .policy-highlight {
+            background: linear-gradient(135deg, rgba(255, 243, 205, 0.9), rgba(255, 193, 7, 0.1));
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        
+        /* Tables */
+        .table-wrapper {
+            overflow-x: auto;
+            margin: 25px 0;
+            border-radius: 10px;
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 500px;
+        }
+        
+        th {
+            background: linear-gradient(135deg, #1a365d, #2d3748);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+        
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 0.9rem;
+        }
+        
+        tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        
+        /* Lists */
+        ul {
+            padding-left: 20px;
+            margin: 15px 0;
+        }
+        
+        li {
+            margin-bottom: 12px;
+            padding-left: 5px;
+            font-size: clamp(0.9rem, 2vw, 1rem);
+        }
+        
+        li strong {
+            color: #1a365d;
+        }
+        
+        /* Links */
+        .contact-link {
+            color: #ed64a6;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .contact-link:hover {
+            color: #1a365d;
+            text-decoration: underline;
+        }
+        
+        /* FLOATING HOME BUTTON */
+        .floating-home-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #ed64a6, #667eea);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 24px;
+            box-shadow: 0 8px 25px rgba(237, 100, 166, 0.4);
+            z-index: 1000;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .floating-home-btn:hover {
+            transform: scale(1.1) rotate(360deg);
+            box-shadow: 0 12px 30px rgba(237, 100, 166, 0.6);
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .policy-container {
+                padding: 20px 15px;
+            }
+            
+            .policy-header {
+                padding: 25px 15px;
+                margin-bottom: 30px;
+            }
+            
+            .section {
+                padding: 25px 20px;
+                margin-bottom: 25px;
+            }
+            
+            th, td {
+                padding: 12px 10px;
+                font-size: 0.85rem;
+            }
+            
+            .floating-home-btn {
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
+                bottom: 20px;
+                right: 20px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .policy-container {
+                padding: 15px 12px;
+            }
+            
+            .policy-header {
+                padding: 20px 15px;
+            }
+            
+            .section {
+                padding: 20px 15px;
+            }
+            
+            table {
+                min-width: 400px;
+            }
+            
+            th, td {
+                padding: 10px 8px;
+                font-size: 0.8rem;
+            }
+            
+            .section-title {
+                font-size: 1.2rem;
+            }
+            
+            .floating-home-btn {
+                width: 45px;
+                height: 45px;
+                font-size: 18px;
+                bottom: 15px;
+                right: 15px;
+            }
+        }
+        
+        /* Extra Small Phones */
+        @media (max-width: 360px) {
+            .policy-container {
+                padding: 12px 10px;
+            }
+            
+            .section {
+                padding: 18px 12px;
+            }
+            
+            .policy-header h1 {
+                font-size: 1.6rem;
+            }
+            
+            .header-icon {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="policy-container">
+        <!-- Header -->
+        <div class="policy-header">
+            <div class="header-icon">
+                <i class="fas fa-lock"></i>
+            </div>
+            <h1>Privacy Policy</h1>
+            <p>How we protect and use your information at Kindady's E-tail</p>
+        </div>
+        
+        <!-- Last Updated -->
+        <div class="last-updated">
+            <p><strong>Last Updated:</strong> December 2024</p>
+            <p>This Privacy Policy describes how Kindady's E-tail ("we," "us," or "our") collects, uses, and shares your personal information when you use our website and services.</p>
+        </div>
+        
+        <!-- Information We Collect -->
+        <div class="section">
+            <h2 class="section-title"><i class="fas fa-info-circle"></i> Information We Collect</h2>
+            <p>We collect information you provide directly to us when you:</p>
+            
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Information Type</th>
+                            <th>Purpose</th>
+                            <th>Example</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Personal Information</td>
+                            <td>To process your orders and communicate with you</td>
+                            <td>Name, phone number, email address</td>
+                        </tr>
+                        <tr>
+                            <td>Delivery Information</td>
+                            <td>To deliver your purchases</td>
+                            <td>Address, city, region</td>
+                        </tr>
+                        <tr>
+                            <td>Payment Information</td>
+                            <td>To process payments (handled securely)</td>
+                            <td>Mobile money number, transaction IDs</td>
+                        </tr>
+                        <tr>
+                            <td>Communication Data</td>
+                            <td>To provide customer support</td>
+                            <td>Messages, inquiries, feedback</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="policy-highlight">
+                <p><strong>Note:</strong> We do not store credit card or bank account details. All payments are processed through secure mobile money or bank transfer channels.</p>
+            </div>
+        </div>
+        
+        <!-- How We Use Your Information -->
+        <div class="section">
+            <h2 class="section-title"><i class="fas fa-shield-alt"></i> How We Use Your Information</h2>
+            <p>Your information helps us provide and improve our services:</p>
+            
+            <ul>
+                <li><strong>Order Processing:</strong> To process, fulfill, and deliver your orders</li>
+                <li><strong>Communication:</strong> To send order updates, delivery notifications, and respond to inquiries</li>
+                <li><strong>Customer Service:</strong> To provide support and handle returns/exchanges</li>
+                <li><strong>Improvement:</strong> To improve our website, products, and services</li>
+                <li><strong>Legal Compliance:</strong> To comply with applicable laws and regulations</li>
+            </ul>
+            
+            <div class="info-box">
+                <p><strong>Marketing Communications:</strong> We only send promotional messages with your explicit consent. You can opt-out at any time by replying "STOP" to our WhatsApp messages or contacting us directly.</p>
+            </div>
+        </div>
+        
+        <!-- Your Rights -->
+        <div class="section rights-section">
+            <h3><i class="fas fa-user-check"></i> Your Rights</h3>
+            <p>You have the right to:</p>
+            <ul>
+                <li><strong>Access:</strong> Request a copy of your personal information</li>
+                <li><strong>Correction:</strong> Update or correct your information</li>
+                <li><strong>Deletion:</strong> Request deletion of your information (subject to legal requirements)</li>
+                <li><strong>Opt-Out:</strong> Unsubscribe from marketing communications</li>
+                <li><strong>Complaint:</strong> Lodge a complaint with relevant authorities</li>
+            </ul>
+            
+            <p>To exercise these rights, contact us at <a href="mailto:kindadyetail@gmail.com" class="contact-link">kindadyetail@gmail.com</a> or <a href="tel:0595736002" class="contact-link">0595736002</a>.</p>
+        </div>
+        
+        <!-- Data Security -->
+        <div class="section">
+            <h2 class="section-title"><i class="fas fa-lock"></i> Data Security</h2>
+            <p>We implement appropriate security measures to protect your information:</p>
+            
+            <ul>
+                <li><strong>Secure Storage:</strong> Your data is stored securely on protected servers</li>
+                <li><strong>Limited Access:</strong> Only authorized personnel have access to your information</li>
+                <li><strong>Secure Communication:</strong> We use encrypted channels for sensitive information</li>
+                <li><strong>Regular Review:</strong> We regularly review our security practices</li>
+            </ul>
+            
+            <div class="info-box">
+                <p><strong>While we strive to protect your information, no method of transmission over the internet is 100% secure. We cannot guarantee absolute security but we take all reasonable precautions.</strong></p>
+            </div>
+        </div>
+        
+        <!-- Contact -->
+        <div class="section contact-box">
+            <h3><i class="fas fa-headset"></i> Contact Us</h3>
+            <p>If you have questions about this Privacy Policy or how we handle your information:</p>
+            <p><strong>Email:</strong> <a href="mailto:kindadyetail@gmail.com" class="contact-link">kindadyetail@gmail.com</a></p>
+            <p><strong>Phone/WhatsApp:</strong> <a href="tel:0595736002" class="contact-link">0595736002</a> (Miss Dora)</p>
+            <p><strong>Business Hours:</strong> Monday-Friday, 9 AM - 6 PM</p>
+        </div>
+    </div>
+    
+    <!-- FLOATING HOME BUTTON -->
+    <a href="index.html" class="floating-home-btn">
+        <i class="fas fa-home"></i>
+    </a>
+</body>
+</html>
