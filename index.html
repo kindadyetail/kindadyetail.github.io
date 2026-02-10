@@ -2974,9 +2974,9 @@ body.search-open {
         margin-right: auto;
     }
 }
-/* ===== HORIZONTAL FILTER BUTTONS (ALL 4 VISIBLE) AT 480px ===== */
+/* ===== PRODUCT COUNT LEFT, FILTER BUTTONS RIGHT AT 480px ===== */
 @media (max-width: 480px) {
-    /* Main container - horizontal layout */
+    /* Main container - horizontal layout SWAPPED */
     .products-controls {
         display: flex !important;
         flex-direction: row !important;
@@ -2988,209 +2988,29 @@ body.search-open {
         flex-wrap: nowrap !important;
     }
     
-    /* Filter buttons container - HORIZONTAL (4 in a row) */
-    .filters {
+    /* Product count LEFT - takes 25% */
+    .products-controls-row {
         order: 1 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 8px !important;
+        flex-shrink: 0 !important;
+        width: 25% !important;
+        min-width: 80px !important;
+    }
+    
+    /* Filter buttons RIGHT - takes 75% */
+    .filters {
+        order: 2 !important;
         display: flex !important;
         flex-direction: row !important;
         flex-wrap: nowrap !important;
-        gap: 4px !important; /* VERY small gap */
+        gap: 4px !important;
         padding: 0 !important;
         margin: 0 !important;
-        flex: 1 !important; /* Takes available space */
-        min-width: 0 !important; /* Allows shrinking */
-        overflow: visible !important;
-        justify-content: space-between !important; /* Distribute evenly */
-        align-items: center !important;
-    }
-    
-    /* Make filter buttons VERY compact to fit 4 horizontally */
-    .filter-btn {
-        padding: 5px 6px !important; /* Minimal padding */
-        font-size: 0.65rem !important; /* Very small font */
-        min-height: 28px !important; /* Small height */
-        width: 100% !important; /* Fill available space */
-        box-sizing: border-box !important;
-        border-radius: 4px !important;
-        border-width: 1px !important; /* Thin border */
-        text-align: center !important;
-        white-space: nowrap !important;
-        overflow: hidden !important;
-        text-overflow: ellipsis !important;
-        flex: 1 !important; /* Each button takes equal width */
-        min-width: 0 !important; /* Allows buttons to shrink */
-        margin: 0 !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-    }
-    
-    /* Make sure button text fits */
-    .filter-btn span {
-        font-size: 0.65rem !important;
-        overflow: hidden !important;
-        text-overflow: ellipsis !important;
-        white-space: nowrap !important;
-        display: block !important;
-        max-width: 100% !important;
-    }
-    
-    /* Products stats container - on the RIGHT */
-    .products-controls-row {
-        order: 2 !important;
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: flex-end !important;
-        gap: 8px !important;
-        flex-shrink: 0 !important; /* Don't shrink */
-        min-width: 90px !important; /* Minimum width */
-        padding: 0 !important;
-        margin: 0 !important;
-    }
-    
-    /* Product count/stats - smaller and on right */
-    .products-stats {
-        display: inline-flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        gap: 6px !important;
-        font-size: 0.65rem !important;
-        padding: 5px 8px !important;
-        background: #f8f9fa !important;
-        border-radius: 12px !important;
-        color: #4a5568 !important;
-        white-space: nowrap !important;
-        border: 1px solid #e2e8f0 !important;
-        width: 100% !important;
-        box-shadow: 0 1px 2px rgba(0,0,0,0.05) !important;
-        text-align: center !important;
-        min-width: 90px !important;
-    }
-    
-    .products-stats i {
-        color: var(--primary-pink) !important;
-        font-size: 0.65rem !important;
-    }
-    
-    #productCount {
-        font-weight: 600 !important;
-        color: var(--primary-navy) !important;
-        font-size: 0.65rem !important;
-    }
-    
-    /* Refresh button - smaller and on right */
-    .sync-button {
-        display: inline-flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        gap: 4px !important;
-        padding: 5px 8px !important;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
-        color: white !important;
-        border: none !important;
-        border-radius: 12px !important;
-        font-size: 0.65rem !important;
-        font-weight: 500 !important;
-        cursor: pointer !important;
-        transition: all 0.2s ease !important;
-        box-shadow: 0 2px 4px rgba(102, 126, 234, 0.15) !important;
-        white-space: nowrap !important;
-        width: 100% !important;
-        text-align: center !important;
-        min-width: 90px !important;
-    }
-    
-    .sync-button:hover {
-        background: linear-gradient(135deg, #5a67d8 0%, #6b46a1 100%) !important;
-        transform: translateY(-1px) !important;
-        box-shadow: 0 3px 8px rgba(102, 126, 234, 0.25) !important;
-    }
-    
-    .sync-button i {
-        font-size: 0.6rem !important;
-    }
-    
-    .sync-button .sync-text {
-        font-size: 0.65rem !important;
-    }
-    
-    /* Products grid should be beneath */
-    .products-grid {
-        margin-top: 1rem !important;
-        clear: both !important;
-    }
-}
-
-/* For even more precise fitting at exact 480px */
-@media (max-width: 480px) and (min-width: 401px) {
-    .filter-btn {
-        padding: 6px 4px !important; /* Even tighter */
-        font-size: 0.6rem !important;
-    }
-    
-    .filter-btn span {
-        font-size: 0.6rem !important;
-    }
-}
-
-/* For smaller screens */
-@media (max-width: 400px) {
-    .filters {
-        gap: 3px !important;
-    }
-    
-    .filter-btn {
-        padding: 4px 3px !important;
-        font-size: 0.55rem !important;
-        min-height: 26px !important;
-    }
-    
-    .filter-btn span {
-        font-size: 0.55rem !important;
-    }
-    
-    .products-stats {
-        font-size: 0.6rem !important;
-        padding: 4px 6px !important;
-        min-width: 80px !important;
-    }
-    
-    .sync-button {
-        font-size: 0.6rem !important;
-        padding: 4px 6px !important;
-        min-width: 80px !important;
-    }
-}
-
-/* For very small screens - switch to 2x2 grid */
-@media (max-width: 350px) {
-    .products-controls {
-        flex-direction: column !important;
-        align-items: stretch !important;
-    }
-    
-    .filters {
-        display: grid !important;
-        grid-template-columns: repeat(2, 1fr) !important;
-        gap: 4px !important;
-        width: 100% !important;
-        margin-bottom: 10px !important;
-    }
-    
-    .filter-btn {
-        padding: 5px 4px !important;
-        font-size: 0.6rem !important;
-    }
-    
-    .products-controls-row {
-        width: 100% !important;
-        align-items: stretch !important;
-    }
-    
-    .products-stats,
-    .sync-button {
-        min-width: auto !important;
-        width: 100% !important;
+        width: 75% !important;
+        justify-content: space-between !important;
     }
 }
     </style>
