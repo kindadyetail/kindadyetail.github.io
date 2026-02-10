@@ -3302,22 +3302,59 @@ body.search-open {
         padding-right: 10px !important;
     }
 }
-/* QUICK FIX: Prevent logo click on mobile */
+/* Add this to your existing styles */
 @media (max-width: 768px) {
-    .logo a {
-        pointer-events: none !important;
+    .nav-menu {
+        display: flex;
+        align-items: center;
+        gap: 15px;
     }
     
-    .logo-main, .logo-tagline {
-        user-select: none !important;
-        -webkit-user-select: none !important;
-        -moz-user-select: none !important;
-        -ms-user-select: none !important;
-    }
-    
-    /* Add spacing between search toggle and other elements */
     .mobile-search-toggle {
-        margin-right: 10px !important;
+        order: 3;
+        margin-left: auto;
+    }
+    
+    .cart-icon {
+        order: 4;
+    }
+    
+    .mobile-search-toggle .search-toggle-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: rgba(237, 100, 166, 0.1);
+        color: #ed64a6;
+        border: 2px solid rgba(237, 100, 166, 0.3);
+        cursor: pointer;
+        font-size: 18px;
+        transition: all 0.3s ease;
+    }
+    
+    .mobile-search-toggle .search-toggle-btn:hover,
+    .mobile-search-toggle .search-toggle-btn.active {
+        background: #ed64a6;
+        color: white;
+        transform: scale(1.1);
+    }
+    
+    /* Ensure the search container is positioned correctly */
+    .mobile-search-expandable {
+        position: fixed;
+        top: 70px;
+        left: 10px;
+        right: 10px;
+        z-index: 2000;
+        margin-top: 0;
+    }
+    
+    /* Fix body scroll when search is open */
+    body.search-open {
+        overflow: hidden;
+        height: 100vh;
     }
 }
 
@@ -7750,15 +7787,65 @@ function removeMobileSearchOverlay() {
     }
 }
 
-// Initialize on DOM ready
+// =============== FIX FOR MOBILE SEARCH ===============
+
+// Add this after your existing DOMContentLoaded event listener
 document.addEventListener('DOMContentLoaded', function() {
-    initMobileSearch();
+    // Initialize mobile search
+    setTimeout(() => {
+        initMobileSearch();
+        console.log('Mobile search initialized');
+    }, 500);
     
-    // Make functions globally available
-    window.clearMobileSearch = clearMobileSearch;
-    window.handleMobileSearch = handleMobileSearch;
-    window.closeMobileSearch = closeMobileSearch;
+    // Fix for click conflicts
+    const searchToggle = document.querySelector('.mobile-search-toggle .search-toggle-btn');
+    if (searchToggle) {
+        searchToggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('Search toggle clicked');
+            
+            const container = document.getElementById('mobileSearchContainer');
+            if (container.classList.contains('show')) {
+                closeMobileSearch();
+            } else {
+                openMobileSearch();
+            }
+        });
+    }
 });
+
+// Make sure these functions are available globally
+window.initMobileSearch = initMobileSearch;
+window.openMobileSearch = openMobileSearch;
+window.closeMobileSearch = closeMobileSearch;
+window.clearMobileSearch = clearMobileSearch;
+window.handleMobileSearch = handleMobileSearch;
+
+// Add this helper function if missing
+function addMobileSearchOverlay() {
+    let overlay = document.getElementById('mobileSearchOverlay');
+    if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.id = 'mobileSearchOverlay';
+        overlay.className = 'mobile-search-overlay';
+        overlay.onclick = closeMobileSearch;
+        document.body.appendChild(overlay);
+    }
+    overlay.classList.add('active');
+}
+
+function removeMobileSearchOverlay() {
+    const overlay = document.getElementById('mobileSearchOverlay');
+    if (overlay) {
+        overlay.classList.remove('active');
+        setTimeout(() => {
+            if (overlay && !overlay.classList.contains('active')) {
+                document.body.removeChild(overlay);
+            }
+        }, 300);
+    }
+}
 // =============== CONTACT FORM FUNCTIONALITY ===============
 
 // Save contact to Firebase
