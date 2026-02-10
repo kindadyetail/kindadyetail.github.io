@@ -3194,38 +3194,6 @@ body.search-open {
         justify-content: center !important;
     }
 }
-/* ===== MAKE CLOTHING FILTER BUTTON ACTIVE BY DEFAULT ===== */
-@media (max-width: 480px) {
-    /* Make ALL filter buttons inactive first */
-    .filter-btn {
-        background: white !important;
-        color: #121e32 !important;
-        border-color: #e2e8f0 !important;
-        font-weight: 500 !important;
-        box-shadow: none !important;
-    }
-    
-    /* Target the Clothing filter button specifically */
-    .filter-btn[data-filter="Clothing"],
-    .filter-btn[onclick*="Clothing"],
-    .filter-btn[onclick*="clothing"],
-    .filter-btn[onclick*="CLOTHING"],
-    .filters .filter-btn:nth-of-type(2) {
-        background: var(--primary-pink) !important;
-        color: white !important;
-        border-color: var(--primary-pink) !important;
-        box-shadow: 0 2px 8px rgba(237, 100, 166, 0.25) !important;
-        font-weight: 600 !important;
-    }
-    
-    /* Add active state indicator */
-    .filter-btn[data-filter="Clothing"]::after,
-    .filter-btn[onclick*="Clothing"]::after {
-        content: " ✓" !important;
-        font-weight: bold !important;
-        margin-left: 3px !important;
-    }
-}
     </style>
 </head>
 <body>
