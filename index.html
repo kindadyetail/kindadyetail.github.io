@@ -3306,6 +3306,19 @@ body.search-open {
 .newsletter-section {
     display: none !important;
 }
+/* Hide the second link (Collections) in the footer on small screens */
+@media (max-width: 768px) {
+    .footer-col ul li:nth-child(2) {
+        display: none;
+    }
+}
+/* Hide the "Collections" link in the nav on small screens */
+@media (max-width: 768px) {
+    .nav-menu li:nth-child(2) {
+        display: none;
+    }
+}
+
 
     </style>
 </head>
